@@ -1,0 +1,52 @@
+<?php require __dir__."/../layout/app.phtml"?>
+
+<div class="container">
+<div class="col-md-6">
+    <div class="panel panel-default">
+    <div class="panel-heading"><strong>Uživatelé</strong></div>
+    <div class="panel-body">
+    <?php if (is_array($users) && count($users)):?>
+        <ul class='list-group'>
+        <?php foreach($users as $id => $name):?>
+        <?php if ($name == 'admin'):?>
+            <li class='list-group-item'><?=$name?></li>
+        <?php else:?>
+            <li class='list-group-item'><?=$name?>
+                <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$id?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
+            </li>
+        <?php endif;endforeach;?>
+        </ul>
+    <?php else:?>
+        <span class='text-muted'>Žádní uživatelé</span>
+    <?php endif?>
+    </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Studenti</strong>
+        <a href="<?=$router->pathFor('lists-view');?>" class="pull-right">Zobrazit všechny kánony</a>
+    </div>
+    <div class="panel-body">
+    <?php if (is_array(@$students) && count($students)):?>
+        <ul class='list-group'>
+        <?php foreach($students as $id => $info):?>
+            <li class='list-group-item'><a href='<?=$router->pathFor("lists-view", ["id" => $id])?>'><?=$id?></a> <?=$info['name']?> <b><?=$info['class']?></b>
+                <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$id?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
+            </li>
+        <?php endforeach;?>
+        </ul>
+    <?php else:?>
+        <span class='text-muted'>Žádní studenti</span>
+    <?php endif?>
+    </div>
+    </div>
+    </div>
+<form method="post" action="<?=$router->pathFor('manageUsers')?>">
+    <input type="hidden" name="_METHOD" value="DELETE" />
+    <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+    <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+    <input type="hidden" name="id" value="" id="id">
+</form>
+</div>

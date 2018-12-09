@@ -1,0 +1,39 @@
+<?php require __dir__."/../layout/app.phtml"?>
+<div class="container">
+<div class="col-md-6 col-md-offset-3">
+<div class="panel panel-default">
+    <div class="panel-heading">Změna hesla</div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post">
+            <input type="hidden" name="_METHOD" value="PUT" />
+            <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+            <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="old">Staré heslo:</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="password" name="old" id="old" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="pass">Nové heslo:</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="password" name="pass" id="pass" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="pass2">Nové heslo znovu:</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="password" name="pass2" id="pass2" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <input class="btn btn-primary" type="submit" value="Změnit heslo">
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+</div>
+</div>

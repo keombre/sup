@@ -1,0 +1,27 @@
+<?php require __dir__."/layout/app.phtml"?>
+<script>
+function add (id) {
+    document.getElementById('id').value=id;
+    document.getElementById('add').submit();
+}
+</script>
+<?php
+    if (is_array(@$books) && count($books) > 0) {
+        echo "<table>";
+        echo "<tr><td>Autor</td><td>Dílo</td><td>Období</td><td>Žánr</td><td></td></tr>";
+        foreach($books as $book) {
+            echo "<tr><td>$book[name]</td><td>$book[author]</td><td>$book[region]</td><td>$book[genere]</td><td><button onclick='add($book[id])'>Přidat</button></td></tr>" . PHP_EOL;
+        }
+        ?>
+</table>
+<form method="post" class="form" action="<?=$router->pathFor('books')?>" id="add">
+    <input type="hidden" name="_METHOD" value="PUT" />
+    <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+    <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+    <input type="hidden" name="id" id="id" >
+</form>
+        <?php
+    } else {
+        echo "Žádné knihy nenalezeny."; 
+    }
+?>

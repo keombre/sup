@@ -1,0 +1,38 @@
+<?php require __dir__ . "/../layout/app.phtml"?>
+
+<div class="container">
+<div class="col-md-6 col-md-offset-3">
+<div class="panel panel-default">
+    <div class="panel-heading">Vaše evidenční číslo: <b><?=$id?></b></div>
+    <div class="panel-body">
+        <span>
+            Zvolte si heslo, pro Váš účet. Evidenční číslo si dobře poznamenejte, budete jej potřebovat k budoucímu přihlášení.<br />
+            Heslo musí mít minimálně 8 znaků
+        </span>
+        <form class="form-horizontal" method="post" action="<?=$router->pathFor('register-s1')?>">
+            <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+            <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+            <input type="hidden" name="id" value="<?=$id?>">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="pass">Heslo:</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="password" name="pass" id="name" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="pass2">Heslo znovu:</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="password" name="pass2" id="pass" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <input class="btn btn-primary" type="submit" value="Pokračovat">
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+</div>
+</div>

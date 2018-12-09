@@ -1,0 +1,8 @@
+/vendor
+/cache
+/logs
+/assets/lib
+/db/database.db
+.DS_STORE
+composer.lock
+.vscode

@@ -1,0 +1,64 @@
+<?php require __dir__."/../layout/app.phtml"?>
+<script>
+function add (id) {
+    document.getElementById('id').value=id;
+    document.getElementById('add').submit();
+}
+</script>
+
+<span>Přidat knihu</span>
+<form class="form-horizontal" method="post" action="">
+    <input type="hidden" name="_METHOD" value="PUT" />
+    <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+    <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="title">Název:</label>
+        <div class="col-md-6">
+            <input class="form-control" type="text" name="title" id="title" required autofocus>
+        </div>
+        <label class="col-md-4 control-label" for="author">Autor:</label>
+        <div class="col-md-6">
+            <input class="form-control" type="text" name="author" id="author" required>
+        </div>
+        <label class="col-md-4 control-label" for="region">Období:</label>
+        <div class="col-md-6">
+            <select class="form-control" name="region" id="region" required>
+                <option disabled selected>Vyberte období</option>
+                <option value="0">doba kamenná</option>
+                <option value="1">Hliněnné destičky</option>
+                <option value="2">Období toaletního papíru</option>
+            </select>
+        </div>
+        <label class="col-md-4 control-label" for="genere">Žánr:</label>
+        <div class="col-md-6">
+        <select class="form-control" name="genere" id="genere" required>
+                <option disabled selected>Vyberte žánr</option>
+                <option value="0">Próza</option>
+                <option value="1">Poezie</option>
+                <option value="2">Co já vím..</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-8 col-md-offset-4">
+            <input class="btn btn-primary" type="submit" value="Přidat">
+        </div>
+    </div>
+</form>
+
+Díla:<br />
+<?php
+    if (is_array(@$books)) {
+        echo "<table>";
+        echo "<tr><td>Autor</td><td>Dílo</td><td>Období</td><td>Žánr</td><td></td></tr>";
+        foreach($books as $book) {
+            echo "<tr><td>$book[author]</td><td>$book[name]</td><td>$book[region]</td><td>$book[genere]</td><td><button onclick='add($book[id])'>Odebrat</button></td></tr>" . PHP_EOL;
+        }
+        echo "</table>";
+?>
+    <?php
+    } else {
+        echo "Žádné knihy nenalezeny."; 
+    }
+?>
+

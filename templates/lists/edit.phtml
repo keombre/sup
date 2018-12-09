@@ -1,0 +1,75 @@
+<?php require __dir__ . "/../layout/app.phtml"?>
+
+<div class="container main">
+<form id="form" method="post" action="<?=$router->pathFor('lists-edit')?>">
+<input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+	<div class="col-md-6">
+		<div class="form-group">
+			<label for="book">Školní kánon:</label>
+			<input id="search" class="form-control" placeholder="Vyhledávejte" autofocus />
+			<br />
+			<select name="book" id="book" class="form-control" size="25" ondblclick="send('add')">
+			<?php foreach($books as $rid => $book):?>
+				<optgroup label='<?=$regions[$rid]?>'>
+				<?php foreach($book as $id => $info):?>
+					<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?> (<?=$generes[$info['genere']]?>)</option>
+				<?php endforeach;?>
+				</optgroup>
+				<?php endforeach;?>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-2">
+		<div class="my-buttons">
+			<button class="form-control btn btn-default" onclick="send('add')">
+				Přidat <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+			</button>
+			<button class="form-control btn btn-default" onclick="send('remove')">
+				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Odebrat
+			</button>
+			<button class="form-control btn btn-danger" data-toggle="modal" data-target="#clearModal" onclick="return false;">
+				<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Vyčistit
+			</button>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+			<label for="myBooks">Můj kánon: (<?=count($list)?>/20)</label>
+			<select name="myBooks" id="myBooks" class="form-control" size="26" ondblclick="send('remove')">
+			<?php foreach($list as $rid => $book):?>
+				<optgroup label='<?=$regions[$rid]?>'>
+				<?php foreach($book as $id):?>
+					<option value='<?=$id?>'><?=$books[$rid][$id]['author'] == ''?"":$books[$rid][$id]['author'] . ": "?><?=$books[$rid][$id]['name']?> (<?=$generes[$books[$rid][$id]['genere']]?>)</option>
+				<?php endforeach;?>
+				</optgroup>
+			<?php endforeach;?>
+			</select>
+			<br />
+			<button class="form-control btn btn-success" onclick="send('finish')">
+				Dokončit kánon <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			</button>
+		</div>
+	</div>
+</div>
+</div>
+</form>
+<div id="clearModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Opravdu chcete kánon vyčistit?</h4>
+		</div>
+		<div class="modal-body">
+			<p>
+				Tato akce je nevratná. Celý kánon budete muset vytvořit znovu.<br />
+				Kánon, který jste již odeslali, nebude nijak ovlivněn.
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-danger pull-left" onclick="send('wipe')">Chápu riziko, vše smaž!</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+		</div>
+	</div>
+</div>
