@@ -11,9 +11,9 @@
 			<br />
 			<select name="book" id="book" class="form-control" size="25" ondblclick="send('add')">
 			<?php foreach($books as $rid => $book):?>
-				<optgroup label='<?=$regions[$rid]?>'>
+				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:"Oblast č. ". $rid?>'>
 				<?php foreach($book as $id => $info):?>
-					<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?> (<?=$generes[$info['genere']]?>)</option>
+					<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?"(".$generes[$info['genere']].")":""?></option>
 				<?php endforeach;?>
 				</optgroup>
 				<?php endforeach;?>

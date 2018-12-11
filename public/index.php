@@ -11,6 +11,8 @@ $config['db']['type']   = "sqlite";
 $config['db']['file'] = "../db/database.db";
 $config['name'] = "Kánon";
 $config['path'] = "/maturita";
+$config['upload_directory'] = __DIR__ . "/../uploads";
+$config['lang_directory'] = __DIR__ . "/../langs";
 
 session_start();
 
@@ -44,10 +46,19 @@ $container['flash'] = function () {
     return new \Slim\Flash\Messages();
 };
 
+$container['lang'] = function ($c) {
+    $lang = new lang($c);
+    return $lang;
+};
+
+$container->lang->loadLangs();
+$container->lang->getLang();
+
 $container['view'] = function ($container) {
     $templateVariables = [
         "router" => $container->router,
         "auth" => $container->auth,
+        "lang" => $container->lang,
     ];
     return new \Slim\Views\PhpRenderer('../templates/', $templateVariables);
 };

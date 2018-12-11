@@ -45,8 +45,8 @@ class seed {
             id INTEGER PRIMARY KEY,
             name TEXT,
             author TEXT NULL,
-            region INTEGER,
-            genere INTEGER
+            region INTEGER NULL,
+            genere INTEGER NULL
         );");
 
         $this->db->query("CREATE TABLE IF NOT EXISTS regions (

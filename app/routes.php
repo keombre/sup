@@ -15,6 +15,11 @@ final class routes {
                 
                 $this->get('/lists[/{id}]', \controller\lists\view::class)
                      ->setName('lists-view');
+                
+                $this->group('', function () {
+                    $this->post('/upload', \controller\admin\upload::class)
+                         ->setName('admin-upload');
+                });
                 /*
                 $this->post('/dashboard/print', \controller\printer::class)
                     ->setName('printer');
@@ -50,9 +55,11 @@ final class routes {
                     })->add(\middleware\admin::class);
                     
                 });
-                
-                
+            
             })->add(\middleware\auth::class);
+
+            $this->get('/lang/{lang}', \controller\lang::class)
+                ->setName('lang');
             
             $this->group('', function() {
                 $this->get('/', \controller\index::class)

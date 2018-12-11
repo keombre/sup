@@ -1,7 +1,7 @@
 <?php require __dir__."/../layout/app.phtml"?>
 
 Schválit kánon:
-<form class="form-horizontal" method="post" action="<?=$router->pathFor('approve')?>">
+<form class="form-horizontal" method="post" action="">
     <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
     <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
     <div class="form-group">

@@ -2,7 +2,7 @@
 
 namespace controller\lists;
 
-class vew {
+class view {
     
     use \traits\sendResponse;
 

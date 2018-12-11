@@ -24,7 +24,7 @@ class dashboard {
             $response = $this->sendResponse($request, $response, "dash/student.phtml", ["lists" => $listgroups]);
             
         } else if ($level == 1) {
-            $books = $this->container->db->query(//fix me!!
+            $books = $this->container->db->query(// fix me!!
                 "SELECT books.name, books.author, COUNT(lists.book)
                  FROM books, lists, users
                  WHERE lists.book = books.id AND lists.user = users.id AND users.state = 2;");
@@ -37,11 +37,8 @@ class dashboard {
             ]);
         } else if ($level == 2) {
             $books = $this->container->db->select("books", "*");
-            $users = $this->container->db->select("users", "*");
-            $response = $this->sendResponse($request, $response, "dash/admin.phtml", [
-                "books" => $books,
-                "users" => $users
-            ]);
+
+            $response = $this->sendResponse($request, $response, "dash/admin.phtml", ["books" => $books]);
         }
 
         return $response;
