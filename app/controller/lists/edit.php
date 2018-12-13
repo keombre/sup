@@ -7,64 +7,172 @@ class edit {
     use \traits\sendResponse;
 
     protected $container;
+    private $userID;
+    private $listID = false;
 
     function __construct(\Slim\Container $container) {
         $this->container = $container;
+        $this->userID = $this->container->auth->user['id'];
     }
 
     function __invoke($request, $response, $args) {
 
+        $this->getListID($args);
+
         if ($request->isGet()) {
+            $this->render($request, $response, $args);
+
+        } else if ($request->isPut()) {
+
+            $createNew = false;
             
-            $listbooks = [];
+            $data = $request->getParsedBody();
+            $books = array_unique(filter_var_array(@$data['books'], FILTER_SANITIZE_STRING));
             
-            if (array_key_exists('id', @$args)) {
-                $id = filter_var(@$args['id'], FILTER_SANITIZE_STRING);
-                if (!$this->container->db->has("listgroups", ["id" => $id, "user" => $this->container->auth->user['id']])) {
-                    $this->redirectWithMessage($response, 'dashboard', "error", ["Kánon nenalezen"]);
-                }
-
-                $listbooks = $this->container->db->select("lists", ["[>]listgroups" => ["list" => "id"]], "lists.book", ["listgroups.user" => $this->container->auth->user['id']]);
-            }
-
-            $books = [];
-            $tmpbooks = [];
-
-            foreach ($this->container->db->select("books", "*") as $book) {
-                if (!array_key_exists($book['region'], $books))
-                    $books[$book['region']] = [];
-                $books[$book['region']][$book['id']] = $book;
-                $tmpbooks[$book['id']] = $book;
-            }
-
-            $list = [];
-            foreach ($listbooks as $book) {
-                if (!array_key_exists($tmpbooks[$book]['region'], $list))
-                    $list[$tmpbooks[$book]['region']] = [];
-                array_push($list[$tmpbooks[$book]['region']], $book);
+            if ($this->listID === false)
+                return $this->redirectWithMessage($response, 'lists-edit', "error", ["Kánon nenalezen"]);
+            
+            if (!count($books)) {
+                if ($this->listID === true)
+                    return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"]);
+                else
+                    return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"], ['id' => $this->listID]);
             }
             
-            $regions = [];
-            foreach ($this->container->db->select("regions", "*") as $region) {
-                $regions[$region['id']] = $region['name'];
+            if ($this->listID === true) {
+                $this->generateListID();
+                $createNew = true;
             }
 
-            $generes = [];
-            foreach ($this->container->db->select("generes", "*") as $genere) {
-                $generes[$genere['id']] = $genere['name'];
+            $list = $this->container->db->select("books", "id");
+            
+            foreach ($this->container->db->select("lists", "book", ["list" => $this->listID]) as $remove) {
+                if (($index = array_search($remove, $list)) !== false)
+                    unset($list[$index]);
             }
 
-            $this->sendResponse($request, $response, "lists/edit.phtml", [
-                "list" => $list,
-                "books" => $books,
-                "regions" => $regions,
-                "generes" => $generes
-            ]);
+            $save = [];
+            foreach ($books as $book) {
+                if (in_array($book, $list))
+                    array_push($save, ["list" => $this->listID, "book" => $book]);
+            }
 
-        } elseif ($request->isPut()) {
-            null;
+            if (!count($save)) {
+                if ($this->removeEmptyList())
+                    return $this->redirectWithMessage($response, 'dashboard', "error", ["Chyba při vytváření kánonu"]);
+                else
+                    return $this->redirectWithMessage($response, 'lists-edit', "error", ["Chyba při ukládání knih"], ["id" => $this->listID]);
+            }
+            
+            $this->container->db->insert("lists", $save);
+            if ($createNew) {
+                $this->container->db->insert("listgroups", [
+                    "id" => $this->listID,
+                    "user" => $this->userID,
+                    "created" => time()
+                ]);
+                return $response->withRedirect($this->container->router->pathFor('lists-edit', ['id' => $this->listID]), 301);
+            } else
+                $this->render($request, $response, $args);
+
+        } else if ($request->isDelete()) {
+            $data = $request->getParsedBody();
+            $books = array_unique(filter_var_array(@$data['books'], FILTER_SANITIZE_STRING));
+
+            if ($this->removeEmptyList())
+                return $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
+            
+            if (!is_numeric($this->listID)) {
+                if (!count($books))
+                    return $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
+                else
+                    return $this->redirectWithMessage($response, 'dashboard', "error", ["Kánon nenalezen"]);
+            }
+
+            if (!count($books))
+                return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"], ['id' => $this->listID]);
+            
+            $this->container->db->delete("lists", ["list" => $this->listID, "OR" => ["book" => $books]]);
+            
+            if ($this->removeEmptyList())
+                return $this->redirectWithMessage($response, 'dashboard', "status", ["Kánon smazán"]);
+            else
+                $this->render($request, $response, $args);
+
+        } else if ($request->isPost()) {
+            // action: finish
         }
 
         return $response;
+    }
+
+    private function render(&$request, &$response, $args) {
+        $listbooks = [];
+
+        if ($this->listID === false)
+            return $this->redirectWithMessage($response, 'dashboard', "error", ["Kánon nenalezen"]);
+        
+        if (is_numeric($this->listID))
+            $listbooks = $this->container->db->select("lists", "book", ["list" => $this->listID]);
+
+        $allbooks = [];
+        foreach ($this->container->db->select("books", "*") as $book)
+            $allbooks[$book['id']] = $book;
+        
+        $books = [];
+        $list = [];
+
+        foreach ($listbooks as $book) {
+            if (array_key_exists($book, $allbooks)) {
+                if (!array_key_exists($allbooks[$book]['region'], $list))
+                    $list[$allbooks[$book]['region']] = [];
+                $list[$allbooks[$book]['region']][$book] = $allbooks[$book];
+                unset($allbooks[$book]);
+            }
+        }
+        
+        foreach ($allbooks as $book) {
+            if (!array_key_exists($book['region'], $books))
+                $books[$book['region']] = [];
+            $books[$book['region']][$book['id']] = $book;
+        }
+
+        $regions = array_column($this->container->db->select("regions", "*"), 'name', 'id');
+        $generes = array_column($this->container->db->select("generes", "*"), 'name', 'id');
+        $listLength = count($listbooks);
+        
+        $this->sendResponse($request, $response, "lists/edit.phtml", [
+            "list" => $list,
+            "books" => $books,
+            "regions" => $regions,
+            "generes" => $generes,
+            "listLength" => $listLength
+        ]);
+    }
+
+    private function removeEmptyList() {
+        if ($this->container->db->has('listgroups', ['AND' => ['user' => $this->userID, 'id' => $this->listID]])) {
+            if (!$this->container->db->has('lists', ['list' => $this->listID])) {
+                $this->container->db->delete('listgroups', ['id' => $this->listID]);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function getListID($args) {
+        if (array_key_exists('id', @$args)) {
+            $id = filter_var(@$args['id'], FILTER_SANITIZE_STRING);
+            if ($this->container->db->has("listgroups", ["id" => $id, "user" => $this->userID]))
+                $this->listID = $id;
+        } else
+            $this->listID = true;
+    }
+
+    private function generateListID() {
+        do {
+            $id = rand(100000, 999999);
+        } while ($this->container->db->has("listgroups", ["id" => $id, "user" => $this->userID]));
+        $this->listID = $id;
     }
 }

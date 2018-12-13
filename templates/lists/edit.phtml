@@ -1,15 +1,16 @@
 <?php require __dir__ . "/../layout/app.phtml"?>
 
 <div class="container main">
-<form id="form" method="post" action="<?=$router->pathFor('lists-edit')?>">
-<input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
-<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
 	<div class="col-md-6">
+		<form id="form" method="post">
+		<input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+		<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+		<input type="hidden" name="_METHOD" value="PUT" />
 		<div class="form-group">
-			<label for="book">Školní kánon:</label>
+			<label for="books[]">Školní kánon:</label>
 			<input id="search" class="form-control" placeholder="Vyhledávejte" autofocus />
 			<br />
-			<select name="book" id="book" class="form-control" size="25" ondblclick="send('add')">
+			<select name="books[]" id="books" multiple="multiple" class="form-control" size="25" ondblclick="send('add')">
 			<?php foreach($books as $rid => $book):?>
 				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:"Oblast č. ". $rid?>'>
 				<?php foreach($book as $id => $info):?>
@@ -19,6 +20,8 @@
 				<?php endforeach;?>
 			</select>
 		</div>
+		<input type="submit">
+		</form>
 	</div>
 	<div class="col-md-2">
 		<div class="my-buttons">
@@ -34,13 +37,17 @@
 		</div>
 	</div>
 	<div class="col-md-4">
+		<form id="form" method="post">
+		<input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+		<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+		<input type="hidden" name="_METHOD" value="DELETE" />
 		<div class="form-group">
-			<label for="myBooks">Můj kánon: (<?=count($list)?>/20)</label>
-			<select name="myBooks" id="myBooks" class="form-control" size="26" ondblclick="send('remove')">
+			<label for="books[]">Můj kánon: (<?=$listLength?>/20)</label>
+			<select name="books[]" id="myBooks" multiple="multiple" class="form-control" size="26" ondblclick="send('remove')">
 			<?php foreach($list as $rid => $book):?>
-				<optgroup label='<?=$regions[$rid]?>'>
-				<?php foreach($book as $id):?>
-					<option value='<?=$id?>'><?=$books[$rid][$id]['author'] == ''?"":$books[$rid][$id]['author'] . ": "?><?=$books[$rid][$id]['name']?> (<?=$generes[$books[$rid][$id]['genere']]?>)</option>
+				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:"Oblast č. ". $rid?>'>
+				<?php foreach($book as $id => $info):?>
+				<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?"(".$generes[$info['genere']].")":""?></option>
 				<?php endforeach;?>
 				</optgroup>
 			<?php endforeach;?>
@@ -50,6 +57,8 @@
 				Dokončit kánon <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 			</button>
 		</div>
+		<input type="submit">
+		</form>
 	</div>
 </div>
 </div>
@@ -72,4 +81,5 @@
 			<button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
 		</div>
 	</div>
+</div>
 </div>

@@ -13,6 +13,7 @@ class logout {
     function __invoke($request, $response) {
 
         $this->container->auth->logout();
+        session_unset();
 
         return $response->withRedirect($this->container->router->pathFor('index'), 301);
     }

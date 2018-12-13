@@ -1,18 +1,43 @@
-# Hades - Backend
-PHP Backend for the **Hades** configuration and distribution utility
-# Requirements:
-**PHP** 7.1+
+# Todo
 
-**SQLite** PHP extention
+student:
+ - ukládání kánonu
+ - odevzdání
+ - tisk
 
-**Composer**
-# Instalation:
-```bash
-cd [your public www folder]
+učitel:
+ - potvrzení
+ - zrušení potvrzení
+ - statistika knih
+ - náhled do kánonu
 
-curl -O https://github.com/gpjp-hades/Backend/releases/download/0.3/packages.json
-composer create-project --repository packages.json gpjp-hades/backend [your target folder]
+admin:
+ - kontrola unikátnosti ID knih (nebo můžeme ID kompletně přeskakovat)
+ - správa oblastí
+ - období
+ - stahování kánonů
+ - stahování appky
+ - náhled do kánonu
+ - verze seznamů knih pro různé roky
+ - otevírání a zavírání možnosti tvorby kánonu
 
-vi [your target folder]/bootstrap/app.php
-# find $config['path'] and set it to [your target folder]
-```
+obecně:
+ - default volba pro jazyky v configu
+ - vše přeložit
+ - dodělat styly
+ - xss protection
+ - zkoonstrolovat nasazení v jiných složkách
+ - automatická detekce instalace
+ - opravit HTML (někde chybí/přebývají tagy)
+ - zkonstrolovat flow redirectWithMessage (nově má return)
+ 
+ - pokusit se to celé rozbít
+ - standardizovat akce
+
+do budoucna:
+ - zápis volitelných předmětů
+ - řízení přijímacího řízení (volba jazyku atd.)
+ - správa ICT profilu
+ - propojení s LDAPem (pouze reflexe profilů, správu bude dělat admin)
+ - aktuality od vyučujících (studijní materiály, zadávání a odevzdávání úkolů)
+ - zápis termínů ke zkouškám (vyžaduje změnl školního řádu)
