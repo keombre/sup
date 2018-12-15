@@ -29,13 +29,19 @@ class login {
                     $response = $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
                 } else {
                     sleep(2);
-                    $this->redirectWithMessage($response, 'index', "error", ["Přihlášení selhalo", "Zkuste to znovu"]);
+                    $this->redirectWithMessage($response, 'index', "error", [
+                        $this->container->lang->g('login-failed-title', 'index'),
+                        $this->container->lang->g('login-failed-message', 'index')
+                    ]);
                 }
             } else if ($this->container->auth->loginStudent($name, $pass)) {
                 $response =  $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
             } else {
                 sleep(2);
-                $this->redirectWithMessage($response, 'index', "error", ["Přihlášení selhalo", "Zkuste to znovu"]);
+                $this->redirectWithMessage($response, 'index', "error", [
+                    $this->container->lang->g('login-failed-title', 'index'),
+                    $this->container->lang->g('login-failed-message', 'index')
+                ]);
             }
         }
 
