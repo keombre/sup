@@ -20,16 +20,18 @@ admin:
  - náhled do kánonu
  - verze seznamů knih pro různé roky
  - otevírání a zavírání možnosti tvorby kánonu
+ - nahrávání kánonu musí být větší pedant
 
 obecně:
- - default volba pro jazyky v configu
+ - opravit přímý přístp k /new/s2 - done
+ - default volba pro jazyky v configu - done
  - vše přeložit
  - dodělat styly
  - xss protection
- - zkoonstrolovat nasazení v jiných složkách
+ - zkontrolovat nasazení v jiných složkách
  - automatická detekce instalace
  - opravit HTML (někde chybí/přebývají tagy)
- - zkonstrolovat flow redirectWithMessage (nově má return)
+ - zkontrolovat flow redirectWithMessage (nově má return)
  
  - pokusit se to celé rozbít
  - standardizovat akce

@@ -59,6 +59,7 @@ $container['view'] = function ($container) {
         "router" => $container->router,
         "auth" => $container->auth,
         "lang" => $container->lang,
+        "ROOT_PATH" => $container->get('settings')['path']
     ];
     return new \Slim\Views\PhpRenderer('../templates/', $templateVariables);
 };

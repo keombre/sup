@@ -2,7 +2,7 @@
 
 <div class="container main">
 	<div class="col-md-6">
-		<form id="form" method="post">
+		<form id="form-add" method="post">
 		<input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
 		<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
 		<input type="hidden" name="_METHOD" value="PUT" />
@@ -20,24 +20,23 @@
 				<?php endforeach;?>
 			</select>
 		</div>
-		<input type="submit">
 		</form>
 	</div>
 	<div class="col-md-2">
 		<div class="my-buttons">
-			<button class="form-control btn btn-default" onclick="send('add')">
+			<button class="form-control btn btn-default" onclick="send_add()">
 				Přidat <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 			</button>
-			<button class="form-control btn btn-default" onclick="send('remove')">
+			<button class="form-control btn btn-default" onclick="send_del()">
 				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Odebrat
 			</button>
 			<button class="form-control btn btn-danger" data-toggle="modal" data-target="#clearModal" onclick="return false;">
-				<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Vyčistit
+				<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Smazat kánon
 			</button>
 		</div>
 	</div>
 	<div class="col-md-4">
-		<form id="form" method="post">
+		<form id="form-del" method="post">
 		<input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
 		<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
 		<input type="hidden" name="_METHOD" value="DELETE" />
@@ -53,16 +52,14 @@
 			<?php endforeach;?>
 			</select>
 			<br />
-			<button class="form-control btn btn-success" onclick="send('finish')">
-				Dokončit kánon <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-			</button>
 		</div>
-		<input type="submit">
 		</form>
+		<button class="form-control btn btn-success" onclick="send('finish')">
+			Dokončit kánon <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		</button>
 	</div>
 </div>
 </div>
-</form>
 <div id="clearModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -77,9 +74,21 @@
 			</p>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-danger pull-left" onclick="send('wipe')">Chápu riziko, vše smaž!</button>
+			<button type="button" class="btn btn-danger pull-left" onclick="send_wipe()">Chápu riziko, odstraň kánon!</button>
 			<button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
 		</div>
 	</div>
 </div>
 </div>
+<script>
+function send_add() {
+	$('#form-add').submit()
+}
+function send_del() {
+	$('#form-del').submit()
+}
+function send_wipe() {
+	$('#myBooks option').prop('selected', true);
+	$('#form-del').submit()
+}
+</script>

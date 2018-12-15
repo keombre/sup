@@ -4,15 +4,19 @@
 <div class="col-md-5">
     <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Seznam knih</strong>
-        <span class="pull-right"><a href="<?=$router->pathFor('lists-edit');?>"><span class="glyphicon glyphicon-plus"></span> Přidat knihu</a></span>
+        <strong>Seznam knih (<?=count($books)?>)</strong>
+        <div class="pull-right">
+            <a href="<?=$router->pathFor('lists-edit');?>"><span class="glyphicon glyphicon-plus"></span> Přidat knihu</a>
+            |
+            <a href="#" id="toggle-list" data-toggle="collapse" data-target="#collapse-list">Rozbalit</a>
+        </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body collapse" id="collapse-list">
     <?php if (is_array($books) && count($books)):?>
         <ul class='list-group'>
         <?php foreach($books as $book):?>
         <li class='list-group-item'>
-            <?=$book['author'] == ""?"":$book['author'] . ": "?><?=$book['name']?>
+            <span style="width: 75%;display: inline-block;"><?=$book['author'] == ""?"":$book['author'] . ": "?><b><?=$book['name']?></b></span>
             <a href="#" class='btn btn-xs btn-danger pull-right'>Odstranit</a>
         </li>
         <?php endforeach;?>
@@ -23,6 +27,13 @@
     </div>
     </div>
 </div>
+<script>
+$('#toggle-list').click(function(){
+    $(this).text(function(i,old){
+        return old == 'Rozbalit' ?  'Sbalit' : 'Rozbalit';
+    });
+});
+</script>
 
 <div class="col-md-5 col-md-offset-2">
     <div class="panel panel-default">
@@ -37,7 +48,7 @@
     <form method="post" enctype="multipart/form-data" action="<?=$router->pathFor('admin-upload')?>">
         <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
         <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
-        <input type="file" name="example1"/><br />
+        <input type="file" name="book"/><br />
         <input type="submit"/>
     </form>
     </div>

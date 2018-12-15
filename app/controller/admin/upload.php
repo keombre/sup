@@ -17,7 +17,7 @@ class upload {
         $directory = $this->container['settings']['upload_directory'];
         $uploadedFiles = $request->getUploadedFiles();
 
-        $uploadedFile = $uploadedFiles['example1'];
+        $uploadedFile = $uploadedFiles['book'];
         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
             $filename = $this->moveUploadedFile($directory, $uploadedFile);
             $parsed = $this->validateFile($directory . "/" . $filename);

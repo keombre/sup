@@ -12,6 +12,19 @@
         <a class="navbar-brand" href="<?=$router->pathFor('dashboard')?>"><?=$lang->g('name', 'main')?></a>
     </div>
     <div id="navbar" class="collapse navbar-collapse text-center">
+        <?php if (count($lang->getLangs())):?>
+        <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><?=$lang->g('language', 'navbar')?>
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+        <?php foreach ($lang->getLangs() as $lg => $name):?>
+        <li><a href="<?=$router->pathFor('lang', ['lang' => $lg])?>"><?=$name?> (<?=$lg?>)</a></li>
+        <?php endforeach;?>
+        </ul>
+        </li>
+        </ul>
+        <?php endif;?>
         <?php if ($auth->logged()):?>
         <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
@@ -22,25 +35,20 @@
             <ul class="dropdown-menu">
                 <li>
                     <a href="#" onclick="document.getElementById('logout').submit()">
-                        <span class="glyphicon glyphicon-log-out"></span> Odhlásit se
+                        <span class="glyphicon glyphicon-log-out"></span> <?=$lang->g('logout', 'navbar')?>
                     </a>
                 </li>
                 <li role="presentation" class="divider"></li>
-                <li><a href="<?=$router->pathFor('changePassword')?>"><span class="glyphicon glyphicon-lock"></span> Změnit heslo</a></li>
+                <li><a href="<?=$router->pathFor('changePassword')?>"><span class="glyphicon glyphicon-lock"></span> <?=$lang->g('change-pass', 'navbar')?></a></li>
                 <?php if ($auth->user['level'] == 2):?>
-                <li><a href="<?=$router->pathFor('manageUsers')?>"><span class="glyphicon glyphicon-briefcase"></span> Spravovat uživatele</a></li>
-                <li><a href="<?=$router->pathFor('register')?>"><span class="glyphicon glyphicon-plus"></span> Registrovat učitele</a></li>
+                <li><a href="<?=$router->pathFor('manageUsers')?>"><span class="glyphicon glyphicon-briefcase"></span> <?=$lang->g('manage-users', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('register')?>"><span class="glyphicon glyphicon-plus"></span> <?=$lang->g('register-teacher', 'navbar')?></a></li>
                 <?php endif;?>
             </ul>
         </li>
         </ul>
         <form action="<?=$router->pathFor('logout')?>" method="post" id="logout"></form>
         <?php endif?>
-        <li>
-        <?php foreach ($lang->getLangs() as $lg => $name):?>
-        <a href="<?=$router->pathFor('lang', ['lang' => $lg])?>"><?=$lg?></a> /
-        <?php endforeach;?>
-        </li>
     </div>
     </div>
 </nav>

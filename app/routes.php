@@ -74,6 +74,7 @@ final class routes {
                         ->setName('register-s1');
 
                     $this->map(['GET', 'POST'], '/s2', \controller\register\s2::class)
+                        ->add(\middleware\registers1::class)
                         ->setName('register-s2');
                 });
                 

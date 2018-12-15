@@ -13,7 +13,9 @@ class logout {
     function __invoke($request, $response) {
 
         $this->container->auth->logout();
+        $lang = @$_SESSION['lang'];
         session_unset();
+        $_SESSION['lang'] = $lang;
 
         return $response->withRedirect($this->container->router->pathFor('index'), 301);
     }
