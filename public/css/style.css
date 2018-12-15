@@ -48,7 +48,7 @@ body {
     height: 60px;
     background-color: #f5f5f5;
 }
-.navbar-brand {
+/*.navbar-brand {
     display: flex
 }
 .navbar-brand img {
@@ -58,15 +58,7 @@ body {
     margin-right: 15px;
     image-rendering: pixelated;
     image-rendering: -webkit-optimize-contrast;
-}
-#alert {
-    position: fixed;
-    width: 100%;
-    z-index: 5;
-}
-#alert .alert {
-    box-shadow: 0 5px 15px rgba(0,0,0,.5);
-}
+}*/
 #book, #myBooks {
     overflow: auto;
 }

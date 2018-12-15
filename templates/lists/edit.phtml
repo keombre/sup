@@ -10,7 +10,7 @@
 			<label for="books[]">Školní kánon:</label>
 			<input id="search" class="form-control" placeholder="Vyhledávejte" autofocus />
 			<br />
-			<select name="books[]" id="books" multiple="multiple" class="form-control" size="25" ondblclick="send('add')">
+			<select name="books[]" id="books" multiple="multiple" class="form-control" size="25" ondblclick="send_add()">
 			<?php foreach($books as $rid => $book):?>
 				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:"Oblast č. ". $rid?>'>
 				<?php foreach($book as $id => $info):?>
@@ -42,7 +42,7 @@
 		<input type="hidden" name="_METHOD" value="DELETE" />
 		<div class="form-group">
 			<label for="books[]">Můj kánon: (<?=$listLength?>/20)</label>
-			<select name="books[]" id="myBooks" multiple="multiple" class="form-control" size="26" ondblclick="send('remove')">
+			<select name="books[]" id="myBooks" multiple="multiple" class="form-control" size="26" ondblclick="send_del()">
 			<?php foreach($list as $rid => $book):?>
 				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:"Oblast č. ". $rid?>'>
 				<?php foreach($book as $id => $info):?>
@@ -54,9 +54,9 @@
 			<br />
 		</div>
 		</form>
-		<button class="form-control btn btn-success" onclick="send('finish')">
+		<a href="#" class="form-control btn btn-success">
 			Dokončit kánon <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-		</button>
+		</a>
 	</div>
 </div>
 </div>
@@ -65,12 +65,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">Opravdu chcete kánon vyčistit?</h4>
+			<h4 class="modal-title">Opravdu chcete kánon smazat?</h4>
 		</div>
 		<div class="modal-body">
 			<p>
-				Tato akce je nevratná. Celý kánon budete muset vytvořit znovu.<br />
-				Kánon, který jste již odeslali, nebude nijak ovlivněn.
+				Tato akce je nevratná. Celý kánon budete muset vytvořit znovu.
 			</p>
 		</div>
 		<div class="modal-footer">
@@ -91,4 +90,28 @@ function send_wipe() {
 	$('#myBooks option').prop('selected', true);
 	$('#form-del').submit()
 }
+$.fn.scrollPosReaload = function() {
+    if (localStorage) {
+        let posReader = localStorage["posStorage"]
+        if (posReader) {
+            $(this).scrollTop(posReader);
+            localStorage.removeItem("posStorage")
+        }
+        $(this).click(function(e) {
+            localStorage["posStorage"] = $(this).scrollTop()
+        })
+    }
+    return this
+}
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+    $("#search").on("keyup", function() {
+        let value = $(this).val().toLowerCase()
+        $("#books option").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        })
+	})
+	$('#books').scrollPosReaload()
+})
 </script>
+<?php require __dir__ . "/../layout/footer.phtml"?>
