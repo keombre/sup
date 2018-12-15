@@ -4,11 +4,11 @@
 <div class="col-md-5">
     <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Seznam knih (<?=count($books)?>)</strong>
+        <strong><?=$lang->g('list-title', 'dash-admin')?> (<?=count($books)?>)</strong>
         <div class="pull-right">
-            <a href="<?=$router->pathFor('lists-edit');?>"><span class="glyphicon glyphicon-plus"></span> Přidat knihu</a>
+            <a href="<?=$router->pathFor('lists-edit');?>"><span class="glyphicon glyphicon-plus"></span> <?=$lang->g('list-add', 'dash-admin')?></a>
             |
-            <a href="#" id="toggle-list" data-toggle="collapse" data-target="#collapse-list">Rozbalit</a>
+            <a href="#" id="toggle-list" data-toggle="collapse" data-target="#collapse-list"><?=$lang->g('list-expand', 'dash-admin')?></a>
         </div>
     </div>
     <div class="panel-body collapse" id="collapse-list">
@@ -17,12 +17,12 @@
         <?php foreach($books as $book):?>
         <li class='list-group-item'>
             <span style="width: 75%;display: inline-block;"><?=$book['author'] == ""?"":$book['author'] . ": "?><b><?=$book['name']?></b></span>
-            <a href="#" class='btn btn-xs btn-danger pull-right'>Odstranit</a>
+            <a href="#" class='btn btn-xs btn-danger pull-right'><?=$lang->g('list-remove', 'dash-admin')?></a>
         </li>
         <?php endforeach;?>
         </ul>
     <?php else:?>
-        <span class='text-muted'>Žádné knihy nenalezeny</span>
+        <span class='text-muted'><?=$lang->g('list-empty', 'dash-admin')?></span>
     <?php endif?>
     </div>
     </div>
@@ -30,19 +30,19 @@
 <script>
 $('#toggle-list').click(function(){
     $(this).text(function(i,old){
-        return old == 'Rozbalit' ?  'Sbalit' : 'Rozbalit';
+        return old == <?=$lang->g('list-expand', 'dash-admin')?> ? <?=$lang->g('list-collapse', 'dash-admin')?> : <?=$lang->g('list-expand', 'dash-admin')?>;
     });
 });
-</script>
+</script><?=$lang->g('', 'dash-admin')?>
 
 <div class="col-md-5 col-md-offset-2">
     <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Nahrát nový kánon (Stávající bude přepsán)</strong>
+        <strong><?=$lang->g('upload-title', 'dash-admin')?></strong>
     </div>
     <div class="panel-body">
-    <p>
-    očekávaný formát csv souboru je:<br />
+    <p><?=$lang->g('upload-expected', 'dash-admin')?>
+    <br />
     <pre>[id];[region id];[author];[name];[genere id]</pre>
     </p>
     <form method="post" enctype="multipart/form-data" action="<?=$router->pathFor('admin-upload')?>">
@@ -53,5 +53,6 @@ $('#toggle-list').click(function(){
     </form>
     </div>
     </div>
+</div>
 </div>
 <?php require __dir__ . "/../layout/footer.phtml"?>
