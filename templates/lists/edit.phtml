@@ -7,12 +7,12 @@
 		<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
 		<input type="hidden" name="_METHOD" value="PUT" />
 		<div class="form-group">
-			<label for="books[]">Školní kánon:</label>
-			<input id="search" class="form-control" placeholder="Vyhledávejte" autofocus />
+			<label for="books[]"><?=$lang->g('main-list', 'list-edit')?></label>
+			<input id="search" class="form-control" placeholder="<?=$lang->g('search', 'list-edit')?>" autofocus />
 			<br />
 			<select name="books[]" id="books" multiple="multiple" class="form-control" size="25" ondblclick="send_add()">
 			<?php foreach($books as $rid => $book):?>
-				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:"Oblast č. ". $rid?>'>
+				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:$lang->g('unknown-region', 'list-edit') . " " . $rid?>'>
 				<?php foreach($book as $id => $info):?>
 					<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?"(".$generes[$info['genere']].")":""?></option>
 				<?php endforeach;?>
@@ -25,13 +25,13 @@
 	<div class="col-md-2">
 		<div class="my-buttons">
 			<button class="form-control btn btn-default" onclick="send_add()">
-				Přidat <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+			    <?=$lang->g('add', 'list-edit')?> <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 			</button>
 			<button class="form-control btn btn-default" onclick="send_del()">
-				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Odebrat
+				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> <?=$lang->g('remove', 'list-edit')?>
 			</button>
 			<button class="form-control btn btn-danger" data-toggle="modal" data-target="#clearModal" onclick="return false;">
-				<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Smazat kánon
+				<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> <?=$lang->g('wipe', 'list-edit')?>
 			</button>
 		</div>
 	</div>
@@ -41,10 +41,10 @@
 		<input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
 		<input type="hidden" name="_METHOD" value="DELETE" />
 		<div class="form-group">
-			<label for="books[]">Můj kánon: (<?=$listLength?>/20)</label>
+			<label for="books[]"><?=$lang->g('my-list', 'list-edit')?> (<?=$listLength?>/20)</label>
 			<select name="books[]" id="myBooks" multiple="multiple" class="form-control" size="26" ondblclick="send_del()">
 			<?php foreach($list as $rid => $book):?>
-				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:"Oblast č. ". $rid?>'>
+				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:$lang->g('unknown-region', 'list-edit') . " " . $rid?>'>
 				<?php foreach($book as $id => $info):?>
 				<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?"(".$generes[$info['genere']].")":""?></option>
 				<?php endforeach;?>
@@ -55,7 +55,7 @@
 		</div>
 		</form>
 		<a href="#" class="form-control btn btn-success">
-			Dokončit kánon <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			<?=$lang->g('finish', 'list-edit')?> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 		</a>
 	</div>
 </div>
@@ -65,16 +65,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="modal-title">Opravdu chcete kánon smazat?</h4>
+			<h4 class="modal-title"><?=$lang->g('title-wipe', 'list-edit')?></h4>
 		</div>
 		<div class="modal-body">
-			<p>
-				Tato akce je nevratná. Celý kánon budete muset vytvořit znovu.
-			</p>
+			<p><?=$lang->g('text-wipe', 'list-edit')?></p>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-danger pull-left" onclick="send_wipe()">Chápu riziko, odstraň kánon!</button>
-			<button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+			<button type="button" class="btn btn-danger pull-left" onclick="send_wipe()"><?=$lang->g('submit-wipe', 'list-edit')?></button>
+			<button type="button" class="btn btn-default" data-dismiss="modal"><?=$lang->g('cancel-wipe', 'list-edit')?></button>
 		</div>
 	</div>
 </div>
