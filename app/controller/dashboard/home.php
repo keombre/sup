@@ -16,7 +16,7 @@ class home {
 
         $response = $this->sendResponse($request, $response, "layout/dashboard.phtml", [
             "active" => "home",
-            "site" => "Home - Not implemented"
+            "site" => "Home dashboard"
         ]);
 
         return $response;

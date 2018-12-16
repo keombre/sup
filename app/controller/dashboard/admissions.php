@@ -16,7 +16,7 @@ class admissions {
 
         $response = $this->sendResponse($request, $response, "layout/dashboard.phtml", [
             "active" => "admissions",
-            "site" => "Not implemented"
+            "site" => "Již jste přijat(a)"
         ]);
 
         return $response;
