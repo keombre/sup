@@ -42,7 +42,7 @@ $('#toggle-list').click(function(){
     <br />
     <pre>[id];[region id];[author];[name];[genere id]</pre>
     </p>
-    <form method="post" enctype="multipart/form-data" action="<?=$router->pathFor('admin-upload')?>">
+    <form method="post" enctype="multipart/form-data" action="<?=$router->pathFor('lists-admin-upload')?>">
         <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
         <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
         <input type="file" name="book"/><br />

@@ -1,0 +1,16 @@
+<?php require __dir__."/app.phtml"?>
+
+<div class="container">
+<ul class="nav nav-tabs">
+  <li<?=$active == "home"?' class="active"':''?>><a href="<?=$router->pathFor('dashboard-home')?>">Domů</a></li>
+  <li<?=$active == "admissions"?' class="active"':''?>><a href="<?=$router->pathFor('dashboard-admissions')?>">Přijímací řízení</a></li>
+  <li<?=$active == "subjects"?' class="active"':''?>><a href="<?=$router->pathFor('dashboard-subjects')?>">Volitelné předměty</a></li>
+  <li<?=$active == "lists"?' class="active"':''?>><a href="<?=$router->pathFor('lists')?>">Maturitní kánon</a></li>
+</ul>
+<div class="panel panel-default" style="border-top: none;border-top-left-radius: 0;border-top-right-radius: 0;">
+<div class="panel-body">
+  <?=$site?>
+</div>
+</div>
+</div>
+<?php require __dir__ . "/footer.phtml"?>

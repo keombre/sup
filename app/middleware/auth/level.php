@@ -1,6 +1,6 @@
 <?php
 
-namespace middleware;
+namespace middleware\auth;
 
 class level {
 

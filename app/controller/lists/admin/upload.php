@@ -1,6 +1,6 @@
 <?php
 
-namespace controller\admin;
+namespace controller\lists\admin;
 
 class upload {
 

@@ -6,22 +6,36 @@ final class routes {
         
         $app->group($app->getContainer()->get('settings')['path'], function() {
             $this->group('', function() {
-                
-                $this->get('/dashboard', \controller\dashboard::class)
-                     ->setName('dashboard');
 
-                $this->map(['GET', 'PUT', 'POST', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
-                     ->setName('lists-edit')
-                     ->add(\middleware\dashboard::class)
-                     ->add(new \middleware\level($this->getContainer(), 0));
-                
-                $this->get('/lists[/{id}]', \controller\lists\view::class)
-                     ->setName('lists-view');
-                
-                $this->group('', function () {
-                    $this->post('/upload', \controller\admin\upload::class)
-                         ->setName('admin-upload');
+                $this->group('/dashboard', function () {
+                    $this->get('', \controller\dashboard\home::class)
+                    ->setName('dashboard');
+                    $this->get('/home', \controller\dashboard\home::class)
+                    ->setName('dashboard-home');
+
+                    $this->get('/admissions', \controller\dashboard\admissions::class)
+                    ->setName('dashboard-admissions');
+                    $this->get('/subjects', \controller\dashboard\subjects::class)
+                    ->setName('dashboard-subjects');
                 });
+
+                $this->group('/lists', function () {
+                    $this->get('', \controller\lists\view::class)
+                    ->setName('lists');
+
+                    $this->get('/view[/{id}]', \controller\lists\view::class)
+                    ->setName('lists-view');
+
+                    $this->map(['GET', 'PUT', 'POST', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
+                    ->setName('lists-edit')
+                    ->add(new \middleware\auth\level($this->getContainer(), 0));
+
+                    $this->group('/admin', function () {
+                        $this->post('/upload', \controller\lists\admin\upload::class)
+                        ->setName('lists-admin-upload');
+                    });
+                })->add(\middleware\dashboard::class);
+                
                 /*
                 $this->post('/dashboard/print', \controller\printer::class)
                     ->setName('printer');
@@ -54,11 +68,10 @@ final class routes {
                         
                         $this->map(['GET', 'PUT'], '/register', \controller\auth\register::class)
                              ->setName('register');
-                    })->add(\middleware\admin::class);
-                    
+                    })->add(\middleware\auth\admin::class);
                 });
             
-            })->add(\middleware\auth::class);
+            })->add(\middleware\auth\auth::class);
 
             $this->get('/lang/{lang}', \controller\lang::class)
                 ->setName('lang');
@@ -75,13 +88,11 @@ final class routes {
                         ->setName('register-s1');
 
                     $this->map(['GET', 'POST'], '/s2', \controller\register\s2::class)
-                        ->add(\middleware\registers1::class)
+                        ->add(\middleware\register\s1::class)
                         ->setName('register-s2');
                 });
                 
-            })->add(\middleware\autologin::class);
+            })->add(\middleware\auth\autologin::class);
         });
-
     }
-
 }

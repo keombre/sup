@@ -1,8 +1,8 @@
 <?php
 
-namespace middleware;
+namespace middleware\register;
 
-class registers1 {
+class s1 {
 
     protected $container;
     

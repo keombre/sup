@@ -1,8 +1,8 @@
 <?php
 
-namespace middleware;
+namespace middleware\auth;
 
-class auth {
+class admin {
 
     protected $container;
     
@@ -12,7 +12,7 @@ class auth {
 
     public function __invoke($request, $response, $next) {
         
-        if ($this->container->auth->logged()) {
+        if ($this->container->auth->logged() && $this->container->auth->user['level'] == 2) {
             return $next($request, $response);
         } else {
             return $response->withRedirect($this->container->router->pathFor('index'), 301);
