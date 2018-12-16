@@ -16,29 +16,26 @@ class dashboard {
 
         $level = $this->container->auth->user['level'];
         if ($level == 0) {
-
-            $id = $this->container->auth->user['id'];
-
-            $listgroups = $this->container->db->select("listgroups", "*", ["user" => $id]);
-            
-            $response = $this->sendResponse($request, $response, "dash/student.phtml", ["lists" => $listgroups]);
-            
+            $response = $this->sendResponse($request, $response, "dashboard.phtml", [
+                "home" => "Not implemented",
+                "admissions" => "Not implemented",
+                "subjects" => "Not implemented",
+                "lists" => $this->container->router->getNamedRoute('lists-view')->run($request, new \Slim\Http\Response)->getBody()
+            ]);
         } else if ($level == 1) {
-            $books = $this->container->db->query(// fix me!!
-                "SELECT books.name, books.author, COUNT(lists.book)
-                 FROM books, lists, users
-                 WHERE lists.book = books.id AND lists.user = users.id AND users.state = 2;");
-            if ($books)
-                $books = $books->fetchAll();
-            $lists = $this->container->db->select("users", "*", ["state" => 2]);
-            $response = $this->sendResponse($request, $response, "dash/teacher.phtml", [
-                "books" => $books,
-                "lists" => $lists
+            $response = $this->sendResponse($request, $response, "dashboard.phtml", [
+                "home" => "Not implemented",
+                "admissions" => "Not implemented",
+                "subjects" => "Not implemented",
+                "lists" => "Not implemented"
             ]);
         } else if ($level == 2) {
-            $books = $this->container->db->select("books", "*");
-
-            $response = $this->sendResponse($request, $response, "dash/admin.phtml", ["books" => $books]);
+            $response = $this->sendResponse($request, $response, "dashboard.phtml", [
+                "home" => "Not implemented",
+                "admissions" => "Not implemented",
+                "subjects" => "Not implemented",
+                "lists" => $this->container->router->getNamedRoute('lists-view')->run($request, new \Slim\Http\Response)->getBody()
+            ]);
         }
 
         return $response;
