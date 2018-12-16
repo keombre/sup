@@ -18,8 +18,8 @@ class dashboard {
         if ($level == 0) {
             $response = $this->sendResponse($request, $response, "dashboard.phtml", [
                 "home" => "Not implemented",
-                "admissions" => "Not implemented",
-                "subjects" => "Not implemented",
+                "admissions" => "Nemáte přístup k přijímacímu řízení",
+                "subjects" => "Nemáte přístup k volbě předmětů",
                 "lists" => $this->container->router->getNamedRoute('lists-view')->run($request, new \Slim\Http\Response)->getBody()
             ]);
         } else if ($level == 1) {

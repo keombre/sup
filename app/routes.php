@@ -12,6 +12,7 @@ final class routes {
 
                 $this->map(['GET', 'PUT', 'POST', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
                      ->setName('lists-edit')
+                     ->add(\middleware\dashboard::class)
                      ->add(new \middleware\level($this->getContainer(), 0));
                 
                 $this->get('/lists[/{id}]', \controller\lists\view::class)

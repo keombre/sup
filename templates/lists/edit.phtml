@@ -1,6 +1,4 @@
-<?php require __dir__ . "/../layout/app.phtml"?>
-
-<div class="container main">
+<div class="main">
 	<div class="col-md-6">
 		<form id="form-add" method="post">
 		<input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
@@ -112,4 +110,3 @@ $(document).ready(function() {
 	$('#books').scrollPosReaload()
 })
 </script>
-<?php require __dir__ . "/../layout/footer.phtml"?>
