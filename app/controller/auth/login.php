@@ -24,18 +24,8 @@ class login {
             $name = filter_var(@$data['name'], FILTER_SANITIZE_STRING);
             $pass = filter_var(@$data['pass'], FILTER_SANITIZE_STRING);
             
-            if (!ctype_digit($name)) {
-                if ($this->container->auth->loginUser($name, $pass)) {
-                    $response = $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
-                } else {
-                    sleep(2);
-                    $this->redirectWithMessage($response, 'index', "error", [
-                        $this->container->lang->g('login-failed-title', 'index'),
-                        $this->container->lang->g('login-failed-message', 'index')
-                    ]);
-                }
-            } else if ($this->container->auth->loginStudent($name, $pass)) {
-                $response =  $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
+            if ($this->container->auth->login($name, $pass)) {
+                $response = $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
             } else {
                 sleep(2);
                 $this->redirectWithMessage($response, 'index', "error", [

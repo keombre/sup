@@ -14,7 +14,7 @@ class seed {
 
     function update() {
         if (!$this->container->db->has("sqlite_master", ["AND" => ["type" => "table", "OR" => [
-            "name" => ["users", "books", "listgroups", "lists", "regions", "generes"]
+            "name" => ["users", "userinfo", "books", "listgroups", "lists", "regions", "generes"]
         ]]])) {
             $this->seed();
         }
@@ -25,11 +25,17 @@ class seed {
             id INTEGER PRIMARY KEY,
             name TEXT,
             pass TEXT,
-            class TEXT NULL,
             token TEXT NULL,
-            level INTEGER DEFAULT 0,
-            state INTEGER DEFAULT 0,
+            role TEXT DEFAULT '0',
+            activeRole INTEGER NULL,
             lastActive INTEGER NULL
+        );");
+
+        $this->db->query("CREATE TABLE IF NOT EXISTS userinfo (
+            id INTEGER PRIMARY KEY,
+            surname TEXT,
+            givenname TEXT,
+            class TEXT NULL,
         );");
         
         if (!$this->db->has("users", ["name" => "admin"])) {
@@ -37,7 +43,8 @@ class seed {
                 "id"   => "1",
                 "name" => "admin", 
                 "pass" => password_hash("admin", PASSWORD_DEFAULT),
-                "level" => 2
+                "activeRole" => 2,
+                "role" => '0,1,2'
             ]);
         }
 

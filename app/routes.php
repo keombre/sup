@@ -13,8 +13,6 @@ final class routes {
                     $this->get('/home', \controller\dashboard\home::class)
                     ->setName('dashboard-home');
 
-                    $this->get('/admissions', \controller\dashboard\admissions::class)
-                    ->setName('dashboard-admissions');
                     $this->get('/subjects', \controller\dashboard\subjects::class)
                     ->setName('dashboard-subjects');
                 });
@@ -57,17 +55,20 @@ final class routes {
                 
                 $this->group('/user', function () {
                     $this->post('/logout', \controller\auth\logout::class)
-                         ->setName('logout');
+                    ->setName('logout');
                     
                     $this->map(['GET', 'PUT'], '/changepass', \controller\auth\changePassword::class)
-                         ->setName('changePassword');
+                    ->setName('changePassword');
                     
-                    $this->group('', function () { // admin middleware
+                    $this->map(['GET', 'PUT'], '/changerole', \controller\auth\changeRole::class)
+                    ->setName('changeRole');
+                    
+                    $this->group('', function () {
                         $this->map(['GET', 'DELETE'], '/manage', \controller\auth\manage::class)
-                             ->setName('manageUsers');
+                        ->setName('manageUsers');
                         
                         $this->map(['GET', 'PUT'], '/register', \controller\auth\register::class)
-                             ->setName('register');
+                        ->setName('register');
                     })->add(\middleware\auth\admin::class);
                 });
             

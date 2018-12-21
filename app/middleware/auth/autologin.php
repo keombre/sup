@@ -12,7 +12,7 @@ class autologin {
 
     public function __invoke($request, $response, $next) {
         
-        if ($this->container->auth->logged()) {
+        if ($this->container->auth->user->logged()) {
             return $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
         } else {
             return $next($request, $response);

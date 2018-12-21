@@ -21,7 +21,7 @@ class s1 {
 
             $this->sendResponse($request, $response, "register/s1.phtml", ["id" => $id]);
 
-        } elseif ($request->isPost()) {
+        } else if ($request->isPost()) {
 
             $data = $request->getParsedBody();
 
@@ -29,19 +29,16 @@ class s1 {
             $pass2 = filter_var(@$data['pass2'], FILTER_SANITIZE_STRING);
             $id = filter_var(@$data['id'], FILTER_SANITIZE_STRING);
             
-            if (
-                is_string($pass) && strlen($pass) > 0 &&
-                $pass === $pass2
-            ) {
-                if (strlen($pass) > 7) {
-                    $_SESSION["APP_PASS"] = $pass;
-                    $_SESSION["APP_ID"] = $id;
-                    $response = $response->withRedirect($this->container->router->pathFor("register-s2"), 301);
-                } else {
-                    $this->redirectWithMessage($response, 'register-s1', "error", ["Chyba!", "Zvolte delší heslo!"]);
-                }
-            } else {
+            if (!is_string($pass) || !strlen($pass) > 0 || $pass != $pass2)
                 $this->redirectWithMessage($response, 'register-s1', "error", ["Chyba!", "Hesla nesouhlasí!"]);
+            else if (strlen($pass) < 8)
+                $this->redirectWithMessage($response, 'register-s1', "error", ["Chyba!", "Zvolte delší heslo!"]);
+            else if ($pass !== $data['pass'])
+                $this->redirectWithMessage($response, 'register-s2', "error", ["Chyba!", "Nepoužívejte speciální znaky!"]);
+            else {
+                $_SESSION["APP_PASS"] = $pass;
+                $_SESSION["APP_ID"] = $id;
+                $response = $response->withRedirect($this->container->router->pathFor("register-s2"), 301);
             }
         }
 

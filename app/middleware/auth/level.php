@@ -14,14 +14,11 @@ class level {
 
     public function __invoke($request, $response, $next) {
         
-        if ($this->container->auth->logged()) {
-            if (is_array($this->level)) {
-                if (in_array($this->container->auth->user['level'], $this->level))
-                    return $next($request, $response);
-            } else if ($this->container->auth->user['level'] == $this->level) {
-                return $next($request, $response);
-            }
-        }
+        if (
+            $this->container->auth->user->logged() && 
+            $this->container->auth->user->level($this->level)
+        )
+            return $next($request, $response);
         return $response->withRedirect($this->container->router->pathFor('index'), 301);
     }
 }

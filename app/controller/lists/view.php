@@ -13,16 +13,17 @@ class view {
     }
 
     function __invoke($request, $response, $args) {
-        $level = $this->container->auth->user['level'];
-        if ($level == 0) {
-            $id = $this->container->auth->user['id'];
+        if ($this->container->auth->user->level(ROLE_STUDENT)) {
+            $id = $this->container->auth->user->getInfo('id');
 
             $listgroups = $this->container->db->select("listgroups", "*", ["user" => $id]);
             
             $response = $this->sendResponse($request, $response, "lists/view.phtml", ["lists" => $listgroups]);
-        } else if ($level == 1) {
-            $response->writeBody("kitten");
-        } else if ($level == 2) {
+
+        } else if ($this->container->auth->user->level(ROLE_TEACHER)) {
+            $response->getBody()->write("kitten");
+
+        } else if ($this->container->auth->user->level(ROLE_ADMIN)) {
             $books = $this->container->db->select("books", "*");
 
             $response = $this->sendResponse($request, $response, "lists/manage.phtml", ["books" => $books]);

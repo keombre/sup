@@ -35,6 +35,7 @@ class register {
             ) {
                 if (strlen($pass) > 7) {
                     
+                    // todo: modify for new api
                     if ($this->container->auth->register(null, $name, $pass, null, 1)) {
                         
                         $this->redirectWithMessage($response, 'dashboard', "status", ["Success!", "User " . $users[$id]. " was created!"]);
