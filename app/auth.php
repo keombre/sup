@@ -21,13 +21,22 @@ class auth {
             $info = $this->db->get("users", "*", ["token" => $_SESSION['token']]);
             $this->user = new user(true);
             $this->addUserInfo($info);
+            $this->addUserAttribs($this->db->get("userinfo", "*", ["id" => $info['id']]));
         } else {
             $this->user = new user(false);
         }
     }
 
     private function addUserInfo($info) {
-        $this->user->setInfo($info['id'], $info['name'], $this->decodeRole($info['role']), intVal($info['activeRole']));
+        $this->user->setInfo($info['id'], $info['name'], $info['role'], intVal($info['activeRole']));
+    }
+
+    private function addUserAttribs($attribs) {
+        if (!is_array($attribs))
+            return false;
+        foreach (['givenname', 'surname', 'class'] as $val)
+            if (array_key_exists($val, $attribs))
+                $this->user->setAttrib($val, $attribs[$val]);
     }
 
     function login($id, $pass) {
@@ -44,8 +53,9 @@ class auth {
                 
                 $this->user->login();
                 $this->addUserInfo($info);
+                $this->addUserAttribs($this->db->get("userinfo", "*", ["id" => $info['id']]));
 
-                return $this->decodeRole($info['role']);
+                return true;
             }
         }
 
@@ -87,14 +97,6 @@ class auth {
         return true;
     }
 
-    private function encodeRole($roles) {
-        return implode(",", $roles);
-    }
-
-    private function decodeRole($roles) {
-        return array_map('intval', explode(",", $roles));
-    }
-
     function checkPassword($pass) {
         if (!$this->user->logged())
             return false;
@@ -107,6 +109,21 @@ class auth {
         $this->db->update('users', ['activeRole' => $role], ["token" => $_SESSION['token']]);
         return true;
     }
+
+    function changeAttrib($attrib, $val) {
+        $this->user->setAttrib($attrib, $val);
+        
+        if (!$this->db->has("userinfo", ["id" => $this->user->getInfo("id")]))
+            $this->db->insert("userinfo", [$attrib => $val, "id" => $this->user->getInfo('id')]);
+        else
+            $this->db->update("userinfo", [$attrib => $val], ["id" => $this->user->getInfo('id')]);
+    }
+
+    private function encodeRole($roles) {
+        if (!is_array($roles))
+            $roles = [$roles];
+        return implode(",", $roles);
+    }
 }
 
 class user {
@@ -118,16 +135,26 @@ class user {
         "activeRole" => null
     ];
 
-    function __construct($logged) {
+    private $attribs = [
+        "givenname" => null,
+        "surname" => null,
+        "class" => null
+    ];
+
+    function __construct($logged = false) {
         $this->logged = $logged;
+    }
+
+    private function decodeRole($roles) {
+        return array_map('intval', explode(",", $roles));
     }
 
     function setInfo($id, $name, $roles, $activeRole = null) {
         $this->props['id']    = $id;
         $this->props['name']  = $name;
-        $this->props['roles'] = $roles;
+        $this->props['roles'] = $this->decodeRole($roles);
         if (is_null($activeRole))
-            $this->props['activeRole'] = max($roles);
+            $this->props['activeRole'] = max($this->decodeRole($roles));
         else
             $this->props['activeRole'] = $activeRole;
     }
@@ -165,10 +192,16 @@ class user {
     function logged() {return $this->logged;}
 
     function getAttrib($attrib) {
-
+        if (!array_key_exists($attrib, $this->attribs))
+            throw new \Exception("Attribute " . $attrib . " in class user not found");
+        
+        return $this->attribs[$attrib];
     }
 
-    function setAttrib($attrib) {
-
+    function setAttrib($attrib, $val) {
+        if (!array_key_exists($attrib, $this->attribs))
+            throw new \Exception("Attribute " . $attrib . " in class user not found");
+        
+        $this->attribs[$attrib] = $val;
     }
 }

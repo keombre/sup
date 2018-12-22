@@ -27,7 +27,7 @@ class changePassword {
 
             if (!$this->container->auth->checkPassword($old)) {
                 
-                $this->redirectWithMessage($response, 'changePassword', "error", ["Chyba!", "Chybné aktuální heslo!"]);
+                $this->redirectWithMessage($response, 'user-changePassword', "error", ["Chyba!", "Chybné aktuální heslo!"]);
             } else if (
                 is_string($old) && strlen($old) > 0 &&
                 is_string($pass) && strlen($pass) > 0 &&
@@ -38,10 +38,10 @@ class changePassword {
                 
                     $this->redirectWithMessage($response, 'dashboard', "status", ["Úspěch!", "Heslo úspěšně změneno"]);
                 } else {
-                    $this->redirectWithMessage($response, 'changePassword', "error", ["Chyba!", "Heslo je příliš krátké!"]);
+                    $this->redirectWithMessage($response, 'user-changePassword', "error", ["Chyba!", "Heslo je příliš krátké!"]);
                 }
             } else {
-                $this->redirectWithMessage($response, 'changePassword', "error", ["Chyba!", "Hesla nesouhlasí!"]);
+                $this->redirectWithMessage($response, 'user-changePassword', "error", ["Chyba!", "Hesla nesouhlasí!"]);
             }
         }
         return $response;

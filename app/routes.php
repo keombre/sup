@@ -34,41 +34,22 @@ final class routes {
                     });
                 })->add(\middleware\dashboard::class);
                 
-                /*
-                $this->post('/dashboard/print', \controller\printer::class)
-                    ->setName('printer');
-                
-                $this->map(['PUT', 'DELETE'], '/books', \controller\books::class)
-                    ->setName('books');
-
-                $this->map(['PUT', 'DELETE'], '/admin/books', \controller\adminBooks::class)
-                    ->add(\middleware\admin::class)
-                    ->setName('adminBooks');
-                
-                $this->post('/dashboard/approve', \controller\approve::class)
-                    ->add(\middleware\teacher::class)
-                    ->setName('approve');
-                
-                $this->get('/dashboard/list/{id}', \controller\lists::class)
-                    ->add(\middleware\teacher::class)
-                    ->setName('lists');*/
-                
                 $this->group('/user', function () {
                     $this->post('/logout', \controller\auth\logout::class)
-                    ->setName('logout');
+                    ->setName('user-logout');
                     
                     $this->map(['GET', 'PUT'], '/changepass', \controller\auth\changePassword::class)
-                    ->setName('changePassword');
+                    ->setName('user-changePassword');
                     
                     $this->map(['GET', 'PUT'], '/changerole', \controller\auth\changeRole::class)
-                    ->setName('changeRole');
+                    ->setName('user-changeRole');
                     
                     $this->group('', function () {
                         $this->map(['GET', 'DELETE'], '/manage', \controller\auth\manage::class)
-                        ->setName('manageUsers');
+                        ->setName('user-manageUsers');
                         
                         $this->map(['GET', 'PUT'], '/register', \controller\auth\register::class)
-                        ->setName('register');
+                        ->setName('user-register');
                     })->add(\middleware\auth\admin::class);
                 });
             

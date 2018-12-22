@@ -7,12 +7,12 @@
     <div class="panel-body">
     <?php if (is_array($users) && count($users)):?>
         <ul class='list-group'>
-        <?php foreach($users as $id => $name):?>
-        <?php if ($name == 'admin'):?>
-            <li class='list-group-item'><?=$name?></li>
+        <?php foreach($users as $user):?>
+        <?php if (in_array(2, $user->getInfo('roles'))):?>
+            <li class='list-group-item'><?=$user->getInfo('name')?></li>
         <?php else:?>
-            <li class='list-group-item'><?=$name?>
-                <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$id?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
+            <li class='list-group-item'><?=$user->getAttrib('surname')?> (<?=$user->getInfo('name')?>)
+                <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$user->getInfo('id')?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
             </li>
         <?php endif;endforeach;?>
         </ul>
@@ -31,9 +31,9 @@
     <div class="panel-body">
     <?php if (is_array(@$students) && count($students)):?>
         <ul class='list-group'>
-        <?php foreach($students as $id => $info):?>
-            <li class='list-group-item'><a href='<?=$router->pathFor("lists-view", ["id" => $id])?>'><?=$id?></a> <?=$info['name']?> <b><?=$info['class']?></b>
-                <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$id?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
+        <?php foreach($students as $student):?>
+            <li class='list-group-item'><a href='<?=$router->pathFor("lists-view", ["id" => $student->getInfo('id')])?>'><?=$student->getInfo('name')?></a> <?=$student->getAttrib('surname')?> <b><?=$student->getAttrib('class')?></b>
+                <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$student->getInfo('id')?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
             </li>
         <?php endforeach;?>
         </ul>
@@ -43,7 +43,7 @@
     </div>
     </div>
     </div>
-<form method="post" action="<?=$router->pathFor('manageUsers')?>">
+<form method="post" action="<?=$router->pathFor('user-manageUsers')?>">
     <input type="hidden" name="_METHOD" value="DELETE" />
     <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
     <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">

@@ -25,30 +25,27 @@ class register {
             $pass = filter_var(@$data['pass'], FILTER_SANITIZE_STRING);
             $pass2 = filter_var(@$data['pass2'], FILTER_SANITIZE_STRING);
 
-            if ($this->container->db->has("users", ["name" => $name])) {
+            if (!is_string($name) || strlen($name) == 0)
+                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Username missing"]);
 
-                $this->redirectWithMessage($response, 'register', "error", ["Error!", "Username alredy taken!"]);
-            } else if (
-                is_string($name) && strlen($name) > 0 &&
-                is_string($pass) && strlen($pass) > 0 &&
-                $pass === $pass2
-            ) {
-                if (strlen($pass) > 7) {
-                    
-                    // todo: modify for new api
-                    if ($this->container->auth->register(null, $name, $pass, null, 1)) {
-                        
-                        $this->redirectWithMessage($response, 'dashboard', "status", ["Success!", "User " . $users[$id]. " was created!"]);
-                    } else {
-                        $this->sendResponse($request, $response, "auth/register.phtml", [
-                            "error" => [["Error!", "Use only ASCII in UserName & keep it short!"]]
-                        ]);
-                    }
-                } else {
-                    $this->redirectWithMessage($response, 'register', "error", ["Error!", "Password too short!"]);
-                }
-            } else {
-                $this->redirectWithMessage($response, 'register', "error", ["Error!", "Passwords don't match!"]);
+            else if ($this->container->db->has("users", ["name" => $name]))
+                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Username alredy taken!"]);
+
+            else if (!is_string($pass) || strlen($pass) < 8)
+                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Password too short!"]);
+            
+            else if ($pass !== $pass2)
+                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Passwords don't match!"]);
+            
+            else if ($data['name'] != $name || $data['pass'] != $pass)
+                $this->redirectWithMessage($response, 'user-register', "error", ["Chyba!", "Nepoužívejte speciální znaky!"]);
+            
+            else {
+                if ($this->container->auth->register($name, $pass, [0, 1]))
+                    $this->redirectWithMessage($response, 'dashboard', "status", ["Success!", "User was created!"]);
+                
+                else
+                    $this->redirectWithMessage($response, 'dashboard', "error", ["Chyba!", "Chyba při tvorbě uživatele!"]);                
             }
         }
         return $response;

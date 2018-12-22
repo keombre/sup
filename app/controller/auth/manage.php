@@ -15,13 +15,21 @@ class manage {
     function __invoke($request, $response) {
         
         $users = [];
-        foreach ($this->container->db->select("users", ["id", "name"], ["level" => [1, 2]]) as $user) {
-            $users[$user['id']] = $user['name'];
-        }
-        
         $students = [];
-        foreach ($this->container->db->select("users", ["id", "name", "class"], ["level" => 0]) as $user) {
-            $students[$user['id']] = $user;
+
+        foreach ($this->container->db->select("users", '*') as $user) {
+            $userinfo = $this->container->db->get('userinfo', '*', ['id' => $user['id']]);
+            $userCL = new \user();
+            $userCL->setInfo($user['id'], $user['name'], $user['role'], $user['activeRole']);
+            if ($userinfo) {
+                foreach (['givenname', 'surname', 'class'] as $val)
+                    if (array_key_exists($val, $userinfo))
+                        $userCL->setAttrib($val, $userinfo[$val]);
+            }
+            if ($userCL->getInfo('roles') == [0])
+                array_push($students, $userCL);
+            else
+                array_push($users, $userCL);
         }
 
         if ($request->isGet()) {
@@ -39,15 +47,15 @@ class manage {
             if (is_string($id) && strlen($id) > 0) {
                 
                 if ($users[$id] == 'admin') {
-                    $this->redirectWithMessage($response, 'manageUsers', "error", ["Chyba odebírání!", "Nelze odebrat administrátora"]);
+                    $this->redirectWithMessage($response, 'user-manageUsers', "error", ["Chyba odebírání!", "Nelze odebrat administrátora"]);
                 } else {
 
                     $this->container->db->delete("users", ["id" => $id]);
 
-                    $this->redirectWithMessage($response, 'manageUsers', "status", ["Oderání úspěšné!", "Účet " . $users[$id]. " byl odebrán!"]);
+                    $this->redirectWithMessage($response, 'user-manageUsers', "status", ["Oderání úspěšné!", "Účet " . $users[$id]. " byl odebrán!"]);
                 }
             } else {
-                $this->redirectWithMessage($response, 'manageUsers', "error", ["Chyba odebírání!", "Žádný uživatel nebyl specifikován"]);
+                $this->redirectWithMessage($response, 'user-manageUsers', "error", ["Chyba odebírání!", "Žádný uživatel nebyl specifikován"]);
             }
         }
         return $response;

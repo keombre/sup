@@ -30,7 +30,7 @@
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             <span class="glyphicon glyphicon-user"></span>
-            <span><b><?=$auth->user->getInfo('name')?></b> (<?=$auth->user->getInfo('id')?>)</span>
+            <span><b><?=$auth->user->getAttrib('surname')?></b> (<?=$auth->user->getInfo('name')?>)</span>
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
@@ -39,16 +39,16 @@
                     </a>
                 </li>
                 <li role="presentation" class="divider"></li>
-                <li><a href="<?=$router->pathFor('changePassword')?>"><span class="glyphicon glyphicon-lock"></span> <?=$lang->g('change-pass', 'navbar')?></a></li>
-                <li><a href="<?=$router->pathFor('changeRole')?>"><span class="glyphicon glyphicon-pencil"></span> <?=$lang->g('change-role', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-changePassword')?>"><span class="glyphicon glyphicon-lock"></span> <?=$lang->g('change-pass', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-changeRole')?>"><span class="glyphicon glyphicon-pencil"></span> <?=$lang->g('change-role', 'navbar')?></a></li>
                 <?php if ($auth->user->level(2)):?>
-                <li><a href="<?=$router->pathFor('manageUsers')?>"><span class="glyphicon glyphicon-briefcase"></span> <?=$lang->g('manage-users', 'navbar')?></a></li>
-                <li><a href="<?=$router->pathFor('register')?>"><span class="glyphicon glyphicon-plus"></span> <?=$lang->g('register-teacher', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-manageUsers')?>"><span class="glyphicon glyphicon-briefcase"></span> <?=$lang->g('manage-users', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-register')?>"><span class="glyphicon glyphicon-plus"></span> <?=$lang->g('register-teacher', 'navbar')?></a></li>
                 <?php endif;?>
             </ul>
         </li>
         </ul>
-        <form action="<?=$router->pathFor('logout')?>" method="post" id="logout"></form>
+        <form action="<?=$router->pathFor('user-logout')?>" method="post" id="logout"></form>
         <?php endif?>
     </div>
     </div>

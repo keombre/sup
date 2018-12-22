@@ -32,10 +32,10 @@ class seed {
         );");
 
         $this->db->query("CREATE TABLE IF NOT EXISTS userinfo (
-            id INTEGER PRIMARY KEY,
-            surname TEXT,
-            givenname TEXT,
-            class TEXT NULL,
+            id INTEGER,
+            surname TEXT NULL,
+            givenname TEXT NULL,
+            class TEXT NULL
         );");
         
         if (!$this->db->has("users", ["name" => "admin"])) {

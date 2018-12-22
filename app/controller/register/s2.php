@@ -27,16 +27,21 @@ class s2 {
             if (!(is_string($name) && strlen($name) > 0))
                 $this->redirectWithMessage($response, 'register-s2', "error", ["Chyba!", "Vyplňte jméno!"]);
             else if ($name !== $data['name'])
+
                 $this->redirectWithMessage($response, 'register-s2', "error", ["Chyba!", "Nepoužívejte speciální znaky!"]);
             else if (!(is_string($class) && strlen($class) == 1))
+
                 $this->redirectWithMessage($response, 'register-s2', "error", ["Chyba!", "Zvolte třídu!"]);
             else if (
                 is_string($_SESSION['APP_ID']) && strlen($_SESSION['APP_ID']) == 5 &&
                 is_string($_SESSION['APP_PASS']) && strlen($_SESSION['APP_PASS']) > 7
             ) {
-                // todo save aditional attributes
                 if ($this->container->auth->register($_SESSION['APP_ID'], $_SESSION['APP_PASS'], ROLE_STUDENT)) {
                     $this->container->auth->login($_SESSION['APP_ID'], $_SESSION['APP_PASS']);
+
+                    $this->container->auth->changeAttrib("surname", $name);
+                    $this->container->auth->changeAttrib("class", $class);
+
                     $response = $response->withRedirect($this->container->router->pathFor("dashboard"), 301);
                 } else {
                     $this->redirectWithMessage($response, 'index', "error", ["Chyba!", "Nastala chyba, zkuste to prosím znovu."]);
