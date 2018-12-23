@@ -16,7 +16,7 @@ class view {
         if ($this->container->auth->user->level(ROLE_STUDENT)) {
             $id = $this->container->auth->user->getInfo('id');
 
-            $listgroups = $this->container->db->select("listgroups", "*", ["user" => $id]);
+            $listgroups = $this->container->db->select("lists_main", "*", ["user" => $id]);
             
             $response = $this->sendResponse($request, $response, "lists/view.phtml", ["lists" => $listgroups]);
 
@@ -24,7 +24,7 @@ class view {
             $response->getBody()->write("kitten");
 
         } else if ($this->container->auth->user->level(ROLE_ADMIN)) {
-            $books = $this->container->db->select("books", "*");
+            $books = $this->container->db->select("lists_books", "*");
 
             $response = $this->sendResponse($request, $response, "lists/manage.phtml", ["books" => $books]);
         }

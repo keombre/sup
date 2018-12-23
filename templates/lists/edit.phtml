@@ -1,3 +1,21 @@
+<?php if (is_array(@$message)):?>
+	<div id="infoModal" class="modal fade in" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title"><?=$message[0]['title']?></h4>
+				</div>
+				<div class="modal-body">
+					<?=$message[0]['message']?>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif;?>
 <div class="main">
 	<div class="col-md-6">
 		<form id="form-add" method="post">
@@ -12,7 +30,7 @@
 			<?php foreach($books as $rid => $book):?>
 				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:$lang->g('unknown-region', 'list-edit') . " " . $rid?>'>
 				<?php foreach($book as $id => $info):?>
-					<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?"(".$generes[$info['genere']].")":""?></option>
+					<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?" (".$generes[$info['genere']].")":""?></option>
 				<?php endforeach;?>
 				</optgroup>
 				<?php endforeach;?>
@@ -22,10 +40,10 @@
 	</div>
 	<div class="col-md-2">
 		<div class="my-buttons">
-			<button class="form-control btn btn-default" onclick="send_add()">
+			<button class="form-control btn btn-default" onclick="$('#form-add').submit()">
 			    <?=$lang->g('add', 'list-edit')?> <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 			</button>
-			<button class="form-control btn btn-default" onclick="send_del()">
+			<button class="form-control btn btn-default" onclick="$('#form-del').submit()">
 				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> <?=$lang->g('remove', 'list-edit')?>
 			</button>
 			<button class="form-control btn btn-danger" data-toggle="modal" data-target="#clearModal" onclick="return false;">
@@ -44,7 +62,7 @@
 			<?php foreach($list as $rid => $book):?>
 				<optgroup label='<?=array_key_exists($rid, $regions)?$regions[$rid]:$lang->g('unknown-region', 'list-edit') . " " . $rid?>'>
 				<?php foreach($book as $id => $info):?>
-				<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?"(".$generes[$info['genere']].")":""?></option>
+				<option value='<?=$id?>'><?=$info['author'] == ''?"":$info['author'] . ": "?><?=$info['name']?><?=array_key_exists($info['genere'], $generes)?" (".$generes[$info['genere']].")":""?></option>
 				<?php endforeach;?>
 				</optgroup>
 			<?php endforeach;?>
@@ -52,7 +70,7 @@
 			<br />
 		</div>
 		</form>
-		<a href="#" class="form-control btn btn-success">
+		<a href="<?=is_numeric($listID)?$router->pathFor('lists-validate', ['id' => $listID]):'#'?>" class="form-control btn btn-success">
 			<?=$lang->g('finish', 'list-edit')?> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 		</a>
 	</div>
@@ -69,23 +87,13 @@
 			<p><?=$lang->g('text-wipe', 'list-edit')?></p>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-danger pull-left" onclick="send_wipe()"><?=$lang->g('submit-wipe', 'list-edit')?></button>
+			<button type="button" class="btn btn-danger pull-left" onclick="$('#myBooks option').prop('selected', true);$('#form-del').submit()"><?=$lang->g('submit-wipe', 'list-edit')?></button>
 			<button type="button" class="btn btn-default" data-dismiss="modal"><?=$lang->g('cancel-wipe', 'list-edit')?></button>
 		</div>
 	</div>
 </div>
 </div>
 <script>
-function send_add() {
-	$('#form-add').submit()
-}
-function send_del() {
-	$('#form-del').submit()
-}
-function send_wipe() {
-	$('#myBooks option').prop('selected', true);
-	$('#form-del').submit()
-}
 $.fn.scrollPosReaload = function() {
     if (localStorage) {
         let posReader = localStorage["posStorage"]
@@ -101,6 +109,7 @@ $.fn.scrollPosReaload = function() {
 }
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip()
+	$('#infoModal').modal('show');
     $("#search").on("keyup", function() {
         let value = $(this).val().toLowerCase()
         $("#books option").filter(function() {

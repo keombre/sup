@@ -35,9 +35,9 @@ class upload {
                         "genere" => intval($entry[4])
                     ]);
                 }
-                $this->container->db->delete("books", ["id[!]" => null]);
-                $this->container->db->insert("books", $save);
-                $this->redirectWithMessage($response, 'dashboard', "status", [count($save) . " knih nahráno"]);
+                $this->container->db->delete("lists_books", ["id[!]" => null]);
+                $this->container->db->insert("lists_books", $save);
+                $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
             }
         } else {
             $this->redirectWithMessage($response, 'dashboard', "error", ["Chyba nahrávání"]);

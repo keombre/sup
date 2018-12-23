@@ -20,6 +20,8 @@ class seed {
         }
     }
 
+    # auth
+
     function seed() {
         $this->db->query("CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
@@ -48,7 +50,9 @@ class seed {
             ]);
         }
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS books (
+        # lists
+
+        $this->db->query("CREATE TABLE IF NOT EXISTS lists_books (
             id INTEGER PRIMARY KEY,
             name TEXT,
             author TEXT NULL,
@@ -56,24 +60,28 @@ class seed {
             genere INTEGER NULL
         );");
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS regions (
+        $this->db->query("CREATE TABLE IF NOT EXISTS lists_regions (
             id INTEGER PRIMARY KEY,
-            name TEXT
+            name TEXT,
+            min INTEGER,
+            max INTEGER
         );");
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS generes (
+        $this->db->query("CREATE TABLE IF NOT EXISTS lists_generes (
             id INTEGER PRIMARY KEY,
-            name TEXT
+            name TEXT,
+            min INTEGER,
+            max INTEGER
         );");
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS listgroups (
+        $this->db->query("CREATE TABLE IF NOT EXISTS lists_main (
             id INTEGER PRIMARY KEY,
             user INTEGER,
             created INTEGER,
             state INTEGER DEFAULT 0
         );"); // 0 - editing, 1 - sent, 2 - accepted
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists (
+        $this->db->query("CREATE TABLE IF NOT EXISTS lists_lists (
             list INTEGER,
             book INTEGER
         );");

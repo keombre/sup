@@ -10,16 +10,17 @@ učitel:
  - zrušení potvrzení
  - statistika knih
  - náhled do kánonu
+ - běh maturitní appky
 
 admin:
  - kontrola unikátnosti ID knih (nebo můžeme ID kompletně přeskakovat)
  - správa oblastí
  - období
  - stahování kánonů
- - stahování appky
  - náhled do kánonu
  - verze seznamů knih pro různé roky
  - otevírání a zavírání možnosti tvorby kánonu
+ - spouštění režimu maturitní appky
  - nahrávání kánonu musí být větší pedant
 
 obecně:
@@ -31,7 +32,8 @@ obecně:
  - zkontrolovat nasazení v jiných složkách
  - automatická detekce instalace
  - opravit HTML (někde chybí/přebývají tagy)
- - zkontrolovat flow redirectWithMessage (nově má return)
+ - zkontrolovat flow redirectWithMessage (nově má return) - done
+ - změnit user class (chci mít víc helper class a možná i dědičnost)
  
  - pokusit se to celé rozbít
  - standardizovat akce

@@ -28,6 +28,9 @@ final class routes {
                     ->setName('lists-edit')
                     ->add(new \middleware\auth\level($this->getContainer(), 0));
 
+                    $this->get('/validate/{id}', \controller\lists\validate::class)
+                    ->setName('lists-validate');
+
                     $this->group('/admin', function () {
                         $this->post('/upload', \controller\lists\admin\upload::class)
                         ->setName('lists-admin-upload');
