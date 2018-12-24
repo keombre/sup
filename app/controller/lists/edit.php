@@ -1,26 +1,23 @@
 <?php
 
+// todo: complete rewrite
+
 namespace controller\lists;
 
-class edit {
-    
-    use \traits\sendResponse;
+class edit extends lists {
 
-    protected $container;
-    private $userID;
-    private $listID = false;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-        $this->userID = $this->container->auth->user->getInfo('id');
+    function teacher($request, &$response, $args) {
+        if (is_null($this->listID))
+            return $this->redirectWithMessage($response, 'lists-edit', "error", ["Nemůžete vytvářet kánony"]);
+        else    
+            return $response->withRedirect($this->container->router->pathFor('lists-validate', ['id' => $this->listID]), 301);
     }
 
-    function __invoke($request, $response, $args) {
+    function admin($request, &$response, $args) {
+        $this->teacher($request, $response, $args);
+    }
 
-        $this->getListID($args);
-
-        if (!$this->listID)
-            return $this->redirectWithMessage($response, 'lists', "error", ["Kánon nenalezen"]);
+    function student($request, &$response, $args) {
 
         $state = $this->container->db->get('lists_main', 'state', ['id' => $this->listID]);
         if ($state != 0)
@@ -37,13 +34,13 @@ class edit {
             $books = array_unique(filter_var_array(@$data['books'], FILTER_SANITIZE_STRING));
             
             if (!count($books)) {
-                if ($this->listID === true)
+                if (is_null($this->listID))
                     return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"]);
                 else
                     return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"], ['id' => $this->listID]);
             }
             
-            if ($this->listID === true) {
+            if (is_null($this->listID)) {
                 $this->generateListID();
                 $createNew = true;
             }
@@ -73,7 +70,8 @@ class edit {
                 $this->container->db->insert("lists_main", [
                     "id" => $this->listID,
                     "user" => $this->userID,
-                    "created" => time()
+                    "created" => time(),
+                    "version" => $this->settings['active_version']
                 ]);
                 return $response->withRedirect($this->container->router->pathFor('lists-edit', ['id' => $this->listID]), 301);
             } else
@@ -86,7 +84,7 @@ class edit {
             if ($this->removeEmptyList())
                 return $response->withRedirect($this->container->router->pathFor('lists'), 301);
             
-            if (!is_numeric($this->listID)) {
+            if (is_null($this->listID)) {
                 if (!count($books))
                     return $response->withRedirect($this->container->router->pathFor('lists'), 301);
                 else
@@ -103,8 +101,6 @@ class edit {
             else
                 $this->render($request, $response, $args);
 
-        } else if ($request->isPost()) {
-            // action: finish
         }
 
         return $response;
@@ -113,7 +109,7 @@ class edit {
     private function render(&$request, &$response, $args) {
         $listbooks = [];
 
-        if (is_numeric($this->listID))
+        if (!is_null($this->listID))
             $listbooks = $this->container->db->select("lists_lists", "book", ["list" => $this->listID]);
 
         $allbooks = [];
@@ -160,16 +156,6 @@ class edit {
             }
         }
         return false;
-    }
-
-    private function getListID($args) {
-        if (array_key_exists('id', @$args)) {
-            $id = filter_var(@$args['id'], FILTER_SANITIZE_STRING);
-            $version = $this->container->db->get("lists_settings", "active_version");
-            if ($this->container->db->has("lists_main", ["id" => $id, "user" => $this->userID, "version" => $version]))
-                $this->listID = $id;
-        } else
-            $this->listID = true;
     }
 
     private function generateListID() {

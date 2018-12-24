@@ -2,17 +2,9 @@
 
 namespace controller\auth;
 
-class changeRole {
-    
-    use \traits\sendResponse;
+class changeRole extends \sup\controller {
 
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
-
-    function __invoke($request, $response) {
+    function __invoke($request, $response, $args) {
 
         if ($request->isGet()) {
             $this->sendResponse($request, $response, "auth/changeRole.phtml", [

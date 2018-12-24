@@ -2,17 +2,9 @@
 
 namespace controller\lists\admin;
 
-class upload {
+class upload extends \sup\controller {
 
-    use \traits\sendResponse;
-    
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
-
-    function __invoke($request, $response) {
+    function __invoke($request, $response, $args) {
 
         $directory = $this->container['settings']['upload_directory'];
         $uploadedFiles = $request->getUploadedFiles();
@@ -40,13 +32,13 @@ class upload {
         $line = 0;
         while (($data = fgetcsv($f, 0, ";")) !== false) {
             if (count($data) != 4)
-                return $line;
+                return $line + 1;
             if (
                 !is_numeric($data[0]) ||
                 !is_numeric($data[3]) ||
                 strlen($data[2]) == 0
             )
-                return $line;
+                return $line + 1;
             $list[$line] = $data;
             $line++;
         }

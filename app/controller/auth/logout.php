@@ -2,13 +2,7 @@
 
 namespace controller\auth;
 
-class logout {
-    
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class logout extends \sup\controller {
 
     function __invoke($request, $response) {
 

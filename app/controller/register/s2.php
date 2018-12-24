@@ -2,17 +2,10 @@
 
 namespace controller\register;
 
-class s2 {
+class s2 extends \sup\controller {
 
-    use \traits\sendResponse;
-    
-    protected $container;
 
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
-
-    function __invoke($request, $response) {
+    function __invoke($request, $response, $args) {
         if ($request->isGet()) {
 
             $this->sendResponse($request, $response, "register/s2.phtml", ["id" => $_SESSION['APP_ID']]);

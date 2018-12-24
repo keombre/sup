@@ -14,5 +14,5 @@ abstract class controller {
         $this->db = $this->container->db;
     }
 
-    abstract function __invoke(\Slim\Request $request, \Slim\Response $response, $args);
+    abstract function __invoke(\Slim\Http\Request $request, \Slim\Http\Response $response, $args);
 }

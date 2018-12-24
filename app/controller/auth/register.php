@@ -2,15 +2,7 @@
 
 namespace controller\auth;
 
-class register {
-    
-    use \traits\sendResponse;
-
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class register extends \sup\controller {
 
     function __invoke($request, $response) {
 

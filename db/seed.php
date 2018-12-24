@@ -54,10 +54,18 @@ class seed {
 
         $this->db->query("CREATE TABLE IF NOT EXISTS lists_settings (
             active_version INTEGER NULL,
-            open_editing INTEGER DEFAULT 0,
-            open_validate INTEGER DEFAULT 0,
-            open_drawing INTEGER DEFAULT 0
+            open_editing INTEGER,
+            open_validate INTEGER,
+            open_drawing INTEGER
         );");
+
+        if (!$this->db->count("lists_settings")) {
+            $this->db->insert("lists_settings", [
+                "open_editing"  => 0,
+                "open_validate" => 0,
+                "open_drawing"  => 0
+            ]);
+        }
 
         $this->db->query("CREATE TABLE IF NOT EXISTS lists_versions (
             id INTEGER PRIMARY KEY,

@@ -2,16 +2,8 @@
 
 namespace controller\auth;
 
-class changePassword {
+class changePassword extends \sup\controller {
     
-    use \traits\sendResponse;
-
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
-
     function __invoke($request, $response) {
 
         if ($request->isGet()) {

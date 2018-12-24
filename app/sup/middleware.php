@@ -4,6 +4,8 @@ namespace sup;
 
 abstract class middleware {
 
+    use \traits\sendResponse;
+
     protected $container;
     
     function __construct(\Slim\Container $container) {

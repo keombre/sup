@@ -2,15 +2,7 @@
 
 namespace controller\auth;
 
-class login {
-
-    use \traits\sendResponse;
-    
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class login extends \sup\controller {
 
     function __invoke($request, $response) {
         if ($request->isGet()) {

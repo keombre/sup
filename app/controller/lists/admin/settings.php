@@ -2,15 +2,7 @@
 
 namespace controller\lists\admin;
 
-class settings {
-    
-    use \traits\sendResponse;
-
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class settings extends \sup\controller {
 
     function __invoke($request, $response, $args) {
 

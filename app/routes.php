@@ -23,15 +23,18 @@ final class routes {
 
                     $this->get('/view[/{id}]', \controller\lists\view::class)
                     ->setName('lists-view')
+                    ->add(\middleware\lists\listID::class)
                     ->add(\middleware\lists\open_editing::class);
 
-                    $this->map(['GET', 'PUT', 'POST', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
+                    $this->map(['GET', 'PUT', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
                     ->setName('lists-edit')
                     ->add(new \middleware\auth\level($this->getContainer(), 0))
+                    ->add(\middleware\lists\listID::class)
                     ->add(\middleware\lists\open_editing::class);
 
                     $this->map(['GET', 'PUT'], '/validate/{id}', \controller\lists\validate::class)
                     ->setName('lists-validate')
+                    ->add(\middleware\lists\listID::class)
                     ->add(\middleware\lists\open_editing::class);
 
                     $this->group('/admin', function () {
