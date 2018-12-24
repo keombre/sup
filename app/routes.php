@@ -28,7 +28,7 @@ final class routes {
                     ->setName('lists-edit')
                     ->add(new \middleware\auth\level($this->getContainer(), 0));
 
-                    $this->get('/validate/{id}', \controller\lists\validate::class)
+                    $this->map(['GET', 'PUT'], '/validate/{id}', \controller\lists\validate::class)
                     ->setName('lists-validate');
 
                     $this->group('/admin', function () {

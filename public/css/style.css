@@ -16,12 +16,22 @@
 .only-print, .only-print *  {
     display: none;
 }
-@media print {    
-    .no-print, .no-print * {
-        display: none !important;
+
+@media print {
+    body * {
+      visibility: hidden;
     }
-    .only-print, .only-print *  {
-        display: initial !important;
+    .print, .print * {
+      visibility: visible;
+    }
+    .only-print, .only-print * {
+        display: block;
+    }
+    .print {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
     }
 }
 .my-buttons button {

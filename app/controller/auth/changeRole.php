@@ -27,6 +27,8 @@ class changeRole {
 
             if (!$this->container->auth->changeRole($role))
                 $this->redirectWithMessage($response, 'changeRole', "error", ["Chyba!", "Neexistující role"]);
+            else if ($this->container->auth->user->getInfo('roles')[0] == $role)
+                return $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
             else
                 $this->redirectWithMessage($response, 'dashboard', "status", ["Úspěch", "Nyní jste " . strtolower($this->container->lang->g($role, 'roles'))]);
         }

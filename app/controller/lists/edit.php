@@ -19,6 +19,13 @@ class edit {
 
         $this->getListID($args);
 
+        if (!$this->listID)
+            return $this->redirectWithMessage($response, 'lists', "error", ["Kánon nenalezen"]);
+
+        $state = $this->container->db->get('lists_main', 'state', ['id' => $this->listID]);
+        if ($state != 0)
+            return $response->withRedirect($this->container->router->pathFor('lists-validate', ['id' => $this->listID]), 301);
+
         if ($request->isGet()) {
             $this->render($request, $response, $args);
 
@@ -28,9 +35,6 @@ class edit {
             
             $data = $request->getParsedBody();
             $books = array_unique(filter_var_array(@$data['books'], FILTER_SANITIZE_STRING));
-            
-            if ($this->listID === false)
-                return $this->redirectWithMessage($response, 'lists-edit', "error", ["Kánon nenalezen"]);
             
             if (!count($books)) {
                 if ($this->listID === true)
@@ -109,9 +113,6 @@ class edit {
     private function render(&$request, &$response, $args) {
         $listbooks = [];
 
-        if ($this->listID === false)
-            return $this->redirectWithMessage($response, 'lists', "error", ["Kánon nenalezen"]);
-        
         if (is_numeric($this->listID))
             $listbooks = $this->container->db->select("lists_lists", "book", ["list" => $this->listID]);
 
