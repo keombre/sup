@@ -1,4 +1,5 @@
 <?php
+
 define("ROLE_STUDENT", 0);
 define("ROLE_TEACHER", 1);
 define("ROLE_ADMIN", 2);

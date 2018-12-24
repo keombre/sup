@@ -14,12 +14,6 @@ class upload {
 
     function __invoke($request, $response) {
 
-        $data = $request->getParsedBody();
-
-        $name = filter_var(@$data['name'], FILTER_SANITIZE_STRING);
-        if ($this->container->db->has("lists_versions", ["name" => $name]))
-            return $this->redirectWithMessage($response, 'lists', "error", ["Období " . $name . " již existuje"]);
-
         $directory = $this->container['settings']['upload_directory'];
         $uploadedFiles = $request->getUploadedFiles();
 
@@ -35,22 +29,6 @@ class upload {
         unlink($directory . "/" . $filename);
         if (!is_array($parsed))
             return $this->redirectWithMessage($response, 'lists', "error", ["Špatný formát", "Chyba na řádku " . $parsed]);
-        
-        $this->container->db->insert("lists_versions", ["name" => $name]);
-        $version = $this->container->db->id();
-
-        $save = [];
-        foreach ($parsed as $entry) {
-            array_push($save, [
-                "name"    => $entry[2],
-                "author"  => $entry[1],
-                "region"  => intval($entry[0]),
-                "genere"  => intval($entry[3]),
-                "version" => $version
-            ]);
-        }
-        $this->container->db->insert("lists_books", $save);
-        $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
         
         return $response;
     }

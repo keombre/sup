@@ -2,13 +2,7 @@
 
 namespace middleware\lists;
 
-class open_editing {
-
-    protected $container;
-    
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class open_editing extends \sup\middleware {
 
     public function __invoke($request, $response, $next) {
         

@@ -2,15 +2,9 @@
 
 namespace middleware;
 
-class dashboard {
+class dashboard extends \sup\middleware {
 
     use \traits\sendResponse;
-
-    protected $container;
-    
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
 
     public function __invoke($request, $response, $next) {
         

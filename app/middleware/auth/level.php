@@ -2,13 +2,12 @@
 
 namespace middleware\auth;
 
-class level {
-
-    protected $container;
+class level extends \sup\middleware {
     private $level;
     
     function __construct(\Slim\Container $container, $level) {
-        $this->container = $container;
+        parent::__construct($container);
+
         $this->level = $level;
     }
 

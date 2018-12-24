@@ -2,13 +2,7 @@
 
 namespace middleware\register;
 
-class s1 {
-
-    protected $container;
-    
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class s1 extends \sup\middleware {
 
     public function __invoke($request, $response, $next) {
 

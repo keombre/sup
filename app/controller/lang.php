@@ -2,15 +2,7 @@
 
 namespace controller;
 
-class lang {
-
-    use \traits\sendResponse;
-    
-    protected $container;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class lang extends \sup\controller {
 
     function __invoke($request, $response, $args) {
 

@@ -2,13 +2,7 @@
 
 namespace middleware\auth;
 
-class admin {
-
-    protected $container;
-    
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-    }
+class admin extends \sup\middleware {
 
     public function __invoke($request, $response, $next) {
         
