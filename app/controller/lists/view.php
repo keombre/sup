@@ -35,7 +35,7 @@ class view {
 
             $response = $this->sendResponse($request, $response, "lists/admin/dash.phtml", [
                 "versions" => $versions,
-                "settings" => $settings
+                "settings" => @$settings[0]
             ]);
         }
 

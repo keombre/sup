@@ -42,9 +42,9 @@
     <?php if (is_array($versions) && count($versions)):?>
     <div class="panel-body collapse" id="collapse-list">
         <ul class='list-group'>
-        <?php foreach($books as $book):?>
+        <?php foreach($versions as $version):?>
         <li class='list-group-item'>
-            <span style="width: 75%;display: inline-block;"><?=$book['author'] == ""?"":$book['author'] . ": "?><b><?=$book['name']?></b></span>
+            <a href="<?=$router->pathFor('lists-admin-manage', ['id' => $version['id']])?>"><?=$version['name']?></a>
         </li>
         <?php endforeach;?>
         </ul>
@@ -66,19 +66,19 @@ $('#toggle-list').click(function(){
 <div class="col-md-5 col-md-offset-2">
     <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Nastavení kánonů</strong>
+        <strong>Nastavení</strong>
     </div>
     <div class="panel-body">
-    <form class="form-horizontal" method="post" enctype="multipart/form-data" action="<?=$router->pathFor('lists-admin-settings')?>">
+    <form class="form-horizontal" method="post" action="<?=$router->pathFor('lists-admin-settings')?>">
         <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
         <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
         <div class="form-group">
-            <label class="col-md-5 control-label" for="class">Aktivní verze</label>
+            <label class="col-md-5 control-label" for="active">Aktivní období</label>
             <div class="col-md-6">
-                <select class="form-control" name="class" id="class" required>
-                    <option disabled selected value="">Zvolte verzi</option>
+                <select class="form-control" name="active" required>
+                    <option disabled selected value="">Zvolte období</option>
                     <?php foreach ($versions as $version):?>
-                    <option value="<?=$version['id']?>"><?=$version['name']?></option>
+                    <option value="<?=$version['id']?>" <?=@$settings['active_version'] == $version['id']?'selected':''?>><?=$version['name']?></option>
                     <?php endforeach;?>
                 </select>
             </div>

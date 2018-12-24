@@ -40,7 +40,11 @@ final class routes {
 
                         $this->post('/settings', \controller\lists\admin\settings::class)
                         ->setName('lists-admin-settings');
-                    });
+
+                        $this->map(['GET', 'PUT'], '/manage', \controller\lists\admin\manage::class)
+                        ->setName('lists-admin-manage');
+                    })->add(\middleware\auth\admin::class);
+                    
                 })->add(\middleware\dashboard::class);
                 
                 $this->group('/user', function () {

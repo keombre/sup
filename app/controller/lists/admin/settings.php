@@ -13,14 +13,29 @@ class settings {
     }
 
     function __invoke($request, $response, $args) {
+
+        $data = $request->getParsedBody();
         
-        $title  = filter_var(@$data['edit'],  FILTER_SANITIZE_STRING);
-        $author = filter_var(@$data['validate'], FILTER_SANITIZE_STRING);
-        $region = filter_var(@$data['draw'], FILTER_SANITIZE_STRING);
-        $genere = filter_var(@$data['active'], FILTER_SANITIZE_STRING);
+        $edit  = filter_var(@$data['edit'],  FILTER_SANITIZE_STRING);
+        $validate = filter_var(@$data['validate'], FILTER_SANITIZE_STRING);
+        $draw = filter_var(@$data['draw'], FILTER_SANITIZE_STRING);
+        $active = filter_var(@$data['active'], FILTER_SANITIZE_STRING);
 
-        $response = $this->sendResponse($request, $response, "lists/admin/manage.phtml", ["books" => $books]);
+        if (!$this->container->db->has("lists_versions", ["id" => $active]))
+            return $this->redirectWithMessage($response, 'lists', "error", ["Období nenalezeno"]);
+        
+        $store = [
+            "active_version" => $active,
+            "open_editing"   => $edit == "on",
+            "open_validate"  => $validate == "on",
+            "open_drawing"   => $draw == "on",
+        ];
+        if ($this->container->db->count("lists_settings"))
+            $this->container->db->update("lists_settings", $store);
+        else
+            $this->container->db->insert("lists_settings", $store);
 
-        return $response;
+        return $this->redirectWithMessage($response, 'lists', "status", ["Nastavení uloženo"]);
+
     }
 }

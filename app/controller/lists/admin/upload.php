@@ -14,6 +14,12 @@ class upload {
 
     function __invoke($request, $response) {
 
+        $data = $request->getParsedBody();
+
+        $name = filter_var(@$data['name'], FILTER_SANITIZE_STRING);
+        if ($this->container->db->has("lists_versions", ["name" => $name]))
+            return $this->redirectWithMessage($response, 'lists', "error", ["Období " . $name . " již existuje"]);
+
         $directory = $this->container['settings']['upload_directory'];
         $uploadedFiles = $request->getUploadedFiles();
 
@@ -21,77 +27,50 @@ class upload {
         if (!$uploadedFile)
             return $this->redirectWithMessage($response, 'lists', "error", ["Soubor neodeslán"]);
 
-        if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-            $filename = $this->moveUploadedFile($directory, $uploadedFile);
-            $parsed = $this->validateFile($directory . "/" . $filename);
-            unlink($directory . "/" . $filename);
-            if (!is_array($parsed))
-                return $this->redirectWithMessage($response, 'lists', "error", ["Špatný formát", "Chyba na řádku " . $parsed]);
-            
-            $save = [];
-            foreach ($parsed as $entry) {
-                array_push($save, [
-                    "id" => intval ($entry[0]),
-                    "name" => $entry[3],
-                    "author" => $entry[2],
-                    "region" => intval($entry[1]),
-                    "genere" => intval($entry[4])
-                ]);
-            }
-            $this->container->db->delete("lists_books", ["id[!]" => null]);
-            $this->container->db->insert("lists_books", $save);
-            $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
+        if ($uploadedFile->getError() !== UPLOAD_ERR_OK)
+            return $this->redirectWithMessage($response, 'lists', "error", ["Chyba nahrávání"]);
         
-        } else {
-            $this->redirectWithMessage($response, 'lists', "error", ["Chyba nahrávání"]);
+        $filename = $this->moveUploadedFile($directory, $uploadedFile);
+        $parsed = $this->validateFile($directory . "/" . $filename);
+        unlink($directory . "/" . $filename);
+        if (!is_array($parsed))
+            return $this->redirectWithMessage($response, 'lists', "error", ["Špatný formát", "Chyba na řádku " . $parsed]);
+        
+        $this->container->db->insert("lists_versions", ["name" => $name]);
+        $version = $this->container->db->id();
+
+        $save = [];
+        foreach ($parsed as $entry) {
+            array_push($save, [
+                "name"    => $entry[2],
+                "author"  => $entry[1],
+                "region"  => intval($entry[0]),
+                "genere"  => intval($entry[3]),
+                "version" => $version
+            ]);
         }
+        $this->container->db->insert("lists_books", $save);
+        $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
+        
         return $response;
     }
 
     private function validateFile($filename) {
         $f = fopen($filename, "r");
         if (!$f) return 0;
-        $char;
         $list = [];
-        $entry = ["", "", "", "", ""];
-        $state = 0;
-        while (!feof($f)) {
-            $char = fread($f, 1);
-            switch ($state) {
-                case 0:
-                    if ($char == ";") $state = 1;
-                    else if ($char == "\n") return count($list) + 1;
-                    else $entry[0] .= $char;
-                    break;
-                case 1:
-                    if ($char == ";") $state = 2;
-                    else if ($char == "\n") return count($list) + 1;
-                    else $entry[1] .= $char;
-                    break;
-                case 2:
-                    if ($char == ";") $state = 3;
-                    else if ($char == "\n") return count($list) + 1;
-                    else $entry[2] .= $char;
-                    break;
-                case 3:
-                    if ($char == ";") $state = 4;
-                    else if ($char == "\n") {
-                        array_push($list, $entry);
-                        $entry = ["", "", "", "", ""];
-                        $state = 0;
-                    }
-                    else $entry[3] .= $char;
-                    break;
-                case 4:
-                    if ($char == ";") return count($list) + 1;
-                    else if ($char == "\n") {
-                        array_push($list, $entry);
-                        $entry = ["", "", "", "", ""];
-                        $state = 0;
-                    }
-                    else $entry[4] .= $char;
-                    break;
-            }
+        $line = 0;
+        while (($data = fgetcsv($f, 0, ";")) !== false) {
+            if (count($data) != 4)
+                return $line;
+            if (
+                !is_numeric($data[0]) ||
+                !is_numeric($data[3]) ||
+                strlen($data[2]) == 0
+            )
+                return $line;
+            $list[$line] = $data;
+            $line++;
         }
         return $list;
     }
