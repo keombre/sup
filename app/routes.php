@@ -37,6 +37,9 @@ final class routes {
                     $this->group('/admin', function () {
                         $this->post('/upload', \controller\lists\admin\upload::class)
                         ->setName('lists-admin-upload');
+
+                        $this->post('/settings', \controller\lists\admin\settings::class)
+                        ->setName('lists-admin-settings');
                     });
                 })->add(\middleware\dashboard::class);
                 

@@ -30,9 +30,13 @@ class view {
             $response->getBody()->write("kitten");
 
         } else if ($this->container->auth->user->level(ROLE_ADMIN)) {
-            $books = $this->container->db->select("lists_books", "*");
+            $versions = $this->container->db->select("lists_versions", "*");
+            $settings = $this->container->db->select("lists_settings", "*");
 
-            $response = $this->sendResponse($request, $response, "lists/admin/dash.phtml", ["books" => $books]);
+            $response = $this->sendResponse($request, $response, "lists/admin/dash.phtml", [
+                "versions" => $versions,
+                "settings" => $settings
+            ]);
         }
 
         return $response;

@@ -18,29 +18,32 @@ class upload {
         $uploadedFiles = $request->getUploadedFiles();
 
         $uploadedFile = $uploadedFiles['book'];
+        if (!$uploadedFile)
+            return $this->redirectWithMessage($response, 'lists', "error", ["Soubor neodeslán"]);
+
         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
             $filename = $this->moveUploadedFile($directory, $uploadedFile);
             $parsed = $this->validateFile($directory . "/" . $filename);
             unlink($directory . "/" . $filename);
-            if (!is_array($parsed)) {
-                $this->redirectWithMessage($response, 'dashboard', "error", ["Špatný formát", "Chyba na řádku " . $parsed]);
-            } else {
-                $save = [];
-                foreach ($parsed as $entry) {
-                    array_push($save, [
-                        "id" => intval ($entry[0]),
-                        "name" => $entry[3],
-                        "author" => $entry[2],
-                        "region" => intval($entry[1]),
-                        "genere" => intval($entry[4])
-                    ]);
-                }
-                $this->container->db->delete("lists_books", ["id[!]" => null]);
-                $this->container->db->insert("lists_books", $save);
-                $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
+            if (!is_array($parsed))
+                return $this->redirectWithMessage($response, 'lists', "error", ["Špatný formát", "Chyba na řádku " . $parsed]);
+            
+            $save = [];
+            foreach ($parsed as $entry) {
+                array_push($save, [
+                    "id" => intval ($entry[0]),
+                    "name" => $entry[3],
+                    "author" => $entry[2],
+                    "region" => intval($entry[1]),
+                    "genere" => intval($entry[4])
+                ]);
             }
+            $this->container->db->delete("lists_books", ["id[!]" => null]);
+            $this->container->db->insert("lists_books", $save);
+            $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
+        
         } else {
-            $this->redirectWithMessage($response, 'dashboard', "error", ["Chyba nahrávání"]);
+            $this->redirectWithMessage($response, 'lists', "error", ["Chyba nahrávání"]);
         }
         return $response;
     }
