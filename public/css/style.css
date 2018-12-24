@@ -14,7 +14,8 @@
     }
 }
 .only-print, .only-print *  {
-    display: none;
+    visibility: hidden;
+    height: 0;
 }
 
 @media print {
@@ -25,7 +26,8 @@
       visibility: visible;
     }
     .only-print, .only-print * {
-        display: block;
+        visibility: visible;
+        height: auto;
     }
     .print {
       position: absolute;

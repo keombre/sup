@@ -165,7 +165,8 @@ class edit {
     private function getListID($args) {
         if (array_key_exists('id', @$args)) {
             $id = filter_var(@$args['id'], FILTER_SANITIZE_STRING);
-            if ($this->container->db->has("lists_main", ["id" => $id, "user" => $this->userID]))
+            $version = $this->container->db->get("lists_settings", "active_version");
+            if ($this->container->db->has("lists_main", ["id" => $id, "user" => $this->userID, "version" => $version]))
                 $this->listID = $id;
         } else
             $this->listID = true;

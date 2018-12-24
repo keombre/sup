@@ -22,14 +22,17 @@ final class routes {
                     ->setName('lists');
 
                     $this->get('/view[/{id}]', \controller\lists\view::class)
-                    ->setName('lists-view');
+                    ->setName('lists-view')
+                    ->add(\middleware\lists\open_editing::class);
 
                     $this->map(['GET', 'PUT', 'POST', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
                     ->setName('lists-edit')
-                    ->add(new \middleware\auth\level($this->getContainer(), 0));
+                    ->add(new \middleware\auth\level($this->getContainer(), 0))
+                    ->add(\middleware\lists\open_editing::class);
 
                     $this->map(['GET', 'PUT'], '/validate/{id}', \controller\lists\validate::class)
-                    ->setName('lists-validate');
+                    ->setName('lists-validate')
+                    ->add(\middleware\lists\open_editing::class);
 
                     $this->group('/admin', function () {
                         $this->post('/upload', \controller\lists\admin\upload::class)
