@@ -11,7 +11,7 @@ abstract class lists extends \sup\controller implements \sup\roleActions {
     function __construct(\Slim\Container $container) {
         parent::__construct($container);
         
-        $this->settings = $this->container->db->get("lists_settings", "*");
+        $this->settings = $this->db->get("lists_settings", "*");
         $this->userID = $this->container->auth->user->getInfo('id');
     }
 

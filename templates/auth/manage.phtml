@@ -11,7 +11,7 @@
         <?php if (in_array(2, $user->getInfo('roles'))):?>
             <li class='list-group-item'><?=$user->getInfo('name')?></li>
         <?php else:?>
-            <li class='list-group-item'><?=$user->getAttrib('surname')?> (<?=$user->getInfo('name')?>)
+            <li class='list-group-item'><?=$user->getName()?> (<?=$user->getInfo('name')?>)
                 <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$user->getInfo('id')?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
             </li>
         <?php endif;endforeach;?>
@@ -32,7 +32,7 @@
     <?php if (is_array(@$students) && count($students)):?>
         <ul class='list-group'>
         <?php foreach($students as $student):?>
-            <li class='list-group-item'><a href='<?=$router->pathFor("lists-view", ["id" => $student->getInfo('id')])?>'><?=$student->getInfo('name')?></a> <?=$student->getAttrib('surname')?> <b><?=$student->getAttrib('class')?></b>
+            <li class='list-group-item'><a href='<?=$router->pathFor("lists-view", ["id" => $student->getInfo('id')])?>'><?=$student->getInfo('name')?></a> <?=$student->getName()?> <b><?=$student->getAttrib('class')?></b>
                 <a href='#' onclick="let elm=document.getElementById('id');elm.value='<?=$student->getInfo('id')?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</a>
             </li>
         <?php endforeach;?>

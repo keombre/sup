@@ -12,9 +12,15 @@
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
             <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Jméno:</label>
+                <label class="col-md-4 control-label" for="givenname">Jméno:</label>
                 <div class="col-md-6">
-                    <input class="form-control" type="text" name="name" id="name" required autofocus>
+                    <input class="form-control" type="text" name="givenname" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="surname">Příjmení:</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" name="surname" required>
                 </div>
             </div>
             <div class="form-group">

@@ -205,4 +205,11 @@ class user {
         
         $this->attribs[$attrib] = $val;
     }
+
+    function getName() {
+        $ret = $this->attribs['givenname'] . " " . $this->attribs['surname'];
+        if ($ret == " ")
+            return null;
+        return $ret;
+    }
 }

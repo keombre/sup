@@ -30,7 +30,7 @@
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             <span class="glyphicon glyphicon-user"></span>
-            <span><b><?=$auth->user->getAttrib('surname')?></b> (<?=$auth->user->getInfo('name')?>)</span>
+            <span><b><?=$auth->user->getName()?></b> (<?=$auth->user->getInfo('name')?>)</span>
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
