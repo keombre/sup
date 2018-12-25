@@ -2,14 +2,19 @@
 
 namespace controller\lists\admin;
 
-class create extends upload {
+final class create extends upload {
 
     function __invoke($request, $response, $args) {
         $data = $request->getParsedBody();
 
-        $name = filter_var(@$data['name'], FILTER_SANITIZE_STRING);
-        if ($this->db->has("lists_versions", ["name" => $name]))
-            return $this->redirectWithMessage($response, 'lists', "error", ["Období " . $name . " již existuje"]);
+        $name = substr(filter_var(@$data['name'], FILTER_SANITIZE_STRING), 0, 30);
+        
+        if (!is_string($name) || strlen($name) == 0)
+            return $this->redirectWithMessage($response, 'lists', "error", ["Zadejte název verze"]);
+        if ($name !== $data['name'])
+            return $this->redirectWithMessage($response, 'lists', "error", ["Nepoužívejte speciální znaky"]);
+        else if ($this->db->has("lists_versions", ["name" => $name]))
+            return $this->redirectWithMessage($response, 'lists', "error", ["Verze " . $name . " již existuje"]);
         
         $parsed = parent::__invoke($request, $response, $args);
         

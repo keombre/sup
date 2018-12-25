@@ -1,9 +1,12 @@
 <div class="col-md-5">
+    <h3>Kánon verze <?=$name?>
+    <a href="<?=$router->pathFor('lists')?>" class="btn btn-default pull-right">Zpět</a></h3>
+    <hr />
     <div class="panel panel-default">
     <div class="panel-heading">
         <strong><?=$lang->g('list-title', 'dash-admin')?> (<?=count($books)?>)</strong>
         <div class="pull-right">
-            <a href="<?=$router->pathFor('lists-edit');?>"><span class="glyphicon glyphicon-plus"></span> <?=$lang->g('list-add', 'dash-admin')?></a>
+            <a href="#" class="btn btn-xs disabled" ><span class="glyphicon glyphicon-plus"></span> <?=$lang->g('list-add', 'dash-admin')?></a>
             |
             <a href="#" id="toggle-list" data-toggle="collapse" data-target="#collapse-list"><?=$lang->g('list-expand', 'dash-admin')?></a>
         </div>
@@ -14,7 +17,7 @@
         <?php foreach($books as $book):?>
         <li class='list-group-item'>
             <span style="width: 75%;display: inline-block;"><?=$book['author'] == ""?"":$book['author'] . ": "?><b><?=$book['name']?></b></span>
-            <a href="#" class='btn btn-xs btn-danger pull-right'><?=$lang->g('list-remove', 'dash-admin')?></a>
+            <a href="#" class='btn disabled btn-xs btn-danger pull-right'><?=$lang->g('list-remove', 'dash-admin')?></a>
         </li>
         <?php endforeach;?>
         </ul>
@@ -24,13 +27,6 @@
     </div>
     </div>
 </div>
-<script>
-$('#toggle-list').click(function(){
-    $(this).text(function(i,old){
-        return old == "<?=$lang->g('list-expand', 'dash-admin')?>" ? "<?=$lang->g('list-collapse', 'dash-admin')?>" : "<?=$lang->g('list-expand', 'dash-admin')?>";
-    });
-});
-</script><?=$lang->g('', 'dash-admin')?>
 
 <div class="col-md-5 col-md-offset-2">
     <div class="panel panel-default">
@@ -40,15 +36,23 @@ $('#toggle-list').click(function(){
     <div class="panel-body">
     <p><?=$lang->g('upload-expected', 'dash-admin')?>
     <br />
-    <pre>[id];[region id];[author];[name];[genere id]</pre>
+    <pre>[region id];[author];[name];[genere id]</pre>
     </p>
-    <form method="post" enctype="multipart/form-data" action="<?=$router->pathFor('lists-admin-upload')?>">
+    <form method="post" enctype="multipart/form-data" action="<?=$router->pathFor('lists-admin-manage', ["id" => $version])?>">
         <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
         <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+        <input type="hidden" name="_METHOD" value="PUT" />
         <input type="file" name="book"/><br />
         <input type="submit"/>
     </form>
     </div>
     </div>
 </div>
-</div>
+
+<script>
+$('#toggle-list').click(function(){
+    $(this).text(function(i,old){
+        return old == "<?=$lang->g('list-expand', 'dash-admin')?>" ? "<?=$lang->g('list-collapse', 'dash-admin')?>" : "<?=$lang->g('list-expand', 'dash-admin')?>";
+    });
+});
+</script>

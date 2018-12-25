@@ -1,18 +1,19 @@
 <div class="col-md-5">
 <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Založit nový kánon</strong>
+        <strong>Založit novou verzi kánonu</strong>
     </div>
     <div class="panel-body">
         <form class="form-horizontal"  enctype="multipart/form-data" method="post" action="<?=$router->pathFor('lists-admin-create')?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+            <input type="hidden" name="_METHOD" value="PUT" />
             <p><?=$lang->g('upload-expected', 'dash-admin')?>
             <br />
             <pre>[region id];[author];[name];[genere id]</pre>
             </p>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Název období:</label>
+                <label class="col-md-4 control-label" for="name">Název verze:</label>
                 <div class="col-md-8">
                     <input class="form-control" type="text" name="name" id="name" required autofocus>
                 </div>
@@ -25,7 +26,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-8 col-md-offset-4">
-                    <input class="btn btn-primary" type="submit" value="Založit nový kánon">
+                    <input class="btn btn-primary" type="submit" value="Založit novou verzi">
                 </div>
             </div>
         </form>
@@ -73,10 +74,10 @@ $('#toggle-list').click(function(){
         <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
         <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
         <div class="form-group">
-            <label class="col-md-5 control-label" for="active">Aktivní období</label>
+            <label class="col-md-5 control-label" for="active">Aktivní verze</label>
             <div class="col-md-6">
                 <select class="form-control" name="active" required>
-                    <option disabled selected value="">Zvolte období</option>
+                    <option disabled selected value="">Zvolte verzi</option>
                     <?php foreach ($versions as $version):?>
                     <option value="<?=$version['id']?>" <?=@$settings['active_version'] == $version['id']?'selected':''?>><?=$version['name']?></option>
                     <?php endforeach;?>
@@ -103,7 +104,7 @@ $('#toggle-list').click(function(){
         </div>
         <div class="form-group">
             <div class="col-md-7 col-md-offset-5">
-                <input class="btn btn-primary" type="submit" value="Nastavit">
+                <input class="btn btn-primary" type="submit" value="Uložit nastavení">
             </div>
         </div>
     </form>

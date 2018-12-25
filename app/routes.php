@@ -38,13 +38,14 @@ final class routes {
                     ->add(\middleware\lists\open_editing::class);
 
                     $this->group('/admin', function () {
-                        $this->post('/create', \controller\lists\admin\create::class)
+                        $this->put('/create', \controller\lists\admin\create::class)
                         ->setName('lists-admin-create');
 
                         $this->post('/settings', \controller\lists\admin\settings::class)
                         ->setName('lists-admin-settings');
 
-                        $this->map(['GET', 'PUT'], '/manage', \controller\lists\admin\manage::class)
+                        $this->map(['GET', 'PUT'], '/manage/{id}', \controller\lists\admin\manage::class)
+                        ->add(\middleware\lists\listID::class)
                         ->setName('lists-admin-manage');
                     })->add(\middleware\auth\admin::class);
                     

@@ -13,8 +13,8 @@ class login extends \sup\controller {
 
             $data = $request->getParsedBody();
 
-            $name = filter_var(@$data['name'], FILTER_SANITIZE_STRING);
-            $pass = filter_var(@$data['pass'], FILTER_SANITIZE_STRING);
+            $name = substr(filter_var(@$data['name'], FILTER_SANITIZE_STRING), 0, 50);
+            $pass = substr(filter_var(@$data['pass'], FILTER_SANITIZE_STRING), 0, 50);
             
             if ($this->container->auth->login($name, $pass)) {
                 $response = $response->withRedirect($this->container->router->pathFor('dashboard'), 301);
