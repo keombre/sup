@@ -22,7 +22,7 @@ class upload extends \sup\controller {
         if (!is_array($parsed))
             return $this->redirectWithMessage($response, 'lists', "error", ["Špatný formát", "Chyba na řádku " . $parsed]);
         
-        return $response;
+        return $parsed;
     }
 
     private function validateFile($filename) {

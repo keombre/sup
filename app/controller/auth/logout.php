@@ -4,7 +4,7 @@ namespace controller\auth;
 
 class logout extends \sup\controller {
 
-    function __invoke($request, $response) {
+    function __invoke($request, $response, $args) {
 
         $this->container->auth->logout();
         $lang = @$_SESSION['lang'];

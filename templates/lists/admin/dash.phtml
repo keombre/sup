@@ -4,7 +4,7 @@
         <strong>Založit nový kánon</strong>
     </div>
     <div class="panel-body">
-        <form class="form-horizontal"  enctype="multipart/form-data" method="post" action="<?=$router->pathFor('lists-admin-upload')?>">
+        <form class="form-horizontal"  enctype="multipart/form-data" method="post" action="<?=$router->pathFor('lists-admin-create')?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
             <p><?=$lang->g('upload-expected', 'dash-admin')?>

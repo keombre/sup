@@ -12,5 +12,5 @@ abstract class middleware {
         $this->container = $container;
     }
 
-    abstract function __invoke(\Slim\Request $request, \Slim\Response $response, $next);
+    abstract function __invoke(\Slim\Http\Request $request, \Slim\Http\Response $response, $next);
 }

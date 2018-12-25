@@ -4,17 +4,20 @@ namespace controller\lists\admin;
 
 class create extends upload {
 
-    function __invoke() {
+    function __invoke($request, $response, $args) {
         $data = $request->getParsedBody();
 
         $name = filter_var(@$data['name'], FILTER_SANITIZE_STRING);
-        if ($this->container->db->has("lists_versions", ["name" => $name]))
+        if ($this->db->has("lists_versions", ["name" => $name]))
             return $this->redirectWithMessage($response, 'lists', "error", ["Období " . $name . " již existuje"]);
         
-        $response = parrent::__invoke($request, $response);
+        $parsed = parent::__invoke($request, $response, $args);
+        
+        if (!is_array($parsed))
+            return $parsed;
 
-        $this->container->db->insert("lists_versions", ["name" => $name]);
-        $version = $this->container->db->id();
+        $this->db->insert("lists_versions", ["name" => $name]);
+        $version = $this->db->id();
 
         $save = [];
         foreach ($parsed as $entry) {
@@ -26,8 +29,9 @@ class create extends upload {
                 "version" => $version
             ]);
         }
-        $this->container->db->insert("lists_books", $save);
+        $this->db->insert("lists_books", $save);
         $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
+        return $response;
     }
 
 }

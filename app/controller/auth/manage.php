@@ -4,7 +4,7 @@ namespace controller\auth;
 
 class manage extends \sup\controller {
 
-    function __invoke($request, $response) {
+    function __invoke($request, $response, $args) {
         
         $users = [];
         $students = [];
