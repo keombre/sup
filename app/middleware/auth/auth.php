@@ -9,7 +9,7 @@ class auth extends \sup\middleware {
         if ($this->container->auth->user->logged()) {
             return $next($request, $response);
         } else {
-            return $response->withRedirect($this->container->router->pathFor('index'), 301);
+            return $response->withRedirect($this->container->router->pathFor('index', [], ["next" => base64_encode($request->getUri())]), 301);
         }
     }
 }

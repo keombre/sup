@@ -23,10 +23,10 @@ trait sendResponse {
         return $response;
     }
 
-    function redirectWithMessage(&$response, $namedRoute, $message, $content, $args = []) {
+    function redirectWithMessage(&$response, $namedRoute, $message, $content, $args = [], $params = []) {
         $this->container->flash->addMessage($message, $content);
 
-        $response = $response->withRedirect($this->container->router->pathFor($namedRoute, $args), 301);
+        $response = $response->withRedirect($this->container->router->pathFor($namedRoute, $args, $params), 301);
         return $response;
     }
 }

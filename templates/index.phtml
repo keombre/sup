@@ -8,7 +8,7 @@
 <div class="panel panel-default">
     <div class="panel-heading"><?=$lang->g('existing-user', 'index')?></div>
     <div class="panel-body">
-        <form class="form-horizontal" method="post" action="<?=$router->pathFor('login')?>">
+        <form class="form-horizontal" method="post" action="<?=$router->pathFor('login', [], ["next" => $next])?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
             <div class="form-group">

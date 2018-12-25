@@ -92,8 +92,8 @@ class validate {
             if (!array_key_exists($books[$book]['author'], $authorCounter))
                 $authorCounter[$books[$book]['author']] = 0;
             
-            $genereCounter[$books[$book]['genere']]++;
-            $regionCounter[$books[$book]['region']]++;
+            @$genereCounter[$books[$book]['genere']]++;
+            @$regionCounter[$books[$book]['region']]++;
             $authorCounter[$books[$book]['author']]++;
         }
 
@@ -147,6 +147,8 @@ class validate {
         $ret = true;
         $message = "";
         foreach ($counter as $id => $count) {
+            if (!array_key_exists($id, $info))
+                continue;
             if (!is_null($info[$id]['min']) && $info[$id]['min'] > $count) {
                 $message .= "<span class='text-danger'><span class='glyphicon glyphicon-remove'></span> " . $info[$id]['name'] . " (<b>" . $info[$id]['min'] . " ≤</b> " . $count . " ≤ " . $info[$id]['max'] . ")</span><br />" . PHP_EOL;
                 $ret = false;
