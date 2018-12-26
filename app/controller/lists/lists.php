@@ -29,4 +29,10 @@ abstract class lists extends \sup\controller implements \sup\roleActions {
         }
         return $response;
     }
+
+    function withListID($listID) {
+        $clone = clone $this;
+        $clone->listID = $listID;
+        return $clone;
+    }
 }

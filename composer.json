@@ -8,7 +8,9 @@
         "slim/csrf": "^0.8.2",
         "slim/php-view": "^2.2",
         "catfan/medoo": "^1.5",
-        "php": "^7.0"
+        "php": "^7.0",
+        "picqer/php-barcode-generator": "^0.2.2",
+        "chillerlan/php-qrcode": "^3.0"
     },
     "license": "MIT",
     "authors": [

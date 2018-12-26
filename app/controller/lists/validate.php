@@ -2,56 +2,32 @@
 
 namespace controller\lists;
 
-class validate {
-    
-    use \traits\sendResponse;
+class validate extends lists {
 
-    protected $container;
-    private $listID = false;
-
-    function __construct(\Slim\Container $container) {
-        $this->container = $container;
-        $this->userID = $this->container->auth->user->getInfo('id');
-    }
-
-    function __invoke($request, $response, $args) {
-        $this->getListID($args);
-
-        if (!$this->listID)
-            return $this->redirectWithMessage($response, 'lists', "error", ["Kánon nenalezen"]);
-
+    public function student($request, &$response, $args) {
         $state = $this->container->db->get('lists_main', 'state', ['id' => $this->listID]);
 
         if ($state == 0) {
             if (!$this->validate($response))
                 return $response;
+            else if (!$request->isPut())
+                return (new preview($this->container))->withListID($this->listID)->preview($request, $response, $args);
         }
         
         if ($request->isPut()) {
-            if ($state == 0) {
+            if ($state == 0)
                 $this->container->db->update("lists_main", ["state" => 1], ["id" => $this->listID]);
-                $state = 1;
-            }
         }
 
-        $this->preview($request, $response, $state != 0);
-        return $response;
+        return $response->withRedirect($this->container->router->pathFor('lists-preview', ["id" => $this->listID]), 301);
     }
 
-    private function preview($request, &$response, $print = false) {
-        $books = [];
-        foreach ($this->container->db->select("lists_books", "*") as $book)
-            $books[$book['id']] = $book;
+    public function teacher($request, &$response, $args) {
+        $response->getBody()->write("Nemáte přístup ke kontrole kánonů");
+    }
 
-        $list = [];
-        foreach ($this->container->db->select("lists_lists", "book", ["list" => $this->listID]) as $book)
-            array_push($list, $books[$book]);
-
-        $this->sendResponse($request, $response, "lists/preview.phtml", [
-            "list" => $list,
-            "listID" => $this->listID,
-            "print" => $print
-        ]);
+    public function admin($request, &$response, $args) {
+        $response->getBody()->write("Nemáte přístup ke kontrole kánonů");
     }
 
     private function validate(&$response) {
@@ -108,7 +84,7 @@ class validate {
         if ($message == "") {
 
             $regionMessage = $this->checkCount($regionInfo, $regionCounter);
-            $this->checkCount($genereInfo, $genereCounter);
+            $genereMessage = $this->checkCount($genereInfo, $genereCounter);
 
             if ($regionMessage != "") {
                 $message .= "<h5><b>Období:</b></h5>" . PHP_EOL;

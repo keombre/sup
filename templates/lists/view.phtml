@@ -8,7 +8,7 @@
     <ul class='list-group'>
     <?php foreach($lists as $info):?>
     <li class='list-group-item'>
-        <a href='<?=$router->pathFor('lists-edit', ['id' => $info['id']])?>'><?=date("G:i j. n. Y", $info['created'])?></a>
+        <a href='<?=$info['state']==0?$router->pathFor('lists-edit', ['id' => $info['id']]):$router->pathFor('lists-preview', ['id' => $info['id']])?>'><?=date("G:i j. n. Y", $info['created'])?></a>
     <?php if ($info['state'] == 0):?>
         <span class='label label-info pull-right'>Upravován</span>
     <?php elseif ($info['state'] == 1):?>

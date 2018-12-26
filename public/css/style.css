@@ -14,26 +14,59 @@
     }
 }
 .only-print, .only-print *  {
-    visibility: hidden;
-    height: 0;
+    visibility: hidden !important;
+    height: 0 !important;
 }
 
 @media print {
+    @page {
+        size: auto;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
     body * {
-      visibility: hidden;
+        max-height: calc(100% - 20mm);
+        visibility: hidden !important;
     }
     .print, .print * {
-      visibility: visible;
+      visibility: visible !important;
     }
     .only-print, .only-print * {
-        visibility: visible;
-        height: auto;
+        visibility: visible !important;
+        height: auto !important;
     }
     .print {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
+        position: absolute;
+        left: 0;
+        top: 10mm;
+        width: 100%;
+        height: 100%;
+    }
+    .qr-code {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+    .qr-code img {
+        width: 120px;
+        height: 120px;
+    }
+    .qr-code span {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-top: -10px;
+        font-family: monospace;
+        letter-spacing: 1px;
+        font-size: 16px;
+    }
+    .signature {
+        position: absolute;
+        bottom: 5%;
+        left: 5%;
+        width: 40%;
+        border-top: thin solid #000;
+        text-align: center;
     }
 }
 .my-buttons button {

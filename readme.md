@@ -4,6 +4,7 @@ student:
  - ukládání kánonu - done
  - odevzdání - done
  - tisk - done
+ - konzistentní Zpět tlačítka
 
 učitel:
  - potvrzení

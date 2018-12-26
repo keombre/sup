@@ -37,6 +37,14 @@ final class routes {
                     ->add(\middleware\lists\listID::class)
                     ->add(\middleware\lists\open_editing::class);
 
+                    $this->map(['GET', 'PUT'], '/accept/{id}', \controller\lists\validate::class)
+                    ->setName('lists-accept');
+                    
+                    $this->map(['GET', 'PUT'], '/preview/{id}', \controller\lists\preview::class)
+                    ->setName('lists-preview')
+                    ->add(\middleware\lists\listID::class)
+                    ->add(\middleware\lists\open_editing::class);
+
                     $this->group('/admin', function () {
                         $this->put('/create', \controller\lists\admin\create::class)
                         ->setName('lists-admin-create');
