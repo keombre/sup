@@ -40,6 +40,8 @@ class preview extends lists {
         $generatorPNG = new \Picqer\Barcode\BarcodeGeneratorPNG();
         $barcode = base64_encode($generatorPNG->getBarcode($this->listID, $generatorPNG::TYPE_EAN_13, 2.5));
         
+        $versionName = $this->db->get('lists_versions', 'name', ['id' => $this->settings['active_version']]);
+        
         $books = [];
         foreach ($this->container->db->select("lists_books", "*") as $book)
             $books[$book['id']] = $book;
@@ -53,7 +55,8 @@ class preview extends lists {
             "listID" => $this->listID,
             "print" => $this->state != 0,
             "barcode" => $barcode,
-            "qrcode" => $qrcode
+            "qrcode" => $qrcode,
+            "version" => $versionName
         ]);
         return $response;
     }

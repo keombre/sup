@@ -125,13 +125,15 @@ class validate extends lists {
         foreach ($counter as $id => $count) {
             if (!array_key_exists($id, $info))
                 continue;
+            
             if (!is_null($info[$id]['min']) && $info[$id]['min'] > $count) {
-                $message .= "<span class='text-danger'><span class='glyphicon glyphicon-remove'></span> " . $info[$id]['name'] . " (<b>" . $info[$id]['min'] . " ≤</b> " . $count . " ≤ " . $info[$id]['max'] . ")</span><br />" . PHP_EOL;
+                $message .= "<span class='text-danger'><span class='glyphicon glyphicon-remove'></span> " . $info[$id]['name'] . " (<b>" . $info[$id]['min'] . " ≤</b> " . $count . " ≤ " . (is_numeric($info[$id]['max'])?$info[$id]['max']:'∞') . ")</span><br />" . PHP_EOL;
                 $ret = false;
             } elseif (!is_null($info[$id]['max']) && $info[$id]['max'] < $count) {
-                $message .= "<span class='text-danger'><span class='glyphicon glyphicon-remove'></span> " . $info[$id]['name'] . " (" . $info[$id]['min'] . " ≤ " . $count . " <b>≤ " . $info[$id]['max'] . "</b>)</span><br />" . PHP_EOL;
+                $message .= "<span class='text-danger'><span class='glyphicon glyphicon-remove'></span> " . $info[$id]['name'] . " (" . (is_numeric($info[$id]['min'])?$info[$id]['min']:'0') . " ≤ " . $count . " <b>≤ " . $info[$id]['max'] . "</b>)</span><br />" . PHP_EOL;
+                $ret = false;
             } else
-                $message .= "<span class='text-success'><span class='glyphicon glyphicon-ok'></span> " . $info[$id]['name'] . " (" . $info[$id]['min'] . " ≤ " . $count . " ≤ " . $info[$id]['max'] . ")</span><br />" . PHP_EOL;
+                $message .= "<span class='text-success'><span class='glyphicon glyphicon-ok'></span> " . $info[$id]['name'] . " (" . (is_numeric($info[$id]['min'])?$info[$id]['min']:'0') . " ≤ " . $count . " ≤ " . (is_numeric($info[$id]['max'])?$info[$id]['max']:'∞') . ")</span><br />" . PHP_EOL;
         }
         return $ret ? "" : $message;
     }
