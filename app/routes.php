@@ -21,29 +21,30 @@ final class routes {
                     $this->get('', \controller\lists\view::class)
                     ->setName('lists');
 
-                    $this->get('/view[/{id}]', \controller\lists\view::class)
-                    ->setName('lists-view')
+                    $this->group('', function () {
+                        $this->get('/view[/{id}]', \controller\lists\view::class)
+                        ->setName('lists-view');
+
+                        $this->map(['GET', 'PUT', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
+                        ->setName('lists-edit')
+                        ->add(\middleware\auth\student::class);
+
+                        $this->map(['GET', 'PUT'], '/validate/{id}', \controller\lists\validate::class)
+                        ->setName('lists-validate')
+                        ->add(\middleware\auth\student::class);
+
+                        $this->map(['GET', 'PUT'], '/preview/{id}', \controller\lists\preview::class)
+                        ->setName('lists-preview');
+                    })
                     ->add(\middleware\lists\listID::class)
                     ->add(\middleware\lists\open_editing::class);
 
-                    $this->map(['GET', 'PUT', 'DELETE'], '/edit[/{id}]', \controller\lists\edit::class)
-                    ->setName('lists-edit')
-                    ->add(new \middleware\auth\level($this->getContainer(), 0))
-                    ->add(\middleware\lists\listID::class)
-                    ->add(\middleware\lists\open_editing::class);
+                    $this->group('/teacher', function () {
 
-                    $this->map(['GET', 'PUT'], '/validate/{id}', \controller\lists\validate::class)
-                    ->setName('lists-validate')
-                    ->add(\middleware\lists\listID::class)
-                    ->add(\middleware\lists\open_editing::class);
-
-                    $this->map(['GET', 'PUT'], '/accept/{id}', \controller\lists\validate::class)
-                    ->setName('lists-accept');
-                    
-                    $this->map(['GET', 'PUT'], '/preview/{id}', \controller\lists\preview::class)
-                    ->setName('lists-preview')
-                    ->add(\middleware\lists\listID::class)
-                    ->add(\middleware\lists\open_editing::class);
+                        $this->map(['GET', 'PUT'], '/accept[/{id}]', \controller\lists\teacher\accept::class)
+                        ->setName('lists-teacher-accept');
+                    })
+                    ->add(\middleware\auth\teacher::class);
 
                     $this->group('/admin', function () {
                         $this->put('/create', \controller\lists\admin\create::class)

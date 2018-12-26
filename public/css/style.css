@@ -44,7 +44,7 @@
     }
     .qr-code {
         position: absolute;
-        bottom: 0;
+        bottom: 2mm;
         right: 0;
     }
     .qr-code img {
@@ -55,7 +55,7 @@
         width: 100%;
         display: block;
         text-align: center;
-        margin-top: -10px;
+        margin-top: -8px;
         font-family: monospace;
         letter-spacing: 1px;
         font-size: 16px;

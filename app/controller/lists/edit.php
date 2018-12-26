@@ -4,17 +4,8 @@ namespace controller\lists;
 
 class edit extends lists {
 
-    function teacher($request, &$response, $args) {
-        if (is_null($this->listID))
-            return $this->redirectWithMessage($response, 'lists-edit', "error", ["Nemůžete vytvářet kánony"]);
-        else    
-            return $response->withRedirect($this->container->router->pathFor('lists-validate', ['id' => $this->listID]), 301);
-    }
-
-    function admin($request, &$response, $args) {
-        $this->teacher($request, $response, $args);
-    }
-
+    function teacher($request, &$response, $args) {}
+    function admin($request, &$response, $args) {}
     function student($request, &$response, $args) {
 
         $data = $request->getParsedBody();
