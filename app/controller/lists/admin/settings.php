@@ -19,7 +19,7 @@ class settings extends \sup\controller {
         $store = [
             "active_version" => $active,
             "open_editing"   => $edit == "on",
-            "open_validate"  => $validate == "on",
+            "open_accepting"  => $validate == "on",
             "open_drawing"   => $draw == "on",
         ];
         if ($this->container->db->count("lists_settings"))

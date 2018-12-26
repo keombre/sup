@@ -125,6 +125,11 @@ class auth {
             $roles = [$roles];
         return implode(",", $roles);
     }
+
+    public function canBecome($level) {
+        if ($this->user->level($level)) return true;
+        return $this->changeRole($level);
+    }
 }
 
 class user {

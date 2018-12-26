@@ -49,7 +49,12 @@ class accept extends \sup\controller {
             if (!is_numeric($code))
                 return false;
             return ["code" => intval($code)];
-        
+        } else if (strlen($code) == 7) {
+            if (substr($code, 3, 1) != '-')
+                return false;
+            if (!is_numeric(substr($code, 0, 3)) || !is_numeric(substr($code, 4)))
+                return false;
+            return ["code" => intval(substr($code, 0, 3) . substr($code, 4))];
         } else if (strlen($code) >= 13) {
             if (substr($code, 0, 1) != 'C' || substr($code, 7, 2) != '-U')
                 return false;

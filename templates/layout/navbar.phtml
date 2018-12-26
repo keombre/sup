@@ -14,15 +14,15 @@
     <div id="navbar" class="collapse navbar-collapse text-center">
         <?php if (count($lang->getLangs())):?>
         <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><?=$lang->g('language', 'navbar')?>
-        <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-        <?php foreach ($lang->getLangs() as $lg => $name):?>
-        <li><a href="<?=$router->pathFor('lang', ['lang' => $lg])?>"><?=$name?> (<?=$lg?>)</a></li>
-        <?php endforeach;?>
-        </ul>
-        </li>
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><?=$lang->g('language', 'navbar')?>
+            <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <?php foreach ($lang->getLangs() as $lg => $name):?>
+                <li><a href="<?=$router->pathFor('lang', ['lang' => $lg])?>"><?=$name?> (<?=$lg?>)</a></li>
+                <?php endforeach;?>
+                </ul>
+            </li>
         </ul>
         <?php endif;?>
         <?php if ($auth->user->logged()):?>
