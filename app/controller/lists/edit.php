@@ -16,32 +16,24 @@ class edit extends lists {
 
         if ($request->isPut()) {
 
-            $books = array_unique(filter_var_array(@$data['books'], FILTER_SANITIZE_STRING));
-
-            if (!count($books)) {
-                if (is_null($this->listID))
-                    return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"]);
-                else
-                    return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"], ['id' => $this->listID]);
-            }
+            $books = array_unique(filter_var_array(@$data['books'], FILTER_VALIDATE_INT));
+            if (!count($books))
+                return $this->redirectWithMessage($response, 'lists-edit', "error", ["Žádné knihy nezvoleny"], ['id' => $this->listID]);
 
             $id = $this->getListID();
 
-            foreach ($this->container->db->select("lists_lists", "book", ["list" => $id]) as $remove) {
+            foreach ($this->container->db->select("lists_lists", "book", ["list" => $id]) as $remove)
                 if (in_array($remove, $books))
                     unset($books[array_search($remove, $books)]);
-            }
 
-            if (!count($books)) {
-                if (is_null($this->listID))
-                    return $this->redirectWithMessage($response, 'lists-edit', "error", ["Chyba při ukládání knih"]);
-                else
-                    return $this->redirectWithMessage($response, 'lists-edit', "error", ["Chyba při ukládání knih"], ["id" => $this->listID]);
-            }
-
-            $save = [];
-            foreach ($books as $book)
-                array_push($save, ["list" => $id, "book" => $book]);
+            $save = array_filter($books, function ($e) use ($id) {
+                if (is_numeric($e))
+                    return ["list" => $id, "book" => $book];
+            });
+            
+            if (!count($save))
+                return $this->redirectWithMessage($response, 'lists-edit', "error", ["Chyba při ukládání knih"], ["id" => $this->listID]);
+            
             $this->container->db->insert("lists_lists", $save);
 
             if (is_null($this->listID)) {
@@ -74,9 +66,7 @@ class edit extends lists {
             if ($this->removeEmptyList())
                 return $this->redirectWithMessage($response, 'lists', "status", ["Kánon smazán"]);
         }
-
-        // render
-
+        
         $listbooks = [];
         if (!is_null($this->listID))
             $listbooks = $this->container->db->select("lists_lists", "book", ["list" => $this->listID, "ORDER" => "book"]);
@@ -130,11 +120,9 @@ class edit extends lists {
     }
 
     private function getListID() {
-        if (!is_null($this->listID))
-            return $this->listID;
-        do {
-            $id = rand(100000, 999999);
-        } while ($this->container->db->has("lists_main", ["id" => $id, "user" => $this->userID]));
+        if (!is_null($this->listID)) return $this->listID;
+        do $id = rand(100000, 999999);
+        while ($this->container->db->has("lists_main", ["id" => $id]));
         return $id;
     }
 }

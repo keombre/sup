@@ -30,7 +30,7 @@
 <table>
     <tr>
         <td>Jméno:&nbsp;&nbsp;</td>
-        <td><strong><?=$list['user']['name']['given']?> <?=$list['user']['name']['sur']?></strong></td>
+        <td><strong><?=implode(' ', $list['user']['name'])?></strong></td>
     </tr>
     <tr>
         <td>Třída: </td>

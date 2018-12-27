@@ -7,9 +7,9 @@ class preview extends lists {
     protected $state = null;
 
     public function student($request, &$response, $args) {
-        $this->getState();
+        $state = $this->db->get('lists_main', 'state', ['id' => $this->listID]);
 
-        if ($this->state == 0)
+        if ($state == 0)
             return $response->withRedirect($this->container->router->pathFor('lists-edit', ["id" => $this->listID]), 301);
 
         return $this->preview($request, $response, $args);
@@ -21,10 +21,6 @@ class preview extends lists {
 
     public function admin($request, &$response, $args) {
         $response->getBody()->write("kitten");
-    }
-
-    private function getState() {
-        $this->state = $this->container->db->get('lists_main', 'state', ['id' => $this->listID]);
     }
 
     public function preview($request, &$response, $args) {
@@ -59,6 +55,7 @@ class preview extends lists {
         $qrcode = (new \chillerlan\QRCode\QRCode(new \chillerlan\QRCode\QROptions([
             'outputType' => \chillerlan\QRCode\QRCode::OUTPUT_IMAGE_PNG,
         ])))->render($qrURL);
+        
         $generatorPNG = new \Picqer\Barcode\BarcodeGeneratorPNG();
         $barcode = base64_encode($generatorPNG->getBarcode($this->formatBarcode($list), $generatorPNG::TYPE_CODE_39E, 1.5));
 

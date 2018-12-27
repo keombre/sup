@@ -7,22 +7,24 @@ class manage extends \sup\controller {
     function __invoke($request, $response, $args) {
         
         $users = [];
-        $students = [];
-
-        foreach ($this->container->db->select("users", '*') as $user) {
-            $userinfo = $this->container->db->get('userinfo', '*', ['id' => $user['id']]);
-            $userCL = new \user();
-            $userCL->setInfo($user['id'], $user['name'], $user['role'], $user['activeRole']);
-            if ($userinfo) {
-                foreach (['givenname', 'surname', 'class'] as $val)
-                    if (array_key_exists($val, $userinfo))
-                        $userCL->setAttrib($val, $userinfo[$val]);
+        $students = array_filter($this->db->select('users', ['[>]userinfo' => 'id'], [
+            'users.id [Int]',
+            'users.name(code) [String]',
+            'users.role [String]',
+            'name' => [
+                'userinfo.givenname(given) [String]',
+                'userinfo.surname(sur) [String]'
+            ],
+            'userinfo.class [String]'
+        ], ['users.role[!]' => -1]), function ($e) use (&$users) {
+            $e['role'] = explode(',', $e['role']);
+            
+            if (max($e['role']) == 0) {
+                return $e;
             }
-            if ($userCL->getInfo('roles') == [0])
-                array_push($students, $userCL);
             else
-                array_push($users, $userCL);
-        }
+                array_push($users, $e);
+        });
 
         if ($request->isGet()) {
 
@@ -38,11 +40,11 @@ class manage extends \sup\controller {
 
             if (is_string($id) && strlen($id) > 0) {
                 
-                if ($users[$id] == 'admin') {
+                if (max($users[array_search(array_column($users, 'id'), $id)]['role']) == 2) {
                     $this->redirectWithMessage($response, 'user-manageUsers', "error", ["Chyba odebírání!", "Nelze odebrat administrátora"]);
                 } else {
 
-                    $this->container->db->delete("users", ["id" => $id]);
+                    $this->db->update("users", ["role" => -1], ['id' => $id]);
 
                     $this->redirectWithMessage($response, 'user-manageUsers', "status", ["Oderání úspěšné!", "Účet " . $users[$id]. " byl odebrán!"]);
                 }
