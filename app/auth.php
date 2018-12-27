@@ -45,6 +45,8 @@ class auth {
             return false;
         
         if ($info = $this->db->get("users", "*", ["name" => $id])) {
+            if ($info['role'] == -1)
+                return false;
             if (password_verify($pass, $info['pass'])) {
                 do {$token = bin2hex(\openssl_random_pseudo_bytes(4));}
                 while ($this->db->has("users", ["token" => $token]));
@@ -85,7 +87,8 @@ class auth {
             "id" => $id,
             "name" => $name,
             "pass" => $hash,
-            "role" => $this->encodeRole($roles)
+            "role" => $this->encodeRole($roles),
+            "activeRole" => max((array)$roles)
         ]);
         return true;
     }

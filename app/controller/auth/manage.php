@@ -7,7 +7,7 @@ class manage extends \sup\controller {
     function __invoke($request, $response, $args) {
         
         $users = [];
-        $students = array_filter($this->db->select('users', ['[>]userinfo' => 'id'], [
+        $students = array_reduce($this->db->select('users', ['[>]userinfo' => 'id'], [
             'users.id [Int]',
             'users.name(code) [String]',
             'users.role [String]',
@@ -16,15 +16,11 @@ class manage extends \sup\controller {
                 'userinfo.surname(sur) [String]'
             ],
             'userinfo.class [String]'
-        ], ['users.role[!]' => -1]), function ($e) use (&$users) {
-            $e['role'] = explode(',', $e['role']);
-            
-            if (max($e['role']) == 0) {
-                return $e;
-            }
-            else
-                array_push($users, $e);
-        });
+        ], ['users.role[!]' => -1]), function ($e, $f) use (&$users) {
+            $f['role'] = filter_var_array(explode(',', $f['role']), FILTER_VALIDATE_INT);
+            array_push(${max($f['role']) == 0?'e':'users'}, $f);
+            return $e;
+        }, []);
 
         if ($request->isGet()) {
 

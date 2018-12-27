@@ -25,12 +25,12 @@ class edit extends lists {
             foreach ($this->container->db->select("lists_lists", "book", ["list" => $id]) as $remove)
                 if (in_array($remove, $books))
                     unset($books[array_search($remove, $books)]);
-
-            $save = array_filter($books, function ($e) use ($id) {
-                if (is_numeric($e))
-                    return ["list" => $id, "book" => $book];
-            });
             
+            $save = array_reduce($books, function ($e, $f) use ($id) {
+                if (is_numeric($f)) array_push($e, ["list" => $id, "book" => $f]);
+                return $e;
+            }, []);
+
             if (!count($save))
                 return $this->redirectWithMessage($response, 'lists-edit', "error", ["Chyba při ukládání knih"], ["id" => $this->listID]);
             

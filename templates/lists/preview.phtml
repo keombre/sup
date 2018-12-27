@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <p>Kánon zkontrolujte, odešlete a poté vytiskněte.</p>
-        <?php if ($list['state'] == 2):?>
+        <?php if ($list['state'] != 0):?>
         <a class="btn btn-default" href="<?=$router->pathFor('lists')?>">Zpět</a>
         <div class="pull-right btn-group">
             <button class="btn btn-success disabled" data-toggle="tooltip" data-placement="top" title="Kánon již byl odeslán">Odeslat</button>

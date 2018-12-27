@@ -13,7 +13,7 @@ class seed {
     }
 
     function update() {
-        if (!$this->container->db->has("sqlite_master", ["AND" => ["type" => "table", "OR" => [
+        if (!$this->db->has("sqlite_master", ["AND" => ["type" => "table", "OR" => [
             "name" => ["users", "userinfo"]
         ]]])) {
             $this->seed();
@@ -28,8 +28,8 @@ class seed {
             name TEXT,
             pass TEXT,
             token TEXT NULL,
-            role TEXT DEFAULT '0',
-            activeRole INTEGER NULL,
+            role TEXT DEFAULT '-1',
+            activeRole INTEGER,
             lastActive INTEGER NULL
         );");
 

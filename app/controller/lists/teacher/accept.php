@@ -111,23 +111,18 @@ class accept extends \sup\controller {
         }
 
         if (is_null($userID))
-            $userID = $this->db->get('users', 'id', ['name' => $code['user']]);
+            $userID = $this->db->get('users', ['[>]lists_main' => ['id' => 'user']], 'users.id', ['lists_main.id' => $code['code']]);
 
         $this->acceptList($userID, $code['code']);
         return true;
     }
 
     private function acceptList($userID, $listID) {
-        if ($this->db->has('lists_main', [
+        $this->db->update('lists_main', ['state' => 1], [
             'version' => $this->settings['active_version'],
-            'state'   => '2',
+            'state'   => 2,
             'user'    => $userID
-        ]))
-            $this->db->update('lists_main', ['state' => 1], [
-                'version' => $this->settings['active_version'],
-                'state'   => 2,
-                'user'    => $userID
-            ]);
+        ]);
         
         $this->db->update('lists_main', ['state' => 2], ['id' => $listID]);
     }
