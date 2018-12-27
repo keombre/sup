@@ -1,7 +1,17 @@
 <div class="col-md-12">
-<h3>Maturitní kánon</h3>
+<h3>Maturitní kánon <small>učitel</small></h3>
 <hr />
-<div class="col-md-5">
+</div>
+<div class="col-md-4 text-center">
+    <?php if ($allowAccepting):?>
+    <a href="<?=$router->pathFor('lists-teacher-accept')?>" class="btn btn-lg btn-success">Schvalování kánonů</a>
+    <?php else:?>
+    <button class="btn btn-lg btn-success disabled">Schvalování kánonů</button>
+    <?php endif;?>
+    <br /><br />
+    <a href="<?=$router->pathFor('lists-teacher-view')?>" class="btn btn-default">Seznam studentů</a>
+</div>
+<div class="col-md-8">
     <div class="panel panel-default">
     <div class="panel-heading">
     <strong>Seznam knih</strong>
@@ -35,8 +45,3 @@ $('#toggle-list').click(function(){
     });
 });
 </script><?=$lang->g('', 'dash-admin')?>
-
-<div class="col-md-5 col-md-offset-2">
-    <a href="<?=$router->pathFor('lists-teacher-accept')?>" class="btn btn-success">Schvalování kánonů</a>
-    <a href="<?=$router->pathFor('lists-teacher-view')?>" class="btn btn-success">Seznam studentů</a>
-</div>

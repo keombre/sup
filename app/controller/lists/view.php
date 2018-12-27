@@ -27,7 +27,8 @@ class view extends lists {
 
         $response = $this->sendResponse($request, $response, "lists/teacher/dash.phtml", [
             "books" => $books,
-            "count" => $count
+            "count" => $count,
+            "allowAccepting" => $this->settings['open_accepting'] == 1
         ]);
     }
 

@@ -1,3 +1,7 @@
+<div class="col-md-12">
+<h3>Maturitní kánon <small>admin</small></h3>
+<hr />
+</div>
 <div class="col-md-5">
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -91,9 +95,9 @@ $('#toggle-list').click(function(){
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-5 control-label" for="validate">Schvalování kánonů</label>
+            <label class="col-md-5 control-label" for="accept">Schvalování kánonů</label>
             <div class="col-md-6">
-                <input type="checkbox" <?=@$settings['open_validate']?'checked':''?> name="validate" data-on="povoleno" data-off="zakázáno" data-onstyle="info" data-offstyle="danger" data-toggle="toggle">
+                <input type="checkbox" <?=@$settings['open_accepting']?'checked':''?> name="accept" data-on="povoleno" data-off="zakázáno" data-onstyle="info" data-offstyle="danger" data-toggle="toggle">
             </div>
         </div>
         <div class="form-group">
