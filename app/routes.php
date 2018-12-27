@@ -44,6 +44,9 @@ final class routes {
                         $this->map(['GET', 'PUT'], '/accept[/{id}]', \controller\lists\teacher\accept::class)
                         ->setName('lists-teacher-accept')
                         ->add(\middleware\lists\open_accepting::class);
+
+                        $this->get('/view[/{id}]', \controller\lists\teacher\view::class)
+                        ->setName('lists-teacher-view');
                     })
                     ->add(\middleware\auth\teacher::class);
 

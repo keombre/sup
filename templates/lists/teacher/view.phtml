@@ -1,0 +1,22 @@
+<div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Studenti</strong>
+        </div>
+        <div class="panel-body">
+        <?php if (is_array(@$students) && count($students)):?>
+            <ul class='list-group'>
+            <?php foreach($students as $student):?>
+                <li class='list-group-item'><?=$student['name']['given']?> <?=$student['name']['sur']?> (<?=$student['code']?>) <b><?=$student['class']?></b> 
+                <?php if (is_numeric($student['list'])):?>
+                    <span class='pull-right'>Kánon: <a href="<?=$router->pathFor('lists-teacher-view', ['id' => $student['list']])?>"><?=$student['list']?></a></span>
+                <?php endif;?>
+                </li>
+            <?php endforeach;?>
+            </ul>
+        <?php else:?>
+            <span class='text-muted'>Žádní studenti</span>
+        <?php endif?>
+        </div>
+    </div>
+</div>

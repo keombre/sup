@@ -5,9 +5,6 @@ namespace middleware\lists;
 class listID extends \sup\middleware {
 
     public function __invoke($request, $response, $next) {
-
-        if ($this->container->auth->user->level(ROLE_ADMIN))
-            return $next($request, $response);
         
         $listID = $request->getAttributes()['route']->getArgument('id');
 
@@ -27,7 +24,7 @@ class listID extends \sup\middleware {
                 return $next($request, $response);
             else
                 return $this->redirectWithMessage($response, 'lists', "error", ["Kánon nenalezen"]);
-        } else if ($this->container->auth->user->level(ROLE_TEACHER)) {
+        } else if ($this->container->auth->user->level([ROLE_TEACHER, ROLE_ADMIN])) {
             if ($this->container->db->has("lists_main", ["id" => $id, "version" => $version]))
                 return $next($request, $response);
             else

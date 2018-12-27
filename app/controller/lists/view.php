@@ -18,7 +18,17 @@ class view extends lists {
     }
 
     public function teacher($request, &$response, $args) {
-        $response->getBody()->write("kitten");
+        $books = [];
+        foreach ($this->db->select('lists_books', '*', ['version' => $this->settings['active_version']]) as $book)
+            $books[$book['id']] = $book;
+        
+        $count = array_count_values($this->db->select('lists_lists', ['[>]lists_main' => ['list' => 'id']], 'book', ['lists_main.version' => $this->settings['active_version'], 'lists_main.state' => 2]));
+        arsort($count);
+
+        $response = $this->sendResponse($request, $response, "lists/teacher/dash.phtml", [
+            "books" => $books,
+            "count" => $count
+        ]);
     }
 
     public function admin($request, &$response, $args) {

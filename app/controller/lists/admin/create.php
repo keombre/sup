@@ -35,7 +35,7 @@ final class create extends upload {
             ]);
         }
         $this->db->insert("lists_books", $save);
-        $this->redirectWithMessage($response, 'lists', "status", [count($save) . " knih nahráno"]);
+        $this->redirectWithMessage($response, 'lists-admin-manage', "status", [count($save) . " knih nahráno"], ['id' => $version]);
         return $response;
     }
 

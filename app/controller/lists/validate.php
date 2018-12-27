@@ -15,20 +15,17 @@ class validate extends lists {
         }
         
         if ($request->isPut()) {
-            if ($state == 0)
+            if ($state == 0) {
                 $this->container->db->update("lists_main", ["state" => 1], ["id" => $this->listID]);
+                return $this->redirectWithMessage($response, 'lists-preview', "status", ["Kánon odeslán"], ["id" => $this->listID]);
+            }
         }
 
         return $response->withRedirect($this->container->router->pathFor('lists-preview', ["id" => $this->listID]), 301);
     }
 
-    public function teacher($request, &$response, $args) {
-        $response->getBody()->write("Nemáte přístup ke kontrole kánonů");
-    }
-
-    public function admin($request, &$response, $args) {
-        $response->getBody()->write("Nemáte přístup ke kontrole kánonů");
-    }
+    public function teacher($request, &$response, $args) {}
+    public function admin($request, &$response, $args) {}
 
     private function validate(&$response) {
         $list = $this->container->db->select("lists_lists", "book", ["list" => $this->listID]);

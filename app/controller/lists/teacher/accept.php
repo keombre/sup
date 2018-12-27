@@ -44,6 +44,7 @@ class accept extends \sup\controller {
     private function validatePost($code) {
         if (!is_string($code))
             return false;
+        $code = trim($code);
         
         if (strlen($code) == 6) {
             if (!is_numeric($code))
@@ -128,10 +129,6 @@ class accept extends \sup\controller {
                 'user'    => $userID
             ]);
         
-        $this->db->update('lists_main', ['state' => 2], [
-            'version' => $this->settings['active_version'],
-            'user'    => $userID,
-            'id'      => $listID
-        ]);
+        $this->db->update('lists_main', ['state' => 2], ['id' => $listID]);
     }
 }

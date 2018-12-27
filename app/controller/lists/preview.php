@@ -28,44 +28,50 @@ class preview extends lists {
     }
 
     public function preview($request, &$response, $args) {
-        if (is_null($this->state))
-            $this->getState();
+        
+        $versionName = $this->db->get('lists_versions', 'name [String]', ['id' => $this->settings['active_version']]);
 
-        $generatorPNG = new \Picqer\Barcode\BarcodeGeneratorPNG();
-        $barcode = base64_encode($generatorPNG->getBarcode($this->formatBarcode(), $generatorPNG::TYPE_CODE_39E, 1.5));
-        
-        $versionName = $this->db->get('lists_versions', 'name', ['id' => $this->settings['active_version']]);
-        
-        $books = [];
-        foreach ($this->container->db->select("lists_books", "*") as $book)
-            $books[$book['id']] = $book;
-        
-        $list = [];
-        foreach ($this->container->db->select("lists_lists", "book", ["list" => $this->listID]) as $book)
-            array_push($list, $books[$book]);
+        $list = $this->db->get('users', ['[>]userinfo' => 'id', '[>]lists_main' => ['id' => 'user']], [
+            'user' => [
+                'users.name(code) [String]',
+                'name' => [
+                    'userinfo.givenname(given) [String]',
+                    'userinfo.surname(sur) [String]'
+                ],
+                'userinfo.class [String]'
+            ],
+            'lists_main.state [Int]',
+            'lists_main.id [Int]'
+        ], ['lists_main.id' => $this->listID]);
+
+        $list['books'] = $this->db->select('lists_lists', ['[>]lists_books' => ['book' => 'id']], [
+            'lists_books.id [Int]',
+            'lists_books.name [String]',
+            'lists_books.author [String]'
+        ], ['lists_lists.list' => $this->listID, 'ORDER' => 'lists_books.id']);
 
         $qrURL = (string) $request
                 ->getUri()
-                ->withPath($this->container->router->pathFor("lists-teacher-accept", ["id" => $this->formatBarcode()]))
-                ->withQuery(http_build_query(['b' => base64_encode(implode('-', array_column($list, 'id')))]))
+                ->withPath($this->container->router->pathFor("lists-teacher-accept", ["id" => $this->formatBarcode($list)]))
+                ->withQuery(http_build_query(['b' => base64_encode(implode('-', array_column($list['books'], 'id')))]))
                 ->withFragment("");
         
         $qrcode = (new \chillerlan\QRCode\QRCode(new \chillerlan\QRCode\QROptions([
             'outputType' => \chillerlan\QRCode\QRCode::OUTPUT_IMAGE_PNG,
         ])))->render($qrURL);
+        $generatorPNG = new \Picqer\Barcode\BarcodeGeneratorPNG();
+        $barcode = base64_encode($generatorPNG->getBarcode($this->formatBarcode($list), $generatorPNG::TYPE_CODE_39E, 1.5));
 
         $this->sendResponse($request, $response, "lists/preview.phtml", [
-            "list" => $list,
-            "listID" => substr_replace($this->listID, '-', 3, 0),
-            "print" => $this->state != 0,
             "barcode" => $barcode,
             "qrcode" => $qrcode,
-            "version" => $versionName
+            "versionName" => $versionName,
+            "list" => $list
         ]);
         return $response;
     }
 
-    private function formatBarcode() {
-        return 'C' . $this->listID . "-U" . $this->container->auth->user->getInfo('name');
+    private function formatBarcode($list) {
+        return 'C' . $list['id'] . "-U" . $list['user']['code'];
     }
 }

@@ -11,6 +11,6 @@ class teacher extends \sup\middleware {
         else if ($this->container->auth->canBecome(ROLE_TEACHER))
             return $next($request, $response);
         else
-            return $response->withRedirect($this->container->router->pathFor('index'), 301);
+            return $this->container->get('notFoundHandler')($request, $response);
     }
 }

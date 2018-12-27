@@ -1,16 +1,16 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <p>Kánon zkontrolujte, odešlete a poté vytiskněte.</p>
-        <?php if ($print):?>
+        <?php if ($list['state'] == 2):?>
         <a class="btn btn-default" href="<?=$router->pathFor('lists')?>">Zpět</a>
         <div class="pull-right btn-group">
             <button class="btn btn-success disabled" data-toggle="tooltip" data-placement="top" title="Kánon již byl odeslán">Odeslat</button>
             <button class="btn btn-primary" onclick="window.print()">Tisk</button>
         </div>
         <?php else:?>
-        <a class="btn btn-default" href="<?=$router->pathFor('lists-edit', ["id" => $listID])?>">Zpět</a>
+        <a class="btn btn-default" href="<?=$router->pathFor('lists-edit', ["id" => $list['id']])?>">Zpět</a>
         <div class="pull-right">
-            <form method="post" action="<?=$router->pathFor('lists-validate', ["id" => $listID])?>">
+            <form method="post" action="<?=$router->pathFor('lists-validate', ["id" => $list['id']])?>">
                 <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
                 <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
                 <input type="hidden" name="_METHOD" value="PUT" />
@@ -26,15 +26,15 @@
 <div class="print">
 <div class="only-print">
 <img class="pull-right" src="data:image/png;base64,<?=$barcode?>">
-<h3>Kánon <?=$version?></h3>
+<h3>Kánon <?=$versionName?></h3>
 <table>
     <tr>
         <td>Jméno:&nbsp;&nbsp;</td>
-        <td><strong><?=$auth->user->getName()?></strong></td>
+        <td><strong><?=$list['user']['name']['given']?> <?=$list['user']['name']['sur']?></strong></td>
     </tr>
     <tr>
         <td>Třída: </td>
-        <td><strong><?=$auth->user->getAttrib('class')?></strong></td>
+        <td><strong><?=$list['user']['class']?></strong></td>
     </tr>
 </table>
 </div>
@@ -46,7 +46,7 @@
             <th class="col-md-4">Dílo</th>
         </tr>
     </thead>
-    <?php foreach($list as $book):?>
+    <?php foreach($list['books'] as $book):?>
     <tr>
         <td><?=$book['author']?></td>
         <td><?=$book['name']?></td>
@@ -57,7 +57,7 @@
     <div class="signature"><h5>Podpis</h5></div>
     <div class="qr-code pull-right">
         <img src="<?=$qrcode?>"><br />
-        <span style="text-align: center"><?=$listID?></span>
+        <span style="text-align: center"><?=substr_replace($list['id'], '-', 3, 0)?></span>
     </div>
 </div>
 </div>
