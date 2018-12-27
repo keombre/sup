@@ -13,6 +13,7 @@ $config['name'] = "Kánon";
 $config['path'] = "/maturita";
 $config['upload_directory'] = __DIR__ . "/../uploads";
 $config['lang_directory'] = __DIR__ . "/../langs";
+$config['public']['version'] = '0.1.4_dev';
 
 session_start();
 
@@ -59,7 +60,8 @@ $container['view'] = function ($container) {
         "router" => $container->router,
         "auth" => $container->auth,
         "lang" => $container->lang,
-        "ROOT_PATH" => $container->get('settings')['path']
+        "ROOT_PATH" => $container->get('settings')['path'],
+        "config" => $container['settings']['public']
     ];
     return new \Slim\Views\PhpRenderer('../templates/', $templateVariables);
 };

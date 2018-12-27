@@ -68,6 +68,12 @@
         border-top: thin solid #000;
         text-align: center;
     }
+    .footnote {
+        position: absolute;
+        top: 0mm;
+        right: 0mm;
+        font-size: 8pt;
+    }
 }
 .my-buttons button {
     margin-top: 5px;

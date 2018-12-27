@@ -5,10 +5,11 @@
 <div class="panel panel-default">
     <div class="panel-heading">Vaše evidenční číslo: <b><?=$id?></b></div>
     <div class="panel-body">
-        <span>
-            Zvolte si heslo, pro Váš účet. Evidenční číslo si dobře poznamenejte, budete jej potřebovat k budoucímu přihlášení.<br />
+        <p>
+            Zvolte si heslo, pro Váš účet. Evidenční číslo si dobře poznamenejte, budete jej potřebovat k budoucímu přihlášení.<br /><br />
             Heslo musí mít minimálně 8 znaků a maximálně 30
-        </span>
+            <br /><br />
+        </p>
         <form class="form-horizontal" method="post" action="<?=$router->pathFor('register-s1')?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">

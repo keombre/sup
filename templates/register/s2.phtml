@@ -5,9 +5,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">Vaše evidenční číslo: <b><?=$id?></b></div>
     <div class="panel-body">
-        <span>
-            Pokud zde uvedete chybné údaje, váš profil nebude brán v potaz.
-        </span>
+        <p>
+            Se zpracováním osobních údajů jste souhlasili již při zápisu na gymnázium.<br /><br />
+            Pokud zde uvedete chybné údaje, Váš profil nebude brán v potaz.<br /><br />
+        </p>
         <form class="form-horizontal" method="post" action="<?=$router->pathFor('register-s2')?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
