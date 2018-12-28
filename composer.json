@@ -26,7 +26,8 @@
             "middleware\\": "app/middleware/",
             "database\\": "db/",
             "controller\\": "app/controller/",
-            "modules\\": "modules/"
+            "modules\\": "modules/",
+            "base\\": "app/base/"
         }
     }
 }

@@ -11,7 +11,7 @@ class view extends lists {
                 "version" => $this->settings['active_version']
             ]);
             
-            $response = $this->sendResponse($request, $response, "lists/view.phtml", ["lists" => $listgroups]);
+            $response = $this->sendResponse($request, $response, "view.phtml", ["lists" => $listgroups]);
         } else {
             $response->getBody()->write("Nemáte přístup k tvorbě kánonu");
         }

@@ -5,7 +5,7 @@ namespace modules\lists;
 class routes {
     function __construct(\Slim\App $app) {
         $app->group('', function () {
-            $this->get('/', controller\view::class)
+            $this->get('', controller\view::class)
             ->setName('lists');
 
             $this->group('', function () {
@@ -48,6 +48,6 @@ class routes {
                 ->setName('lists-admin-manage');
             })->add(\middleware\auth\admin::class);
             
-        })->add(\middleware\dashboard::class);
+        })->add(\middleware\layout::class);
     }
 }

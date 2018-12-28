@@ -1,10 +1,10 @@
 <?php
 
-namespace modules\dashboard;
+namespace base\layout;
 
 class routes {
     function __construct($app) {
-        $app->get('/', \controller\dashboard\home::class)
+        $app->get('', controller\home::class)
         ->setName('dashboard');
         $app->get('/home', \controller\dashboard\home::class)
         ->setName('dashboard-home');

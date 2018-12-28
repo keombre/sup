@@ -46,3 +46,14 @@ do budoucna:
  - správa ICT profilu - silně možná
  - propojení s LDAPem (pouze reflexe profilů, správu bude dělat admin) - taky hodně možná, ICT na GPJP je fuj fuj
  - aktuality od vyučujících (studijní materiály, zadávání a odevzdávání úkolů) - bude na homepage
+
+moduly:
+ - aplikace sama o sobě poskytuje:
+  - auth
+  - user
+  - lang
+  - dash
+  - csrf
+  - flash
+  - db (seed)
+  - view

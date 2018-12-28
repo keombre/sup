@@ -11,7 +11,6 @@ abstract class controller {
 
     function __construct(\Slim\Container $container) {
         $this->container = $container;
-        $this->container->router->setBasePath('/' . $container->settings['module_name']);
         $this->db = $this->container->db;
     }
 

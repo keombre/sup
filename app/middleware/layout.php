@@ -2,7 +2,7 @@
 
 namespace middleware;
 
-class dashboard extends \sup\middleware {
+class layout extends \sup\middleware {
 
     use \traits\sendResponse;
 
@@ -16,8 +16,9 @@ class dashboard extends \sup\middleware {
         $res = $next($request, new \Slim\Http\Response);
         if ($res->getStatusCode() != 200)
             return $res;
-
-        $response = $this->sendResponse($request, $response, "layout/dashboard.phtml", [
+        
+        $this->container->view->setTemplatePath(__DIR__ . '/../base/layout/templates/');
+        $response = $this->sendResponse($request, $response, "dashboard.phtml", [
             "active" => $active,
             "site" => $res->getBody()
         ]);

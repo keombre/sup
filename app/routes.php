@@ -2,7 +2,10 @@
 
 final class routes {
 
+    private $app;
+
     function __construct(\Slim\App $app) {
+        $this->app = $app;
         
         $app->group('', function() {
             
@@ -26,10 +29,9 @@ final class routes {
             });
         
         })->add(\middleware\auth\auth::class);
-
-        // placeholder routes for path generation
-        $app->any('/lang/{lang}', null)->setName('lang');
-
+        
+        $this->registerIfNotExists('/dashboard', 'dashboard');
+        $this->registerIfNotExists('/lang/{lang}', 'lang');
         
 
         /*$app->group('', function() {
@@ -50,5 +52,13 @@ final class routes {
             
         })->add(\middleware\auth\autologin::class);
         */
+    }
+
+    private function registerIfNotExists($routePattern, $name) {
+        foreach ($this->app->getContainer()['router']->getRoutes() as $route)
+            if ($route->getPattern() == $routePattern)
+                return;
+        
+        $this->app->any($routePattern, null)->setName($name);
     }
 }
