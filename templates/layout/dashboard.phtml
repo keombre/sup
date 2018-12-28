@@ -2,9 +2,10 @@
 
 <div class="container">
 <ul class="nav nav-tabs">
-  <li<?=$active == "home"?' class="active"':''?>><a href="<?=$router->pathFor('dashboard')?>"><?=$lang->g('home', 'dashboard')?></a></li>
-  <li<?=$active == "subjects"?' class="active"':''?>><a href="<?=$router->pathFor('dashboard')?>"><?=$lang->g('subjects', 'dashboard')?></a></li>
-  <li<?=$active == "lists"?' class="active"':''?>><a href=""><?=$lang->g('lists', 'dashboard')?></a></li>
+  <li <?=$active == "home"?'class="active"':''?>><a href="<?=$router->pathFor('dashboard')?>"><?=$lang->g('home', 'dashboard')?></a></li>
+  <?php foreach ($modules as $module):?>
+  <li <?=$active == $module?'class="active"':''?>><a href="<?=$router->pathFor($module)?>"><?=$lang->g('subjects', 'dashboard')?></a></li>
+  <?php endforeach;?>
 </ul>
 <div class="panel panel-default" style="border-top: none;border-top-left-radius: 0;border-top-right-radius: 0;">
 <div class="panel-body">

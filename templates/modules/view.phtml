@@ -1,0 +1,18 @@
+<?php require __dir__."/../layout/app.phtml"?>
+Nainstalované moduly:<br />
+<?php foreach ($local as $entry):?>
+<?=$entry->getName()?> verze <?=$entry->getVersion()?>
+<?php if ($entry->getUpdate()):?>
+lze <a href="<?=$router->pathFor('modules-install', ['id' => $entry->getID()], ['update' => true])?>">aktualizovat</a>
+<?php endif;?>
+<br />
+<?php endforeach;?>
+<hr />
+Moduly možné instalovat<br />
+<?php foreach ($remote as $entry):?>
+<a href="<?=$router->pathFor('modules-install', ['id' => $entry->getName()])?>">
+<?=$entry->getName()?> verze <?=$entry->getVersion()?>
+</a>
+<br />
+<?php endforeach;?>
+<?php require __dir__ . "/../layout/footer.phtml"?>

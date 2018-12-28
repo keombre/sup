@@ -1,47 +1,8 @@
 # Todo
 
-student:
- - ukládání kánonu - done
- - odevzdání - done
- - tisk - done
- - konzistentní Zpět tlačítka - done
-
-učitel:
- - potvrzení - done
- - zrušení potvrzení - done
- - statistika knih - done
- - náhled do kánonu - done
- - běh maturitní appky
-
-admin:
- - kontrola unikátnosti ID knih (nebo můžeme ID kompletně přeskakovat) - done (ignorujeme)
- - správa oblastí - done
- - období - done
- - stahování kánonů - will not do
- - náhled do kánonu - done
- - verze seznamů knih pro různé roky - done
- - otevírání a zavírání možnosti tvorby kánonu - done
- - spouštění režimu maturitní appky - done
- - nahrávání kánonu musí být větší pedant - done
-
-obecně:
- - ošetřit max délku vstupu
- - opravit přímý přístp k /new/s2 - done
- - default volba pro jazyky v configu - done
- - vše přeložit
- - dodělat styly
- - xss protection
- - zkontrolovat nasazení v jiných složkách
- - automatická detekce instalace - done, nebude se instalovat, admin to nastaví
- - opravit HTML (někde chybí/přebývají tagy)
- - zkontrolovat flow redirectWithMessage (nově má return) - done
- - změnit user class (chci mít víc helper class a možná i dědičnost) - nebude, moc práce
  - celé předělat pro použití modulů
 
- - pokusit se to celé rozbít
- - standardizovat akce
-
-do budoucna:
+moduly do budoucna:
  - zápis volitelných předmětů
  - správa ICT profilu - silně možná
  - propojení s LDAPem (pouze reflexe profilů, správu bude dělat admin) - taky hodně možná, ICT na GPJP je fuj fuj
@@ -62,7 +23,7 @@ todo:
  - zlepšit API auth a user
  - zlepšit API seed
  - vyrobit manifesty
- - správa modulů (stahování, zapínání, vypínání)
- - manifest?
+ - správa modulů (stahování, zapínání, vypínání) - important
+ - manifest - important
  - dynamicky načítat obsah public složky
- - layout by měl načítat odkazy na nšechny moduly
+ - layout by měl načítat odkazy na všechny moduly

@@ -27,17 +27,26 @@ final class routes {
                     ->setName('user-register');
                 })->add(\middleware\auth\admin::class);
             });
+
+            $this->group('/dashboard', function () {
+                $this->get('', \controller\layout\home::class)
+                ->setName('dashboard');
+                $this->get('/home', \controller\dashboard\home::class)
+                ->setName('dashboard-home');
+                $this->get('/subjects', \controller\dashboard\subjects::class)
+                ->setName('dashboard-subjects');
+            });
+    
+            $this->group('/modules', function () {
+                $this->get('', \controller\modules\view::class);
+                $this->get('/view', \controller\modules\view::class)
+                ->setName('modules-view');
+
+                $this->get('/install', \controller\modules\install::class)
+                ->setName('modules-install');
+            })->add(\middleware\auth\admin::class);
         
         })->add(\middleware\auth\auth::class);
-        
-        $app->group('/dashboard', function () {
-            $this->get('', \controller\layout\home::class)
-            ->setName('dashboard');
-            $this->get('/home', \controller\dashboard\home::class)
-            ->setName('dashboard-home');
-            $this->get('/subjects', \controller\dashboard\subjects::class)
-            ->setName('dashboard-subjects');
-        });
 
         $app->get('/{lang}', \controller\lang::class)
         ->setName('lang');

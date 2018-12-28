@@ -15,13 +15,21 @@ class seed {
 
     function update() {
         if (!$this->db->has("sqlite_master", ["AND" => ["type" => "table", "OR" => [
-            "name" => ["users", "userinfo"]
+            "name" => ["users", "userinfo", "modules"]
         ]]])) {
             $this->seed();
         }
     }
 
     function seed() {
+
+        $this->db->query("CREATE TABLE IF NOT EXISTS modules (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            version TEXT,
+            active INTEGER DEFAULT 0
+        );");
+
         $this->db->query("CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
             name TEXT,

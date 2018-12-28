@@ -20,7 +20,8 @@ class layout extends \sup\middleware {
         $this->container->view->setTemplatePath(__DIR__ . '/../../templates/layout/');
         $response = $this->sendResponse($request, $response, "dashboard.phtml", [
             "active" => $active,
-            "site" => $res->getBody()
+            "site" => $res->getBody(),
+            "modules" => []
         ]);
         return $response;
     }

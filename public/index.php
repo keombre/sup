@@ -2,6 +2,11 @@
 
 require '../vendor/autoload.php';
 
+set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+    if (0 === error_reporting()) return false;
+    throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+});
+
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -29,6 +34,11 @@ $app->add(function (Request $request, Response $response, callable $next) {
 });
 
 $container = $app->getContainer();
+
+$container['modules'] = function($c) {
+    $modules = new \modules($c);
+    return $modules;
+};
 
 $container['auth'] = function($c) {
     $auth = new \auth($c);
