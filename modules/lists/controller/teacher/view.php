@@ -1,6 +1,6 @@
 <?php
 
-namespace controller\lists\teacher;
+namespace modules\lists\controller\teacher;
 
 class view extends \sup\controller {
 

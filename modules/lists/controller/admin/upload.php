@@ -1,6 +1,6 @@
 <?php
 
-namespace controller\lists\admin;
+namespace modules\lists\controller\admin;
 
 class upload extends \sup\controller {
 

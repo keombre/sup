@@ -1,6 +1,6 @@
 <?php
 
-namespace controller\lists\admin;
+namespace modules\lists\controller\admin;
 
 final class create extends upload {
 

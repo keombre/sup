@@ -25,7 +25,8 @@
             "sup\\": "app/sup/",
             "middleware\\": "app/middleware/",
             "database\\": "db/",
-            "controller\\": "app/controller/"
+            "controller\\": "app/controller/",
+            "modules\\": "modules/"
         }
     }
 }

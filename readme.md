@@ -4,24 +4,24 @@ student:
  - ukládání kánonu - done
  - odevzdání - done
  - tisk - done
- - konzistentní Zpět tlačítka
+ - konzistentní Zpět tlačítka - done
 
 učitel:
- - potvrzení
- - zrušení potvrzení
- - statistika knih
- - náhled do kánonu
+ - potvrzení - done
+ - zrušení potvrzení - done
+ - statistika knih - done
+ - náhled do kánonu - done
  - běh maturitní appky
 
 admin:
  - kontrola unikátnosti ID knih (nebo můžeme ID kompletně přeskakovat) - done (ignorujeme)
- - správa oblastí
- - období
- - stahování kánonů
- - náhled do kánonu
- - verze seznamů knih pro různé roky - in progresss, je potřeba celý systém adaptovat na verze
+ - správa oblastí - done
+ - období - done
+ - stahování kánonů - will not do
+ - náhled do kánonu - done
+ - verze seznamů knih pro různé roky - done
  - otevírání a zavírání možnosti tvorby kánonu - done
- - spouštění režimu maturitní appky
+ - spouštění režimu maturitní appky - done
  - nahrávání kánonu musí být větší pedant - done
 
 obecně:
@@ -36,7 +36,8 @@ obecně:
  - opravit HTML (někde chybí/přebývají tagy)
  - zkontrolovat flow redirectWithMessage (nově má return) - done
  - změnit user class (chci mít víc helper class a možná i dědičnost) - nebude, moc práce
- 
+ - celé předělat pro použití modulů
+
  - pokusit se to celé rozbít
  - standardizovat akce
 

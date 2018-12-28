@@ -12,7 +12,7 @@ class lang {
         $this->container = $container;
     }
 
-    function loadLangs($path = __DIR__ . "/../langs/") {
+    function loadLangs($path = __DIR__ . "/../lang/") {
         $this->path = realpath($path);
         
         if (!is_dir($this->path)) {

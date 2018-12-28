@@ -1,6 +1,6 @@
 <?php
 
-namespace controller\lists;
+namespace modules\lists\controller;
 
 abstract class lists extends \sup\controller implements \sup\roleActions {
 

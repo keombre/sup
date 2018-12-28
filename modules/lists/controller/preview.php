@@ -1,6 +1,6 @@
 <?php
 
-namespace controller\lists;
+namespace modules\lists\controller;
 
 class preview extends lists {
 
