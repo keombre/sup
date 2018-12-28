@@ -8,8 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = true;
 $config['name'] = "SUP";
-$config['lang_directory'] = __DIR__ . "/../lang";
-$config['public']['version'] = '0.1.4_dev';
+$config['public']['version'] = '0.2.0_dev';
 
 session_start();
 
@@ -41,7 +40,7 @@ $container['lang'] = function ($c) {
     return $lang;
 };
 
-$container->lang->loadLangs();
+$container->lang->loadLangs(__DIR__ . "/../lang");
 $container->lang->getLang();
 
 $container['view'] = function ($container) {
@@ -78,7 +77,7 @@ $container['db'] = function ($c) {
 new \database\seed($container);
 
 foreach (scandir(__DIR__ . '/../modules/') as $module)
-    if (is_file(__DIR__ . '/../modules/' . $module . "/routes.php"))
+    if (class_exists('\\modules\\' . $module . '\\routes'));
         $app->any('/' . $module . '[/{params:.*}]', function ($request, $response) use ($module, $container) {
             createModule($module, __DIR__ . '/../modules/' . $module, '\\modules\\' . $module, $container);
         });
@@ -93,8 +92,15 @@ function createModule($module, $path, $namespace, $globalContainer) {
     
     $container['auth']  = clone $globalContainer['auth'];
     $container['flash'] = clone $globalContainer['flash'];
-    $container['lang']  = clone $globalContainer['lang'];
     $container['csrf']  = clone $globalContainer['csrf'];
+
+    $container['lang'] = function ($c) {
+        $lang = new lang($c);
+        return $lang;
+    };
+    
+    $container->lang->loadLangs($path . "/lang");
+    $container->lang->getLang();
 
     $container['view'] = function ($container) use ($path) {
         $templateVariables = [

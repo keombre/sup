@@ -57,3 +57,12 @@ moduly:
   - flash
   - db (seed)
   - view
+
+todo:
+ - zlepšit API auth a user
+ - zlepšit API seed
+ - vyrobit manifesty
+ - správa modulů (stahování, zapínání, vypínání)
+ - manifest?
+ - dynamicky načítat obsah public složky
+ - layout by měl načítat odkazy na nšechny moduly

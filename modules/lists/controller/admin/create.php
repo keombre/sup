@@ -13,7 +13,7 @@ final class create extends upload {
             return $this->redirectWithMessage($response, 'lists', "error", ["Zadejte název verze"]);
         if ($name !== $data['name'])
             return $this->redirectWithMessage($response, 'lists', "error", ["Nepoužívejte speciální znaky"]);
-        else if ($this->db->has("lists_versions", ["name" => $name]))
+        else if ($this->db->has("versions", ["name" => $name]))
             return $this->redirectWithMessage($response, 'lists', "error", ["Verze " . $name . " již existuje"]);
         
         $parsed = parent::__invoke($request, $response, $args);
@@ -21,7 +21,7 @@ final class create extends upload {
         if (!is_array($parsed))
             return $parsed;
 
-        $this->db->insert("lists_versions", ["name" => $name]);
+        $this->db->insert("versions", ["name" => $name]);
         $version = $this->db->id();
 
         $save = [];
@@ -34,7 +34,7 @@ final class create extends upload {
                 "version" => $version
             ]);
         }
-        $this->db->insert("lists_books", $save);
+        $this->db->insert("books", $save);
         $this->redirectWithMessage($response, 'lists-admin-manage', "status", [count($save) . " knih nahráno"], ['id' => $version]);
         return $response;
     }
