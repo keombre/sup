@@ -10,6 +10,7 @@ class seed {
     function __construct(\Slim\Container $container) {
         $this->container = $container;
         $this->db = $this->container->db;
+        $this->update();
     }
 
     function update() {
@@ -19,8 +20,6 @@ class seed {
             $this->seed();
         }
     }
-
-    # auth
 
     function seed() {
         $this->db->query("CREATE TABLE IF NOT EXISTS users (
@@ -49,66 +48,6 @@ class seed {
                 "role" => '0,1,2'
             ]);
         }
-
-        # lists
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists_settings (
-            active_version INTEGER NULL,
-            open_editing INTEGER,
-            open_accepting INTEGER,
-            open_drawing INTEGER
-        );");
-
-        if (!$this->db->count("lists_settings")) {
-            $this->db->insert("lists_settings", [
-                "open_editing"  => 0,
-                "open_accepting" => 0,
-                "open_drawing"  => 0
-            ]);
-        }
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists_versions (
-            id INTEGER PRIMARY KEY,
-            name TEXT
-        );");
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists_books (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            author TEXT NULL,
-            region INTEGER NULL,
-            genere INTEGER NULL,
-            version INTEGER
-        );");
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists_regions (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            min INTEGER,
-            max INTEGER,
-            version INTEGER
-        );");
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists_generes (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            min INTEGER,
-            max INTEGER,
-            version INTEGER
-        );");
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists_main (
-            id INTEGER PRIMARY KEY,
-            user INTEGER,
-            created INTEGER,
-            state INTEGER DEFAULT 0,
-            version INTEGER
-        );"); // 0 - editing, 1 - sent, 2 - accepted
-
-        $this->db->query("CREATE TABLE IF NOT EXISTS lists_lists (
-            list INTEGER,
-            book INTEGER
-        );");
         
     }
 }

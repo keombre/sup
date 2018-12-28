@@ -1,6 +1,6 @@
 <?php
 
-namespace base\lang\controller;
+namespace controller;
 
 class lang extends \sup\controller {
 

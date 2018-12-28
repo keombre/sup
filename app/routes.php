@@ -30,11 +30,19 @@ final class routes {
         
         })->add(\middleware\auth\auth::class);
         
-        $this->registerIfNotExists('/dashboard', 'dashboard');
-        $this->registerIfNotExists('/lang/{lang}', 'lang');
-        
+        $app->group('/dashboard', function () {
+            $this->get('', \controller\layout\home::class)
+            ->setName('dashboard');
+            $this->get('/home', \controller\dashboard\home::class)
+            ->setName('dashboard-home');
+            $this->get('/subjects', \controller\dashboard\subjects::class)
+            ->setName('dashboard-subjects');
+        });
 
-        /*$app->group('', function() {
+        $app->get('/{lang}', \controller\lang::class)
+        ->setName('lang');
+
+        $app->group('', function() {
             $this->get('/', \controller\index::class)
                 ->setName('index');
             
@@ -51,14 +59,6 @@ final class routes {
             });
             
         })->add(\middleware\auth\autologin::class);
-        */
-    }
-
-    private function registerIfNotExists($routePattern, $name) {
-        foreach ($this->app->getContainer()['router']->getRoutes() as $route)
-            if ($route->getPattern() == $routePattern)
-                return;
         
-        $this->app->any($routePattern, null)->setName($name);
     }
 }

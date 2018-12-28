@@ -1,6 +1,6 @@
 <?php
 
-namespace middleware\lists;
+namespace modules\lists\middleware;
 
 class open_accepting extends \sup\middleware {
 

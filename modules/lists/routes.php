@@ -23,14 +23,14 @@ class routes {
                 $this->map(['GET', 'PUT'], '/preview/{id}', controller\preview::class)
                 ->setName('lists-preview');
             })
-            ->add(\middleware\lists\listID::class)
-            ->add(\middleware\lists\open_editing::class);
+            ->add(middleware\listID::class)
+            ->add(middleware\open_editing::class);
 
             $this->group('/teacher', function () {
 
                 $this->map(['GET', 'PUT'], '/accept[/{id}]', controller\teacher\accept::class)
                 ->setName('lists-teacher-accept')
-                ->add(\middleware\lists\open_accepting::class);
+                ->add(middleware\open_accepting::class);
 
                 $this->get('/view[/{id}]', controller\teacher\view::class)
                 ->setName('lists-teacher-view');

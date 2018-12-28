@@ -17,7 +17,7 @@ class layout extends \sup\middleware {
         if ($res->getStatusCode() != 200)
             return $res;
         
-        $this->container->view->setTemplatePath(__DIR__ . '/../base/layout/templates/');
+        $this->container->view->setTemplatePath(__DIR__ . '/../../templates/layout/');
         $response = $this->sendResponse($request, $response, "dashboard.phtml", [
             "active" => $active,
             "site" => $res->getBody()
