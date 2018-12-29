@@ -86,11 +86,18 @@ $container['db'] = function ($c) {
 };
 new \database\seed($container);
 
-foreach (scandir(__DIR__ . '/../modules/') as $module)
-    if (class_exists('\\modules\\' . $module . '\\routes'))
-        $app->any('/' . $module . '[/{params:.*}]', function ($request, $response) use ($module, $container) {
-            return createModule($module, __DIR__ . '/../modules/' . $module, '\\modules\\' . $module, $container);
+foreach ($container->modules->getInstalled() as $module) {
+    if (!$module->isEnabled())
+        continue;
+
+    $name = $module->getName();
+
+    if (class_exists('\\modules\\' . $name . '\\routes')) {
+        $app->any('/' . $name . '[/{params:.*}]', function ($request, $response) use ($name, $container) {
+            return createModule($name, __DIR__ . '/../modules/' . $name, '\\modules\\' . $name, $container);
         });
+    }
+}
 
 new routes($app);
 

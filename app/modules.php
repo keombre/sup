@@ -18,7 +18,11 @@ class modules {
             $this->modulesInstalled[] = (new Module($this->container->db))->createFromArray($entry);
         
         foreach ($this->loadCache() as $entry) {
-            $module = (new Module($this->container->db))->withName($entry['name'])->withVersion($entry['version']);
+            $module = (new Module($this->container->db))
+                      ->withName($entry['name'])
+                      ->withVersion($entry['version'])
+                      ->withBaseVersion($entry['min_base_version']);
+            
             $update = false;
             foreach ($this->modulesInstalled as $key => $installed) {
                 if ($installed->getName() == $module->getName()) {
@@ -38,6 +42,9 @@ class modules {
             return false;
         
         if ($module->validateDB())
+            return false;
+        
+        if (!version_compare(substr($this->container->settings['public']['version'], 0, 5), $module->getBaseVersion(), ">="))
             return false;
         
         $zip = $this->request('https://api.github.com/repos/keombre/sup-modules/zipball/' . $module->getName());
@@ -77,7 +84,8 @@ class modules {
 
         $this->container->db->insert('modules', [
             'name' => $module->getName(),
-            'version' => $module->getVersion()
+            'version' => $module->getVersion(),
+            'baseVersion' => $module->getBaseVersion()
         ]);
         return true;
 
@@ -87,12 +95,15 @@ class modules {
         if (!$module->validateDB())
             return false;
         
-        // validate versions
-        
         $module->remove();
         if (!$this->install($module))
             return false;
-        $this->container->db->update('modules', ['version' => $module->getVersion()]);
+        $this->container->db->update('modules', [
+            'version' => $module->getVersion(),
+            'baseVersion' => $module->getBaseVersion()
+        ]);
+        $this->downloadRepo();
+        return true;
     }
 
     function getInstalled() {
@@ -118,7 +129,7 @@ class modules {
     }
 
     function loadDB() {
-        return $this->container->db->select('modules', ['id', 'name', 'version', 'active']);
+        return $this->container->db->select('modules', ['id', 'name', 'version', 'active', 'baseVersion']);
     }
 
     function loadCache() {
@@ -149,7 +160,8 @@ class modules {
     }
 
     private function downloadRepo() {
-        if (($modules = $this->request('https://api.github.com/repos/keombre/sup-modules/branches')) === false)
+        $modules = $this->request('https://api.github.com/repos/keombre/sup-modules/branches');
+        if ($modules === false)
             return false;
 
         $save = [];
@@ -167,13 +179,10 @@ class modules {
             if (!array_key_exists('name', $infoArr) || $infoArr['name'] != $module['name'])
                 continue;
             
-            if (!array_key_exists('version', $infoArr))
+            if (!array_key_exists('version', $infoArr) || !array_key_exists('min_base_version', $infoArr))
                 continue;
             
-            $save[] = [
-                "name" => $module['name'],
-                "version" => $infoArr['version']
-            ];
+            $save[] = $infoArr;
         }
 
         $cachePath = $this->getCachePath();
@@ -214,6 +223,7 @@ class Module {
     protected $id = null;
     protected $active = 0;
     protected $update = false;
+    protected $baseVersion;
     
     function __construct($db) {
         $this->db = $db;
@@ -225,6 +235,7 @@ class Module {
         $clone->version = $info['version'];
         $clone->id = $info['id'];
         $clone->active = $this->parseActive($info['active']);
+        $clone->baseVersion = $info['baseVersion'];
 
         return $clone;
     }
@@ -233,7 +244,7 @@ class Module {
         if (!$this->db->has('modules', ['id' => $id]))
             return false;
         
-        $info = $this->db->get('modules', ['id', 'name', 'version', 'active'], ['id' => $id]);
+        $info = $this->db->get('modules', ['id', 'name', 'version', 'active', 'baseVersion'], ['id' => $id]);
 
         return $this->createFromArray($info);
     }
@@ -256,6 +267,15 @@ class Module {
         return $clone;
     }
 
+    function withBaseVersion($version) {
+        if (!is_string($version))
+            throw new \InvalidArgumentException('Invalid argument passed to withBaseVersion of type ' . gettype($version));
+        
+        $clone = clone $this;
+        $clone->baseVersion = $version;
+        return $clone;
+    }
+
     function withUpdate($update) {
         if (!is_bool($update))
             throw new \InvalidArgumentException('Invalid argument passed to withUpdate of type ' . gettype($update));
@@ -271,6 +291,10 @@ class Module {
 
     function getVersion() {
         return $this->version;
+    }
+
+    function getBaseVersion() {
+        return $this->baseVersion;
     }
 
     function getUpdate() {
@@ -304,10 +328,18 @@ class Module {
 
     function enable() {
         $this->db->update('modules', ['active' => 1], ['id' => $this->id]);
+        return true;
     }
 
     function disable() {
         $this->db->update('modules', ['active' => 0], ['id' => $this->id]);
+        return true;
+    }
+
+    function isEnabled() {
+        if (is_null($this->id))
+            return false;
+        return (bool) $this->db->get('modules', 'active', ['id' => $this->id]);
     }
 
     private function parseActive($active) {

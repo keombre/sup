@@ -42,8 +42,12 @@ final class routes {
                 $this->get('/view', \controller\modules\view::class)
                 ->setName('modules-view');
 
-                $this->get('/install/{id}', \controller\modules\install::class)
+                $this->map(['PUT', 'PATCH', 'DELETE'], '/install', \controller\modules\install::class)
                 ->setName('modules-install');
+
+                $this->map(['PUT', 'DELETE'], '/manage', \controller\modules\manage::class)
+                ->setName('modules-manage');
+                
             })->add(\middleware\auth\admin::class);
         
         })->add(\middleware\auth\auth::class);

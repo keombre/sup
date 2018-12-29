@@ -27,6 +27,7 @@ class seed {
             id INTEGER PRIMARY KEY,
             name TEXT,
             version TEXT,
+            baseVersion TEXT,
             active INTEGER DEFAULT 0
         );");
 

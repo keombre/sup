@@ -1,20 +1,84 @@
 <?php require __dir__."/../layout/app.phtml"?>
-Nainstalované moduly:<br />
-<?php foreach ($local as $entry):?>
-<?=$entry->getName()?> verze <?=$entry->getVersion()?>
-<?php if ($entry->getUpdate()):?>
-lze <a href="<?=$router->pathFor('modules-install', ['id' => $entry->getName()], ['update' => true])?>">aktualizovat</a>
-<?php endif;?>
 
-<a href="<?=$router->pathFor('modules-install', ['id' => $entry->getName()], ['remove' => true])?>">Odinstalovat</a>
-<br />
-<?php endforeach;?>
+<div class="container">
+<h3>Správa modulů</h3>
 <hr />
-Moduly možné instalovat<br />
-<?php foreach ($remote as $entry):?>
-<a href="<?=$router->pathFor('modules-install', ['id' => $entry->getName()])?>">
-<?=$entry->getName()?> verze <?=$entry->getVersion()?>
-</a>
-<br />
-<?php endforeach;?>
+<div class="col-md-6">
+    <div class="panel panel-default">
+    <div class="panel-heading"><strong>Nainstalované moduly</strong></div>
+    <div class="panel-body">
+    <?php if (is_array($local) && count($local)):?>
+        <ul class='list-group'>
+        <?php foreach($local as $entry):?>
+        <li class="list-group-item">
+        <span onclick="manage('<?=$entry->getName()?>', '<?=$entry->isEnabled()?'DELETE':'PUT'?>')">
+            <input type="checkbox" <?=$entry->isEnabled()?'checked':''?> name="edit" data-size="mini" data-on="povolen" data-off="zakázán" data-onstyle="success" data-offstyle="danger" data-toggle="toggle">
+        </span>
+        <b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
+        <button onclick="send('<?=$entry->getName()?>', 'DELETE')" class='btn btn-xs pull-right btn-danger'>Odstranit</button>
+        <?php if ($entry->getUpdate()):?>
+            <div class="pull-right">
+                <button onclick="send('<?=$entry->getName()?>', 'PATCH')" class='btn btn-xs btn-success'>Aktualizovat</button>&nbsp;
+            </div>
+        <?php endif;?>
+        </li>
+        <?php endforeach;?>
+        </ul>
+    <?php else:?>
+        <span class='text-muted'>Žádné moduly nenalezeny</span>
+    <?php endif?>
+    </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Moduly připravené k instalaci</strong>
+    </div>
+    <div class="panel-body">
+    <?php if (is_array($remote) && count($remote)):?>
+        <ul class='list-group'>
+        <?php foreach($remote as $entry):?>
+        <?php if (version_compare(substr($config['version'], 0, 5), $entry->getBaseVersion(), ">=")):?>
+            <li class="list-group-item"><b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
+            <button onclick="send('<?=$entry->getName()?>', 'PUT')" class='btn btn-xs pull-right btn-success'>Instalovat</button>
+            </li>
+        <?php else:?>
+            <li class="list-group-item disabled"><b><?=$entry->getName()?></b> v<?=$entry->getVersion()?><span class="pull-right">minimální verze SUPi <b>v<?=$entry->getBaseVersion()?></b></span></li>
+        <?php endif;?>
+        <?php endforeach;?>
+        </ul>
+    <?php else:?>
+        <span class='text-muted'>Žádné moduly nenalezeny</span>
+    <?php endif?>
+    </div>
+    </div>
+    </div>
+<form method="post" action="<?=$router->pathFor('modules-install')?>">
+    <input type="hidden" name="_METHOD" id="method" />
+    <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+    <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+    <input type="hidden" name="name" value="" id="name">
+</form>
+<form method="post" action="<?=$router->pathFor('modules-manage')?>">
+    <input type="hidden" name="_METHOD" id="manage_method" />
+    <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
+    <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
+    <input type="hidden" name="name" value="" id="manage_name">
+</form>
+</div>
 <?php require __dir__ . "/../layout/footer.phtml"?>
+<script>
+function send(value, mode) {
+    var elm = document.getElementById('name')
+    elm.value = value
+    document.getElementById('method').value = mode
+    elm.parentNode.submit()
+}
+function manage(value, mode) {
+    var elm = document.getElementById('manage_name')
+    elm.value = value
+    document.getElementById('manage_method').value = mode
+    elm.parentNode.submit()
+}
+</script>
