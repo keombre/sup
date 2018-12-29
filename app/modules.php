@@ -209,6 +209,18 @@ class modules {
             return false;
         }
     }
+
+    static function parseLocalManifest(Module $module) {
+        $path = __DIR__ . '/../modules/' . $module->getName() . '/manifest.json';
+
+        if (!is_file($path))
+            return false;
+        
+        $data = json_decode(file_get_contents($path), true);
+        if (!is_array($data))
+            return false;
+        return $data;
+    }
 }
 
 class Module {
@@ -224,6 +236,7 @@ class Module {
     protected $active = 0;
     protected $update = false;
     protected $baseVersion;
+    protected $manifest;
     
     function __construct($db) {
         $this->db = $db;
@@ -267,6 +280,15 @@ class Module {
         return $clone;
     }
 
+    function withManifest($manifest) {
+        if (!is_array($manifest))
+            throw new \InvalidArgumentException('Invalid argument passed to withManifest of type ' . gettype($manifest));
+        
+        $clone = clone $this;
+        $clone->manifest = $manifest;
+        return $clone;
+    }
+
     function withBaseVersion($version) {
         if (!is_string($version))
             throw new \InvalidArgumentException('Invalid argument passed to withBaseVersion of type ' . gettype($version));
@@ -291,6 +313,10 @@ class Module {
 
     function getVersion() {
         return $this->version;
+    }
+
+    function getManifest() {
+        return $this->manifest;
     }
 
     function getBaseVersion() {
@@ -340,6 +366,21 @@ class Module {
         if (is_null($this->id))
             return false;
         return (bool) $this->db->get('modules', 'active', ['id' => $this->id]);
+    }
+
+    function getLocale($field, $lang) {
+        if (!is_array($this->manifest))
+            return null;
+        if (!array_key_exists('locale', $this->manifest) || !is_array($this->manifest['locale']))
+            return null;
+        
+        if (!array_key_exists($field, $this->manifest['locale']) || !is_array($this->manifest['locale'][$field]))
+            return null;
+        
+        if (!array_key_exists($lang, $this->manifest['locale'][$field]))
+            return null;
+        
+        return $this->manifest['locale'][$field][$lang];
     }
 
     private function parseActive($active) {

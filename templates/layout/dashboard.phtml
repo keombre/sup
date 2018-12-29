@@ -2,14 +2,14 @@
 
 <div class="container">
 <ul class="nav nav-tabs">
-  <li <?=$active == "home"?'class="active"':''?>><a href="<?=$router->pathFor('dashboard')?>"><?=$lang->g('home', 'dashboard')?></a></li>
-  <?php foreach ($modules as $module):?>
-  <li <?=$active == $module?'class="active"':''?>><a href="<?=$router->pathFor($module)?>"><?=$lang->g('subjects', 'dashboard')?></a></li>
-  <?php endforeach;?>
+    <li <?=$active == "home"?'class="active"':''?>><a href="<?=$router->pathFor('dashboard')?>"><?=$lang->g('home', 'dashboard')?></a></li>
+    <?php foreach ($modules as $module):?>
+    <li <?=$active == $module->getName()?'class="active"':''?>><a href="<?=$router->pathFor($module->getName())?>"><?=$module->getLocale('name', $lang->getActive())?></a></li>
+    <?php endforeach;?>
 </ul>
 <div class="panel panel-default" style="border-top: none;border-top-left-radius: 0;border-top-right-radius: 0;">
 <div class="panel-body">
-  <?=$site?>
+    <?=$site?>
 </div>
 </div>
 </div>

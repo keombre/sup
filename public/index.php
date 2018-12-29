@@ -95,11 +95,13 @@ foreach ($container->modules->getInstalled() as $module) {
     if (class_exists('\\modules\\' . $name . '\\routes')) {
         $app->any('/' . $name . '[/{params:.*}]', function ($request, $response) use ($name, $container) {
             return createModule($name, __DIR__ . '/../modules/' . $name, '\\modules\\' . $name, $container);
-        });
+        })->setName($name);
     }
 }
 
 new routes($app);
+
+$container['base'] = $container;
 
 $app->run();
 
@@ -110,9 +112,10 @@ function createModule($module, $path, $namespace, $globalContainer) {
     $container['auth']  = clone $globalContainer['auth'];
     $container['flash'] = clone $globalContainer['flash'];
     $container['csrf']  = clone $globalContainer['csrf'];
+    $container['base'] = $globalContainer;
 
-    $container['lang'] = function ($c) {
-        $lang = new lang($c);
+    $container['lang'] = function ($c) use ($module) {
+        $lang = new lang($c, __DIR__ . "/../modules" . $module . "/lang");
         return $lang;
     };
     
@@ -125,6 +128,7 @@ function createModule($module, $path, $namespace, $globalContainer) {
             "auth" => $container->auth,
             "lang" => $container->lang,
             "ROOT_PATH" => $container->get('settings')['path'],
+            "baseLang" => $container->base->lang,
             "config" => $container['settings']['public']
         ];
         return new \Slim\Views\PhpRenderer($path . '/templates/', $templateVariables);

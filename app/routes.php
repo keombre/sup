@@ -38,9 +38,7 @@ final class routes {
             });
     
             $this->group('/modules', function () {
-                $this->get('', \controller\modules\view::class);
-                $this->get('/view', \controller\modules\view::class)
-                ->setName('modules-view');
+                $this->get('', \controller\modules\view::class)->setName('modules-view');
 
                 $this->map(['PUT', 'PATCH', 'DELETE'], '/install', \controller\modules\install::class)
                 ->setName('modules-install');

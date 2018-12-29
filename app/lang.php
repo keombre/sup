@@ -90,6 +90,10 @@ class lang {
         return $ret;
     }
 
+    function getActive() {
+        return $this->setLang;
+    }
+
     function g($field, $section) {
         if (!array_key_exists($section, $this->table))
             return null;
