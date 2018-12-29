@@ -3,8 +3,10 @@ Nainstalované moduly:<br />
 <?php foreach ($local as $entry):?>
 <?=$entry->getName()?> verze <?=$entry->getVersion()?>
 <?php if ($entry->getUpdate()):?>
-lze <a href="<?=$router->pathFor('modules-install', ['id' => $entry->getID()], ['update' => true])?>">aktualizovat</a>
+lze <a href="<?=$router->pathFor('modules-install', ['id' => $entry->getName()], ['update' => true])?>">aktualizovat</a>
 <?php endif;?>
+
+<a href="<?=$router->pathFor('modules-install', ['id' => $entry->getName()], ['remove' => true])?>">Odinstalovat</a>
 <br />
 <?php endforeach;?>
 <hr />

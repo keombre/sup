@@ -21,8 +21,9 @@ class modules {
             $module = (new Module($this->container->db))->withName($entry['name'])->withVersion($entry['version']);
             $update = false;
             foreach ($this->modulesInstalled as $key => $installed) {
-                if ($installed->getName() == $module->getName() && version_compare($installed->getVersion(), $module->getVersion(), '<')) {
-                    $this->modulesInstalled[$key] = $installed->withUpdate(true);
+                if ($installed->getName() == $module->getName()) {
+                    if (version_compare($installed->getVersion(), $module->getVersion(), '<'))
+                        $this->modulesInstalled[$key] = $installed->withUpdate(true);
                     $update = true;
                     break;
                 }
@@ -33,12 +34,16 @@ class modules {
     }
 
     function install(Module $module) {
+        if (is_dir(__DIR__ . '/../modules/' . $module->getName()))
+            return false;
+        
         if ($module->validateDB())
             return false;
         
-        if ($zip = $this->request('https://api.github.com/repos/keombre/sup-modules/zipball/' . $module->getName()) === false);
+        $zip = $this->request('https://api.github.com/repos/keombre/sup-modules/zipball/' . $module->getName());
+        if ($zip === false)
             return false;
-        
+
         $tmpName = tempnam($this->getCachePath(), 'sup_zip');
         file_put_contents($tmpName, $zip);
         unset($zip);
@@ -51,6 +56,7 @@ class modules {
         }
 
         $tmpFolder = tempnam($this->getCachePath(), 'sup_zip');
+        unlink($tmpFolder);
         mkdir($tmpFolder);
 
         $zip->extractTo($tmpFolder);
@@ -61,8 +67,19 @@ class modules {
         $files = scandir($tmpFolder);
         if (count($files) != 3)
             return false;
-        
-        return rename($tmpFolder . '/' . $files[2], __DIR__ . '/../modules/' . $module->getName());
+
+        if (!rename($tmpFolder . '/' . $files[2], __DIR__ . '/../modules/' . $module->getName())) {
+            rmdir($tmpFolder);
+            return false;
+        }
+
+        rmdir($tmpFolder);
+
+        $this->container->db->insert('modules', [
+            'name' => $module->getName(),
+            'version' => $module->getVersion()
+        ]);
+        return true;
 
     }
 
@@ -70,8 +87,12 @@ class modules {
         if (!$module->validateDB())
             return false;
         
+        // validate versions
+        
         $module->remove();
-        return $this->install($module->getName());
+        if (!$this->install($module->getName()))
+            return false;
+        $this->container->db->update('modules', ['version' => $module->getVersion()]);
     }
 
     function getInstalled() {
@@ -82,10 +103,11 @@ class modules {
         return $this->modulesRemote;
     }
 
-    function findInstalled($id) {
-        if (!array_key_exists($id, $this->modulesInstalled))
-            return null;
-        return $this->modulesInstalled[$id];
+    function findInstalled($name) {
+        foreach ($this->modulesInstalled as $module)
+            if ($module->getName() == $name)
+                return $module;
+        return null;
     }
 
     function findRemote($name) {
@@ -121,7 +143,9 @@ class modules {
     }
 
     protected function getCachePath() {
-        return sys_get_temp_dir();
+        if (!is_dir(__DIR__ . '/../tmp'))
+            mkdir(__DIR__ . '/../tmp');
+        return __DIR__ . '/../tmp';
     }
 
     private function downloadRepo() {
@@ -268,10 +292,11 @@ class Module {
     function remove() {
         $this->removeDir($this->path . $this->name);
         $this->db->delete('modules', ['id' => $this->id]);
+        return true;
     }
 
     function purge() {
-        $this->removeDir($this->path . $this->name);
+        $this->remove();
         $this->removeDir($this->DBpath . $this->name);
     }
 
