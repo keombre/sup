@@ -89,7 +89,7 @@ new \database\seed($container);
 foreach (scandir(__DIR__ . '/../modules/') as $module)
     if (class_exists('\\modules\\' . $module . '\\routes'))
         $app->any('/' . $module . '[/{params:.*}]', function ($request, $response) use ($module, $container) {
-            createModule($module, __DIR__ . '/../modules/' . $module, '\\modules\\' . $module, $container);
+            return createModule($module, __DIR__ . '/../modules/' . $module, '\\modules\\' . $module, $container);
         });
 
 new routes($app);

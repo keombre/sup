@@ -90,7 +90,7 @@ class modules {
         // validate versions
         
         $module->remove();
-        if (!$this->install($module->getName()))
+        if (!$this->install($module))
             return false;
         $this->container->db->update('modules', ['version' => $module->getVersion()]);
     }
@@ -154,7 +154,8 @@ class modules {
 
         $save = [];
         foreach (json_decode($modules, true) as $module) {
-            if (($info = $this->request('https://raw.githubusercontent.com/keombre/sup-modules/' . $module['name'] . '/manifest.json')) === false)
+            $info = $this->request('https://raw.githubusercontent.com/keombre/sup-modules/' . $module['name'] . '/manifest.json');
+            if ($info === false)
                 continue;
             
                 try {
@@ -287,6 +288,7 @@ class Module {
     function validateDB() {
         if (!$this->db->has('modules', ['name' => $this->name]))
             return false;
+        return true;
     }
 
     function remove() {
