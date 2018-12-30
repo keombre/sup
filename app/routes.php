@@ -28,7 +28,7 @@ final class routes {
                 })->add(\middleware\auth\admin::class);
             });
 
-            $this->get('/dashboard', \controller\layout\home::class)
+            $this->get('/dashboard', \controller\dashboard\home::class)
             ->add(\middleware\layout::class)
             ->setName('dashboard');
     

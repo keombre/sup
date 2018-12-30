@@ -1,6 +1,6 @@
 <?php
 
-namespace controller\layout;
+namespace controller\dashboard;
 
 class home extends \sup\controller {
 
