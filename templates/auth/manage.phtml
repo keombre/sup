@@ -1,9 +1,13 @@
 <?php require __dir__."/../layout/app.phtml"?>
 
 <div class="container">
+<h3>
+<?=$lang->g('title', 'user-manage')?>
+</h3>
+<hr />
 <div class="col-md-6">
     <div class="panel panel-default">
-    <div class="panel-heading"><strong>Uživatelé</strong></div>
+    <div class="panel-heading"><strong><?=$lang->g('users-title', 'user-manage')?></strong></div>
     <div class="panel-body">
     <?php if (is_array($users) && count($users)):?>
         <ul class='list-group'>
@@ -12,12 +16,12 @@
             <li class='list-group-item'><?=$user['code']?></li>
         <?php else:?>
             <li class='list-group-item'><?=implode(' ', $user['name'])?> (<?=$user['code']?>)
-                <button onclick="let elm=document.getElementById('id');elm.value='<?=$user['id']?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</button>
+                <button onclick="let elm=document.getElementById('id');elm.value='<?=$user['id']?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$lang->g('users-remove', 'user-manage')?></button>
             </li>
         <?php endif;endforeach;?>
         </ul>
     <?php else:?>
-        <span class='text-muted'>Žádní uživatelé</span>
+        <span class='text-muted'><?=$lang->g('users-notfound', 'user-manage')?></span>
     <?php endif?>
     </div>
     </div>
@@ -25,19 +29,19 @@
 <div class="col-md-6">
     <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Studenti</strong>
+        <strong><?=$lang->g('students-title', 'user-manage')?></strong>
     </div>
     <div class="panel-body">
     <?php if (is_array(@$students) && count($students)):?>
         <ul class='list-group'>
         <?php foreach($students as $student):?>
             <li class='list-group-item'><i><?=$student['code']?></i> <?=implode(' ', $student['name'])?> <b><?=$student['class']?></b>
-                <button onclick="let elm=document.getElementById('id');elm.value='<?=$student['id']?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'>Odstranit</button>
+                <button onclick="let elm=document.getElementById('id');elm.value='<?=$student['id']?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$lang->g('students-remove', 'user-manage')?></button>
             </li>
         <?php endforeach;?>
         </ul>
     <?php else:?>
-        <span class='text-muted'>Žádní studenti</span>
+        <span class='text-muted'><?=$lang->g('students-notfound', 'user-manage')?></span>
     <?php endif?>
     </div>
     </div>

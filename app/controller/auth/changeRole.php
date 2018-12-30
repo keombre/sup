@@ -31,7 +31,7 @@ class changeRole extends \sup\controller {
             else
                 $this->redirectWithMessage($response, 'dashboard', "status", [
                     $l->g('success-change-title', 'user-changeRole'),
-                    $l->g('success-change-message', 'user-changeRole') . strtolower($this->container->lang->g($role, 'roles'))
+                    $l->g('success-change-message', 'user-changeRole', ['role' => strtolower($this->container->lang->g($role, 'roles'))])
                 ]);
         }
         return $response;

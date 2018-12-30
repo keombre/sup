@@ -18,7 +18,7 @@ class manage extends \sup\controller {
             'userinfo.class [String]'
         ], ['users.role[!]' => -1]), function ($e, $f) use (&$users) {
             $f['role'] = filter_var_array(explode(',', $f['role']), FILTER_VALIDATE_INT);
-            array_push(${max($f['role']) == 0?'e':'users'}, $f);
+            ${max($f['role']) == 0?'e':'users'}[$f['id']] = $f;
             return $e;
         }, []);
 
@@ -34,18 +34,33 @@ class manage extends \sup\controller {
             $data = $request->getParsedBody();
             $id = filter_var(@$data['id'], FILTER_SANITIZE_STRING);
 
-            if (is_string($id) && strlen($id) > 0) {
-                
-                if (max($users[array_search(array_column($users, 'id'), $id)]['role']) == 2) {
-                    $this->redirectWithMessage($response, 'user-manageUsers', "error", ["Chyba odebírání!", "Nelze odebrat administrátora"]);
-                } else {
+            $l = $this->container->lang;
 
-                    $this->db->update("users", ["role" => -1], ['id' => $id]);
+            if (!is_string($id) || strlen($id) == 0)
+                return $this->redirectWithMessage($response, 'user-manageUsers', "error", [
+                    $l->g('error-notfound-title', 'user-manage'),
+                    $l->g('error-notfound-message', 'user-manage')
+                ]);
+            
+            else if (intval($id) == 1)
+                return $this->redirectWithMessage($response, 'user-manageUsers', "error", [
+                    $l->g('error-admindel-title', 'user-manage'),
+                    $l->g('error-admindel-message', 'user-manage')
+                ]);
+            
+            else if (!$this->db->has('users', ['id' => $id]))
+                return $this->redirectWithMessage($response, 'user-manageUsers', "error", [
+                    $l->g('error-notfound-title', 'user-manage'),
+                    $l->g('error-notfound-message', 'user-manage')
+                ]);
+            
+            else {
+                $this->db->update("users", ["role" => -1], ['id' => $id]);
 
-                    $this->redirectWithMessage($response, 'user-manageUsers', "status", ["Oderání úspěšné!", "Účet " . $users[$id]. " byl odebrán!"]);
-                }
-            } else {
-                $this->redirectWithMessage($response, 'user-manageUsers', "error", ["Chyba odebírání!", "Žádný uživatel nebyl specifikován"]);
+                return $this->redirectWithMessage($response, 'user-manageUsers', "status", [
+                    $l->g('success-remove-title', 'user-manage'),
+                    $l->g('success-remove-message', 'user-manage')
+                ]);
             }
         }
         return $response;

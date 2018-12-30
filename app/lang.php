@@ -94,12 +94,19 @@ class lang {
         return $this->setLang;
     }
 
-    function g($field, $section) {
+    function g($field, $section, $replaceArr = null) {
         if (!array_key_exists($section, $this->table))
             return null;
         if (!array_key_exists($field, $this->table[$section]))
             return null;
-        return $this->table[$section][$field];
+        
+        if (!is_array($replaceArr))
+            return $this->table[$section][$field];
+        
+        $search = array_map(function ($e) {return "%%" . $e . "%%";}, array_keys($replaceArr));
+        $replace = array_values($replaceArr);
+
+        return str_replace($search, $replace, $this->table[$section][$field]);
     }
 
 }
