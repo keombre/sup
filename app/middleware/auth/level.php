@@ -14,8 +14,8 @@ class level extends \sup\middleware {
     public function __invoke($request, $response, $next) {
         
         if (
-            $this->container->auth->user->logged() && 
-            $this->container->auth->user->level($this->level)
+            $this->container->auth->logged() && 
+            $this->container->auth->getUser()->is($this->level)
         )
             return $next($request, $response);
         return $response->withRedirect($this->container->router->pathFor('index'), 301);
