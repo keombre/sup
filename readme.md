@@ -3,6 +3,7 @@
  - celé předělat pro použití modulů - DONE!! (více-méně, ještě je potřeba povolování modulů)
 
  - zlepšit mobile experience
+ - obecnější register form
 
 moduly do budoucna:
  - zápis volitelných předmětů

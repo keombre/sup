@@ -14,8 +14,15 @@ class modules {
         
         $this->syncRepo();
 
-        foreach ($this->loadDB() as $entry)
-            $this->modulesInstalled[] = (new Module($this->container->db))->createFromArray($entry);
+        foreach ($this->loadDB() as $entry) {
+            $module = (new Module($this->container->db))->createFromArray($entry);
+            
+            $manifest = $this->parseLocalManifest($module);
+            if ($manifest)
+                $module = $module->withManifest($manifest);
+            
+            $this->modulesInstalled[] = $module;
+        }
         
         foreach ($this->loadCache() as $entry) {
             $module = (new Module($this->container->db))

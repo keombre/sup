@@ -11,15 +11,18 @@
         <ul class='list-group'>
         <?php foreach($local as $entry):?>
         <li class="list-group-item">
-        <span onclick="manage('<?=$entry->getName()?>', '<?=$entry->isEnabled()?'DELETE':'PUT'?>')">
-            <input type="checkbox" <?=$entry->isEnabled()?'checked':''?> name="edit" data-size="mini" data-on="povolen" data-off="zakázán" data-onstyle="success" data-offstyle="danger" data-toggle="toggle">
-        </span>
         <b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
+        <span onclick="manage('<?=$entry->getName()?>', '<?=$entry->isEnabled()?'DELETE':'PUT'?>')">
+            &nbsp;<input type="checkbox" <?=$entry->isEnabled()?'checked':''?> name="edit" data-size="mini" data-on="povolen" data-off="zakázán" data-onstyle="success" data-offstyle="danger" data-toggle="toggle">
+        </span>
         <button onclick="send('<?=$entry->getName()?>', 'DELETE')" class='btn btn-xs pull-right btn-danger'>Odstranit</button>
         <?php if ($entry->getUpdate()):?>
             <div class="pull-right">
                 <button onclick="send('<?=$entry->getName()?>', 'PATCH')" class='btn btn-xs btn-success'>Aktualizovat</button>&nbsp;
             </div>
+        <?php endif;?>
+        <?php if (array_key_exists('description', $entry->getManifest())):?>
+            <br /><small><?=$entry->getManifest()['description']?></small>
         <?php endif;?>
         </li>
         <?php endforeach;?>
