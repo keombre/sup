@@ -2,6 +2,7 @@
 
 namespace sup;
 
+define("ROLE_DISABLED", -1);
 define("ROLE_STUDENT", 0);
 define("ROLE_TEACHER", 1);
 define("ROLE_ADMIN", 2);
@@ -50,7 +51,7 @@ class Auth {
         if ($userinfo == false)
             return false;
         
-        if (in_array(-1, $userinfo['roles']))
+        if (in_array(ROLE_DISABLED, $userinfo['roles']))
             return false;
         
         if (!password_verify($password, $userinfo['passw']))
@@ -133,7 +134,7 @@ class Auth {
         return $token;
     }
 
-    private function generateID(int $rangeMin, int $rangeMax) {
+    function generateID(int $rangeMin, int $rangeMax) {
         do {
             $id = mt_rand($rangeMin, $rangeMax);
         } while ($this->db->has("users", ["id" => $id]));

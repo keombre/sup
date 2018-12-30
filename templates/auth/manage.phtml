@@ -12,11 +12,11 @@
     <?php if (is_array($users) && count($users)):?>
         <ul class='list-group'>
         <?php foreach($users as $user):?>
-        <?php if (in_array(2, $user['role'])):?>
-            <li class='list-group-item'><?=$user['code']?></li>
+        <?php if (in_array(ROLE_ADMIN, $user->getAttribute('roles'))):?>
+            <li class='list-group-item'><?=$user->getUname()?></li>
         <?php else:?>
-            <li class='list-group-item'><?=implode(' ', $user['name'])?> (<?=$user['code']?>)
-                <button onclick="let elm=document.getElementById('id');elm.value='<?=$user['id']?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('users-remove', 'user-manage')?></button>
+            <li class='list-group-item'><?=$user->getName()?> (<?=$user->getUname()?>)
+                <button onclick="let elm=document.getElementById('id');elm.value='<?=$user->getID()?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('users-remove', 'user-manage')?></button>
             </li>
         <?php endif;endforeach;?>
         </ul>
@@ -35,8 +35,8 @@
     <?php if (is_array(@$students) && count($students)):?>
         <ul class='list-group'>
         <?php foreach($students as $student):?>
-            <li class='list-group-item'><i><?=$student['code']?></i> <?=implode(' ', $student['name'])?> <b><?=$student['class']?></b>
-                <button onclick="let elm=document.getElementById('id');elm.value='<?=$student['id']?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('students-remove', 'user-manage')?></button>
+            <li class='list-group-item'><i><?=$student->getUname()?></i> <?=$student->getName()?> <b><?=$student->getAttribute('class')?></b>
+                <button onclick="let elm=document.getElementById('id');elm.value='<?=$student->getID()?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('students-remove', 'user-manage')?></button>
             </li>
         <?php endforeach;?>
         </ul>

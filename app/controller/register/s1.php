@@ -9,7 +9,7 @@ class s1 extends \sup\controller {
 
             do {
                 $id = mt_rand(10000, 99999);
-            } while ($this->container->db->has("users", ["id" => $id]));
+            } while ($this->container->db->has('users', ['uname' => $id]));
 
             $this->sendResponse($request, $response, "register/s1.phtml", ["id" => $id]);
 

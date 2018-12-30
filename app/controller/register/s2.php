@@ -33,12 +33,12 @@ class s2 extends \sup\controller {
                 is_numeric($_SESSION['APP_ID']) && strlen($_SESSION['APP_ID']) == 5 &&
                 is_string($_SESSION['APP_PASS']) && strlen($_SESSION['APP_PASS']) > 7
             ) {
-                if ($this->container->auth->register($_SESSION['APP_ID'], $_SESSION['APP_PASS'], ROLE_STUDENT)) {
+                if ($this->container->auth->register($_SESSION['APP_ID'], $_SESSION['APP_PASS'], [ROLE_STUDENT])) {
                     $this->container->auth->login($_SESSION['APP_ID'], $_SESSION['APP_PASS']);
-
-                    $this->container->auth->changeAttrib("givenname", $givenname);
-                    $this->container->auth->changeAttrib("surname", $surname);
-                    $this->container->auth->changeAttrib("class", $class);
+                    $user = $this->container->auth->getUser();
+                    $user->withAttribute("givenname", $givenname)
+                         ->withAttribute("surname", $surname)
+                         ->withAttribute("class", $class);
 
                     $response = $response->withRedirect($this->container->router->pathFor("dashboard"), 301);
                 } else {

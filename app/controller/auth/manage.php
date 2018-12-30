@@ -5,22 +5,16 @@ namespace controller\auth;
 class manage extends \sup\controller {
 
     function __invoke($request, $response, $args) {
-        
+
         $users = [];
-        $students = array_reduce($this->db->select('users', ['[>]userinfo' => 'id'], [
-            'users.id [Int]',
-            'users.name(code) [String]',
-            'users.role [String]',
-            'name' => [
-                'userinfo.givenname(given) [String]',
-                'userinfo.surname(sur) [String]'
-            ],
-            'userinfo.class [String]'
-        ], ['users.role[!]' => -1]), function ($e, $f) use (&$users) {
-            $f['role'] = filter_var_array(explode(',', $f['role']), FILTER_VALIDATE_INT);
-            ${max($f['role']) == 0?'e':'users'}[$f['id']] = $f;
-            return $e;
-        }, []);
+        $students = [];
+        foreach ($this->db->select('users', 'id', ['roles[!]' => 'a:1:{i:0;i:-1;}']) as $id) {
+            $user = (new \sup\User($this->container))->createFromDB($id);
+            if ($user->canBecome(ROLE_TEACHER) || $user->canBecome(ROLE_ADMIN))
+                $users[] = $user;
+            else
+                $students[] = $user;
+        }
 
         if ($request->isGet()) {
 
@@ -55,7 +49,7 @@ class manage extends \sup\controller {
                 ]);
             
             else {
-                $this->db->update("users", ["role" => -1], ['id' => $id]);
+                $this->db->update('users', ['roles' => [ROLE_DISABLED]], ['id' => $id]);
 
                 return $this->redirectWithMessage($response, 'user-manageUsers', "status", [
                     $l->g('success-remove-title', 'user-manage'),

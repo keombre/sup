@@ -6,21 +6,23 @@ class changeRole extends \sup\controller {
 
     function __invoke($request, $response, $args) {
 
+        $user = $this->container->auth->getUser();
+
         if ($request->isGet()) {
             $this->sendResponse($request, $response, "auth/changeRole.phtml", [
-                "roles" => $this->container->auth->user->getInfo('roles'),
-                "activeRole" => $this->container->auth->user->getInfo('activeRole')
+                "roles" => $user->getAttribute('roles'),
+                "activeRole" => $user->getAttribute('activeRole')
             ]);
 
         } elseif ($request->isPut()) {
 
             $data = $request->getParsedBody();
             $role = intVal(filter_var(@$data['role'], FILTER_SANITIZE_STRING));
-            $oldRole = $this->container->auth->user->getInfo('activeRole');
+            $oldRole = $user->getAttribute('activeRole');
 
             $l = $this->container->lang;
 
-            if (!$this->container->auth->changeRole($role))
+            if (!$user->become($role))
                 $this->redirectWithMessage($response, 'user-changeRole', "error", [
                     $l->g('error-notfound-title', 'user-changeRole'),
                     $l->g('error-notfound-message', 'user-changeRole')

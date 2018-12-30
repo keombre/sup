@@ -82,6 +82,10 @@ class User {
         return $this->id;
     }
 
+    function getUname():string {
+        return $this->attributes->get('uname');
+    }
+
     function is(int $level):bool {
         return $this->attributes->get('activeRole') == $level;
     }
