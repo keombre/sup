@@ -19,13 +19,9 @@ class layout extends \sup\middleware {
 
         $modules = [];
 
-        foreach ($this->container->base->modules->getInstalled() as $module) {
-            if ($module->isEnabled()) {
-                if (($manifest = $this->container->base->modules::parseLocalManifest($module)) !== false)
-                    $module = $module->withManifest($manifest);
+        foreach ($this->container->base->modules->getInstalled() as $module)
+            if ($module->isEnabled())
                 $modules[] = $module;
-            }
-        }
 
         $this->container->view->setTemplatePath(__DIR__ . '/../../templates/layout/');
         $response = $this->sendResponse($request, $response, "dashboard.phtml", [

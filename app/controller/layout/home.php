@@ -8,13 +8,9 @@ class home extends \sup\controller {
 
         $modules = [];
         
-        foreach ($this->container->modules->getInstalled() as $module) {
-            if ($module->isEnabled()) {
-                if (($manifest = $this->container->modules::parseLocalManifest($module)) !== false)
-                    $module = $module->withManifest($manifest);
+        foreach ($this->container->modules->getInstalled() as $module)
+            if ($module->isEnabled())
                 $modules[] = $module;
-            }
-        }
 
         if ($this->container->auth->user->level(ROLE_ADMIN)) {
             return $this->sendResponse($request, $response, "layout/dashboard.phtml", [
