@@ -59,6 +59,7 @@ $container['view'] = function ($container) {
         "auth" => $container->auth,
         "lang" => $container->lang,
         "ROOT_PATH" => $container->get('settings')['path'],
+        "baseLang" => $container->lang,
         "config" => $container['settings']['public']
     ];
     return new \Slim\Views\PhpRenderer(__DIR__ . '/../templates/', $templateVariables);

@@ -1,11 +1,11 @@
 <?php require __dir__."/../layout/app.phtml"?>
 
 <div class="container">
-<h3><?=$lang->g('title', 'modules');?></h3>
+<h3><?=$baseLang->g('title', 'modules');?></h3>
 <hr />
 <div class="col-md-6">
     <div class="panel panel-default">
-    <div class="panel-heading"><strong><?=$lang->g('installed-title', 'modules');?></strong></div>
+    <div class="panel-heading"><strong><?=$baseLang->g('installed-title', 'modules');?></strong></div>
     <div class="panel-body">
     <?php if (is_array($local) && count($local)):?>
         <ul class='list-group'>
@@ -13,12 +13,12 @@
         <li class="list-group-item">
         <b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
         <span onclick="manage('<?=$entry->getName()?>', '<?=$entry->isEnabled()?'DELETE':'PUT'?>')">
-            &nbsp;<input type="checkbox" <?=$entry->isEnabled()?'checked':''?> name="edit" data-size="mini" data-on="<?=$lang->g('installed-enabled', 'modules');?>" data-off="<?=$lang->g('installed-disabled', 'modules');?>" data-onstyle="success" data-offstyle="danger" data-toggle="toggle">
+            &nbsp;<input type="checkbox" <?=$entry->isEnabled()?'checked':''?> name="edit" data-size="mini" data-on="<?=$baseLang->g('installed-enabled', 'modules');?>" data-off="<?=$baseLang->g('installed-disabled', 'modules');?>" data-onstyle="success" data-offstyle="danger" data-toggle="toggle">
         </span>
-        <button onclick="send('<?=$entry->getName()?>', 'DELETE')" class='btn btn-xs pull-right btn-danger'><?=$lang->g('installed-remove', 'modules');?></button>
+        <button onclick="send('<?=$entry->getName()?>', 'DELETE')" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('installed-remove', 'modules');?></button>
         <?php if ($entry->getUpdate()):?>
             <div class="pull-right">
-                <button onclick="send('<?=$entry->getName()?>', 'PATCH')" class='btn btn-xs btn-success'><?=$lang->g('installed-update', 'modules');?></button>&nbsp;
+                <button onclick="send('<?=$entry->getName()?>', 'PATCH')" class='btn btn-xs btn-success'><?=$baseLang->g('installed-update', 'modules');?></button>&nbsp;
             </div>
         <?php endif;?>
         <?php if (array_key_exists('description', $entry->getManifest())):?>
@@ -28,7 +28,7 @@
         <?php endforeach;?>
         </ul>
     <?php else:?>
-        <span class='text-muted'><?=$lang->g('installed-notfound', 'modules');?></span>
+        <span class='text-muted'><?=$baseLang->g('installed-notfound', 'modules');?></span>
     <?php endif?>
     </div>
     </div>
@@ -36,7 +36,7 @@
 <div class="col-md-6">
     <div class="panel panel-default">
     <div class="panel-heading">
-        <strong><?=$lang->g('remote-title', 'modules');?></strong>
+        <strong><?=$baseLang->g('remote-title', 'modules');?></strong>
     </div>
     <div class="panel-body">
     <?php if (is_array($remote) && count($remote)):?>
@@ -44,7 +44,7 @@
         <?php foreach($remote as $entry):?>
         <?php if (version_compare(substr($config['version'], 0, 5), $entry->getBaseVersion(), ">=")):?>
             <li class="list-group-item"><b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
-                <button onclick="send('<?=$entry->getName()?>', 'PUT')" class='btn btn-xs pull-right btn-success'><?=$lang->g('remote-install', 'modules');?></button>
+                <button onclick="send('<?=$entry->getName()?>', 'PUT')" class='btn btn-xs pull-right btn-success'><?=$baseLang->g('remote-install', 'modules');?></button>
             <?php if (array_key_exists('description', $entry->getManifest())):?>
                 <br /><small><?=$entry->getManifest()['description']?></small>
             <?php endif;?>
@@ -52,7 +52,7 @@
         <?php else:?>
             <li class="list-group-item disabled">
                 <b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
-                <span class="pull-right"><?=$lang->g('remote-minVersion', 'modules', ['version' => $entry->getBaseVersion()]);?></span>
+                <span class="pull-right"><?=$baseLang->g('remote-minVersion', 'modules', ['version' => $entry->getBaseVersion()]);?></span>
             <?php if (array_key_exists('description', $entry->getManifest())):?>
                 <br /><small><?=$entry->getManifest()['description']?></small>
             <?php endif;?>
@@ -61,7 +61,7 @@
         <?php endforeach;?>
         </ul>
     <?php else:?>
-        <span class='text-muted'><?=$lang->g('remote-notfound', 'modules');?></span>
+        <span class='text-muted'><?=$baseLang->g('remote-notfound', 'modules');?></span>
     <?php endif?>
     </div>
     </div>

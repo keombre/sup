@@ -2,25 +2,25 @@
 <div class="container">
 <div class="col-md-6 col-md-offset-3">
 <div class="panel panel-default">
-    <div class="panel-heading"><?=$lang->g('title', 'user-changeRole')?></div>
+    <div class="panel-heading"><?=$baseLang->g('title', 'user-changeRole')?></div>
     <div class="panel-body">
         <form class="form-horizontal" method="post">
             <input type="hidden" name="_METHOD" value="PUT" />
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
             <div class="form-group">
-                <label class="col-md-4 control-label" for="pass2"><?=$lang->g('role', 'user-changeRole')?></label>
+                <label class="col-md-4 control-label" for="pass2"><?=$baseLang->g('role', 'user-changeRole')?></label>
                 <div class="col-md-6">
                 <select name="role" class="form-control">
                 <?php foreach($roles as $roleID):?>
-                    <option value='<?=$roleID?>' <?=$roleID == $activeRole?'selected="selected"':''?>><?=$lang->g($roleID, 'roles')?></option>
+                    <option value='<?=$roleID?>' <?=$roleID == $activeRole?'selected="selected"':''?>><?=$baseLang->g($roleID, 'roles')?></option>
                 <?php endforeach;?>
                 </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-8 col-md-offset-4">
-                    <input class="btn btn-primary" type="submit" value="<?=$lang->g('submit', 'user-changeRole')?>">
+                    <input class="btn btn-primary" type="submit" value="<?=$baseLang->g('submit', 'user-changeRole')?>">
                 </div>
             </div>
         </form>

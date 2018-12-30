@@ -3,22 +3,22 @@
     <div class="navbar-header">
         <?php if ($auth->user->logged()):?>
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only"><?=$lang->g('toggle-nav', 'main')?></span>
+        <span class="sr-only"><?=$baseLang->g('toggle-nav', 'main')?></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button>
         <?php endif?>
-        <a class="navbar-brand" href="<?=$router->pathFor('dashboard')?>"><?=$lang->g('name', 'main')?></a>
+        <a class="navbar-brand" href="<?=$router->pathFor('dashboard')?>"><?=$baseLang->g('name', 'main')?></a>
     </div>
     <div id="navbar" class="collapse navbar-collapse text-center">
-        <?php if (count($lang->getLangs())):?>
+        <?php if (count($baseLang->getLangs())):?>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><?=$lang->g('language', 'navbar')?>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><?=$baseLang->g('language', 'navbar')?>
             <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <?php foreach ($lang->getLangs() as $lg => $name):?>
+                <?php foreach ($baseLang->getLangs() as $lg => $name):?>
                 <li><a href="<?=$router->pathFor('lang', ['lang' => $lg])?>"><?=$name?> (<?=$lg?>)</a></li>
                 <?php endforeach;?>
                 </ul>
@@ -35,17 +35,17 @@
             <ul class="dropdown-menu">
                 <li>
                     <a href="#" onclick="document.getElementById('logout').submit()">
-                        <span class="glyphicon glyphicon-log-out"></span> <?=$lang->g('logout', 'navbar')?>
+                        <span class="glyphicon glyphicon-log-out"></span> <?=$baseLang->g('logout', 'navbar')?>
                     </a>
                 </li>
                 <li role="presentation" class="divider"></li>
-                <li><a href="<?=$router->pathFor('user-changePassword')?>"><span class="glyphicon glyphicon-lock"></span> <?=$lang->g('change-pass', 'navbar')?></a></li>
-                <li><a href="<?=$router->pathFor('user-changeRole')?>"><span class="glyphicon glyphicon-pencil"></span> <?=$lang->g('change-role', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-changePassword')?>"><span class="glyphicon glyphicon-lock"></span> <?=$baseLang->g('change-pass', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-changeRole')?>"><span class="glyphicon glyphicon-pencil"></span> <?=$baseLang->g('change-role', 'navbar')?></a></li>
                 <?php if ($auth->user->level(2)):?>
-                <li><a href="<?=$router->pathFor('user-manageUsers')?>"><span class="glyphicon glyphicon-briefcase"></span> <?=$lang->g('manage-users', 'navbar')?></a></li>
-                <li><a href="<?=$router->pathFor('user-register')?>"><span class="glyphicon glyphicon-plus"></span> <?=$lang->g('register-teacher', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-manageUsers')?>"><span class="glyphicon glyphicon-briefcase"></span> <?=$baseLang->g('manage-users', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('user-register')?>"><span class="glyphicon glyphicon-plus"></span> <?=$baseLang->g('register-teacher', 'navbar')?></a></li>
                 <li role="presentation" class="divider"></li>
-                <li><a href="<?=$router->pathFor('modules-view')?>"><span class="glyphicon glyphicon-cog"></span> <?=$lang->g('manage-modules', 'navbar')?></a></li>
+                <li><a href="<?=$router->pathFor('modules-view')?>"><span class="glyphicon glyphicon-cog"></span> <?=$baseLang->g('manage-modules', 'navbar')?></a></li>
                 <?php endif;?>
             </ul>
         </li>
