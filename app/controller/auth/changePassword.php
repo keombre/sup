@@ -19,7 +19,7 @@ class changePassword extends \sup\controller {
 
             $l = $this->container->lang;
 
-            if (!$this->container->auth->checkPassword($old)) {
+            if (!$this->container->auth->checkPass($old)) {
                 $this->redirectWithMessage($response, 'user-changePassword', "error", [
                     $l->g('error-wrongPass-title', 'user-changePass'),
                     $l->g('error-worngPass-message', 'user-changePass')
@@ -53,7 +53,7 @@ class changePassword extends \sup\controller {
                 $this->container->auth->changePass($pass);
                 $this->redirectWithMessage($response, 'dashboard', "status", [
                     $l->g('success-change-title', 'user-changePass'),
-                    $l->g('error-change-message', 'user-changePass')
+                    $l->g('success-change-message', 'user-changePass')
                 ]);
             }
         }

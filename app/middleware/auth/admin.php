@@ -6,9 +6,9 @@ class admin extends \sup\middleware {
 
     public function __invoke($request, $response, $next) {
         
-        if ($this->container->auth->user->level(ROLE_ADMIN))
+        if ($this->container->auth->getUser()->is(ROLE_ADMIN))
             return $next($request, $response);
-        else if ($this->container->auth->canBecome(ROLE_ADMIN))
+        else if ($this->container->auth->getUser()->become(ROLE_ADMIN))
             return $next($request, $response);
         else
             return $this->container->get('notFoundHandler')($request, $response);

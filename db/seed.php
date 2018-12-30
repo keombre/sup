@@ -33,10 +33,10 @@ class seed {
 
         $this->db->query("CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
-            name TEXT,
-            pass TEXT,
+            uname TEXT,
+            passw TEXT,
             token TEXT NULL,
-            role TEXT DEFAULT '-1',
+            roles TEXT,
             activeRole INTEGER,
             lastActive INTEGER NULL
         );");
@@ -48,14 +48,16 @@ class seed {
             class TEXT NULL
         );");
         
-        if (!$this->db->has("users", ["name" => "admin"])) {
-            $this->db->insert("users", [
-                "id"   => "1",
-                "name" => "admin", 
-                "pass" => password_hash("admin", PASSWORD_DEFAULT),
-                "activeRole" => 2,
-                "role" => '0,1,2'
+        if (!$this->db->has('users', ['uname' => 'admin'])) {
+            $this->db->insert('users', [
+                'id' => 1,
+                'uname' => 'admin', 
+                'passw' => password_hash('admin', PASSWORD_DEFAULT),
+                'roles' => [0, 1, 2],
+                'activeRole' => 2
             ]);
+            var_dump($this->db->last());
+            exit;
         }
         
     }

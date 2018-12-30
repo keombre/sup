@@ -41,7 +41,7 @@ $container['modules'] = function($c) {
 };
 
 $container['auth'] = function($c) {
-    $auth = new \auth($c);
+    $auth = new \sup\Auth($c);
     return $auth;
 };
 
