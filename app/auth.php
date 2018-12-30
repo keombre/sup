@@ -20,24 +20,35 @@ class auth {
             $this->db->has("users", ["token" => $_SESSION['token']])
         ) {
             $info = $this->db->get("users", "*", ["token" => $_SESSION['token']]);
-            $this->user = new user(true);
-            $this->addUserInfo($info);
-            $this->addUserAttribs($this->db->get("userinfo", "*", ["id" => $info['id']]));
+            $this->user = new User(true);
+            $this->addUserInfo($info, $this->user);
+            $this->addUserAttribs($this->db->get("userinfo", "*", ["id" => $info['id']]), $this->user);
         } else {
-            $this->user = new user(false);
+            $this->user = new User(false);
         }
     }
 
-    private function addUserInfo($info) {
-        $this->user->setInfo($info['id'], $info['name'], $info['role'], intVal($info['activeRole']));
+    function createFromDB($userID) {
+        if (!$this->db->has('users', ['id' => $userID]))
+            return false;
+        
+        $user = new User(false);
+        $info = $this->db->get('users', '*', ['id' => $userID]);
+        $this->addUserInfo($info, $user);
+        $this->addUserAttribs($this->db->get("userinfo", "*", ["id" => $info['id']]), $user);
+        return $user;
     }
 
-    private function addUserAttribs($attribs) {
+    private function addUserInfo($info, &$user) {
+        $user->setInfo($info['id'], $info['name'], $info['role'], intVal($info['activeRole']));
+    }
+
+    private function addUserAttribs($attribs, &$user) {
         if (!is_array($attribs))
             return false;
         foreach (['givenname', 'surname', 'class'] as $val)
             if (array_key_exists($val, $attribs))
-                $this->user->setAttrib($val, $attribs[$val]);
+                $user->setAttrib($val, $attribs[$val]);
     }
 
     function login($id, $pass) {
@@ -55,8 +66,8 @@ class auth {
                 $this->db->update("users", ["token" => $token], ["name" => $id]);
                 
                 $this->user->login();
-                $this->addUserInfo($info);
-                $this->addUserAttribs($this->db->get("userinfo", "*", ["id" => $info['id']]));
+                $this->addUserInfo($info, $this->user);
+                $this->addUserAttribs($this->db->get("userinfo", "*", ["id" => $info['id']]), $this->user);
 
                 return true;
             }
@@ -135,7 +146,7 @@ class auth {
     }
 }
 
-class user {
+class User {
     private $logged = false;
     private $props = [
         "id" => null,

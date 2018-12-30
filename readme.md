@@ -2,6 +2,8 @@
 
  - celé předělat pro použití modulů - DONE!! (více-méně, ještě je potřeba povolování modulů)
 
+ - zlepšit mobile experience
+
 moduly do budoucna:
  - zápis volitelných předmětů
  - správa ICT profilu - spíš ne

@@ -41,10 +41,19 @@
         <?php foreach($remote as $entry):?>
         <?php if (version_compare(substr($config['version'], 0, 5), $entry->getBaseVersion(), ">=")):?>
             <li class="list-group-item"><b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
-            <button onclick="send('<?=$entry->getName()?>', 'PUT')" class='btn btn-xs pull-right btn-success'>Instalovat</button>
+                <button onclick="send('<?=$entry->getName()?>', 'PUT')" class='btn btn-xs pull-right btn-success'>Instalovat</button>
+            <?php if (array_key_exists('description', $entry->getManifest())):?>
+                <br /><small><?=$entry->getManifest()['description']?></small>
+            <?php endif;?>
             </li>
         <?php else:?>
-            <li class="list-group-item disabled"><b><?=$entry->getName()?></b> v<?=$entry->getVersion()?><span class="pull-right">minimální verze SUPi <b>v<?=$entry->getBaseVersion()?></b></span></li>
+            <li class="list-group-item disabled">
+                <b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
+                <span class="pull-right">minimální verze SUPi <b>v<?=$entry->getBaseVersion()?></b></span>
+            <?php if (array_key_exists('description', $entry->getManifest())):?>
+                <br /><small><?=$entry->getManifest()['description']?></small>
+            <?php endif;?>
+            </li>
         <?php endif;?>
         <?php endforeach;?>
         </ul>

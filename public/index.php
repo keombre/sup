@@ -95,7 +95,7 @@ foreach ($container->modules->getInstalled() as $module) {
     if (class_exists('\\modules\\' . $name . '\\routes')) {
         $app->any('/' . $name . '[/{params:.*}]', function ($request, $response) use ($name, $container) {
             return createModule($name, __DIR__ . '/../modules/' . $name, '\\modules\\' . $name, $container);
-        })->setName($name);
+        })->setName($name)->add(\middleware\auth\auth::class);
     }
 }
 
@@ -165,7 +165,7 @@ function createModule($module, $path, $namespace, $globalContainer) {
     $routes = $namespace . "\\routes";
     $app->group('/' . $module, function () use ($routes) {
         new $routes($this);
-    });
+    })->add(\middleware\auth\auth::class);
 
     new routes($app);
     

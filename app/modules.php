@@ -21,7 +21,8 @@ class modules {
             $module = (new Module($this->container->db))
                       ->withName($entry['name'])
                       ->withVersion($entry['version'])
-                      ->withBaseVersion($entry['min_base_version']);
+                      ->withBaseVersion($entry['min_base_version'])
+                      ->withManifest($entry);
             
             $update = false;
             foreach ($this->modulesInstalled as $key => $installed) {
@@ -342,7 +343,8 @@ class Module {
     }
 
     function remove() {
-        $this->removeDir($this->path . $this->name);
+        if (is_dir($this->path . $this->name))
+            $this->removeDir($this->path . $this->name);
         $this->db->delete('modules', ['id' => $this->id]);
         return true;
     }
