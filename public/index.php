@@ -106,7 +106,11 @@ $container['base'] = $container;
 $app->run();
 
 function createModule($module, $path, $namespace, $globalContainer) {
-    $app = new \Slim\App(['settings' => $globalContainer['settings']->all()]);
+    $settings = $globalContainer['settings']->all();
+
+    $settings['module_name'] = $module;
+
+    $app = new \Slim\App(['settings' => $settings]);
     $container = $app->getContainer();
     
     $container['auth']  = clone $globalContainer['auth'];

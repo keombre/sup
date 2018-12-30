@@ -28,14 +28,9 @@ final class routes {
                 })->add(\middleware\auth\admin::class);
             });
 
-            $this->group('/dashboard', function () {
-                $this->get('', \controller\layout\home::class)
-                ->setName('dashboard');
-                $this->get('/home', \controller\dashboard\home::class)
-                ->setName('dashboard-home');
-                $this->get('/subjects', \controller\dashboard\subjects::class)
-                ->setName('dashboard-subjects');
-            });
+            $this->get('/dashboard', \controller\layout\home::class)
+            ->add(\middleware\layout::class)
+            ->setName('dashboard');
     
             $this->group('/modules', function () {
                 $this->get('', \controller\modules\view::class)->setName('modules-view');

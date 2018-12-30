@@ -8,10 +8,9 @@ class layout extends \sup\middleware {
 
     public function __invoke($request, $response, $next) {
         
-        $routeName = $request->getAttributes()['route']->getName();
         $active = "home";
-        if ($routeName != NULL)
-            $active = explode("-", $routeName)[0];
+        if ($this->container->settings->has('module_name'))
+        $active = $this->container->settings->get('module_name');
         
         $res = $next($request, new \Slim\Http\Response);
         if ($res->getStatusCode() != 200)
@@ -24,7 +23,7 @@ class layout extends \sup\middleware {
                 $modules[] = $module;
 
         $this->container->view->setTemplatePath(__DIR__ . '/../../templates/layout/');
-        $response = $this->sendResponse($request, $response, "dashboard.phtml", [
+        $response = $this->sendResponse($request, $response, "site.phtml", [
             "active" => $active,
             "site" => $res->getBody(),
             "modules" => $modules
