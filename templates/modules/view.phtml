@@ -52,7 +52,7 @@
         <?php else:?>
             <li class="list-group-item disabled">
                 <b><?=$entry->getName()?></b> v<?=$entry->getVersion()?>
-                <span class="pull-right"><?=$lang->g('remote-minVersion', 'modules');?> <b>v<?=$entry->getBaseVersion()?></b></span>
+                <span class="pull-right"><?=$lang->g('remote-minVersion', 'modules', ['version' => $entry->getBaseVersion()]);?></span>
             <?php if (array_key_exists('description', $entry->getManifest())):?>
                 <br /><small><?=$entry->getManifest()['description']?></small>
             <?php endif;?>
