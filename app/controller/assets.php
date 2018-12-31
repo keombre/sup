@@ -26,7 +26,10 @@ class assets extends \sup\controller {
         $ext = strtolower(pathinfo('/' . $file, PATHINFO_EXTENSION));
 
         if (in_array($ext, ['css', 'js']))
-            $type = 'text/' . $ext;
+            $type = [
+                'css' => 'text/css',
+                'js'  => 'application/javascript'
+            ][$ext];
         else
             $type = mime_content_type($path . '/assets/' . $file);
 

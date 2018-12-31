@@ -132,12 +132,13 @@ function createModule($module, $path, $namespace, $globalContainer) {
     $container->lang->loadLangs($path . "/lang");
     $container->lang->getLang();
 
-    $container['view'] = function ($container) use ($path) {
+    $container['view'] = function ($container) use ($path, $module) {
         $templateVariables = [
             "router" => $container->router,
             "auth" => $container->auth,
             "lang" => $container->lang,
             "ROOT_PATH" => $container->get('settings')['path'],
+            "ASSET_PATH" => $container->get('settings')['path'] . '/' . $module . "/assets" ,
             "baseLang" => $container->base->lang,
             "config" => $container['settings']['public']
         ];
