@@ -103,15 +103,30 @@ class modules {
         if (!$module->validateDB())
             return false;
         
-        $module->remove();
-        if (!$this->install($module))
+        $remoteModule = $this->updateRemoteInfo($module);
+        if ($remoteModule->getVersion() == $module->getVersion())
             return false;
-        $this->container->db->update('modules', [
-            'version' => $module->getVersion(),
-            'baseVersion' => $module->getBaseVersion()
-        ]);
+        
+        if (!version_compare(substr($this->container->settings['public']['version'], 0, 5), $remoteModule->getBaseVersion(), ">="))
+            return false;
+        
+        $module->remove();
+        if (!$this->install($remoteModule))
+            return false;
         $this->downloadRepo();
         return true;
+    }
+
+    private function updateRemoteInfo(Module $module) {
+        foreach ($this->loadCache() as $entry) {
+            if ($entry['name'] == $module->getName())
+                return (new Module($this->container->db))
+                    ->withName($entry['name'])
+                    ->withVersion($entry['version'])
+                    ->withBaseVersion($entry['min_base_version'])
+                    ->withManifest($entry);
+        }
+        return null;
     }
 
     function getInstalled() {

@@ -1,35 +1,69 @@
 <?php require __dir__."/../layout/app.phtml"?>
 
 <div class="container">
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-10 col-md-offset-1">
 <div class="panel panel-default">
-    <div class="panel-heading">Registrovat učitele</div>
+    <div class="panel-heading">Registrovat uživatele</div>
     <div class="panel-body">
         <form class="form-horizontal" method="post" action="<?php $router->pathFor('user-register')?>">
-            <input type="hidden" name="_METHOD" value="PUT" />
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Uživatelské jméno:</label>
-                <div class="col-md-6">
-                    <input class="form-control" type="text" name="name" id="name" required autofocus>
+            <input type="hidden" name="_METHOD" value="PUT" />
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="name">Uživatelské jméno:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" name="name" id="name" required autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4">
+                        <button class="btn btn-default" onclick="return genPass(this)">Generovat heslo</button>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="col-md-4 control-label" style="visibility: hidden" id="passDisplay"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="pass">Heslo:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="password" name="pass" id="pass" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="pass2">Heslo znovu:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="password" name="pass2" id="pass2" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8 col-md-offset-4">
+                        <input class="btn btn-primary" type="submit" value="Vytvořit účet">
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="pass">Heslo:</label>
-                <div class="col-md-6">
-                    <input class="form-control" type="password" name="pass" id="pass" required>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="givenname">Křestní jméno:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" name="givenname" id="givenname">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="pass2">Heslo znovu:</label>
-                <div class="col-md-6">
-                    <input class="form-control" type="password" name="pass2" id="pass2" required>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="surname">Příjmení:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" name="surname" id="surname">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-8 col-md-offset-4">
-                    <input class="btn btn-primary" type="submit" value="Vytvořit účet">
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="roles">Role:</label>
+                    <div class="col-md-8">
+                    <select name="roles[]" id="roles" multiple="multiple" class="form-control" size="5" required>
+                        <?php foreach ($roles as $id => $role):?>
+                            <option value='<?=$id?>'><?=$role?></option>
+                        <?php endforeach;?>
+                    </select>
+                    </div>
                 </div>
             </div>
         </form>
@@ -38,4 +72,44 @@
 </div>
 </div>
 </div>
+<script>
+function genPass(elm) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 10; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    $('#passDisplay').html(text);
+    $('#passDisplay').css('visibility', 'initial');
+
+    $('#pass').val(text);
+    $('#pass2').val(text);
+    return false;
+}
+
+var usermod = false;
+
+$('#name').bind('input', function () {
+    usermod = $(this).val() != "";
+})
+
+function userFill() {
+    var combining = /[\u0300-\u036F]/g;
+    var uname = $('#name');
+    if (usermod) return;
+    if ($('#givenname').val() == "") {
+        if ($('#surname').val() == "") return;
+        uname.val($('#surname').val().toLowerCase().normalize('NFKD').replace(combining, ''));
+    } else if ($('#surname').val() == "") {
+        if ($('#givenname').val() == "") return;
+        uname.val($('#givenname').val().toLowerCase().normalize('NFKD').replace(combining, ''));
+    } else {
+        uname.val($('#surname').val().toLowerCase().substring(0, 5).normalize('NFKD').replace(combining, '') + $('#givenname').val().toLowerCase().substring(0, 3).normalize('NFKD').replace(combining, ''));
+    }
+}
+
+$('#givenname').bind('input', userFill)
+$('#surname').bind('input', userFill)
+</script>
 <?php require __dir__ . "/../layout/footer.phtml"?>
