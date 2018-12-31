@@ -3,7 +3,7 @@
 <div class="container">
 <div class="col-md-10 col-md-offset-1">
 <div class="panel panel-default">
-    <div class="panel-heading">Registrovat uživatele</div>
+    <div class="panel-heading"><?=$baseLang->g('title', 'user-register')?></div>
     <div class="panel-body">
         <form class="form-horizontal" method="post" action="<?php $router->pathFor('user-register')?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
@@ -11,52 +11,52 @@
             <input type="hidden" name="_METHOD" value="PUT" />
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="name">Uživatelské jméno:</label>
+                    <label class="col-md-4 control-label" for="name"><?=$baseLang->g('username', 'user-register')?></label>
                     <div class="col-md-8">
                         <input class="form-control" type="text" name="name" id="name" required autofocus>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-4">
-                        <button class="btn btn-default" onclick="return genPass(this)">Generovat heslo</button>
+                        <button class="btn btn-default" onclick="return genPass(this)"><?=$baseLang->g('generate-button', 'user-register')?></button>
                     </div>
                     <div class="col-md-8">
                         <label class="col-md-4 control-label" style="visibility: hidden" id="passDisplay"></label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="pass">Heslo:</label>
+                    <label class="col-md-4 control-label" for="pass"><?=$baseLang->g('pass1', 'user-register')?></label>
                     <div class="col-md-8">
                         <input class="form-control" type="password" name="pass" id="pass" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="pass2">Heslo znovu:</label>
+                    <label class="col-md-4 control-label" for="pass2"><?=$baseLang->g('pass2', 'user-register')?></label>
                     <div class="col-md-8">
                         <input class="form-control" type="password" name="pass2" id="pass2" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
-                        <input class="btn btn-primary" type="submit" value="Vytvořit účet">
+                        <input class="btn btn-primary" type="submit" value="<?=$baseLang->g('submit', 'user-register')?>">
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="givenname">Křestní jméno:</label>
+                    <label class="col-md-4 control-label" for="givenname"><?=$baseLang->g('givenname', 'user-register')?></label>
                     <div class="col-md-8">
                         <input class="form-control" type="text" name="givenname" id="givenname">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="surname">Příjmení:</label>
+                    <label class="col-md-4 control-label" for="surname"><?=$baseLang->g('surname', 'user-register')?></label>
                     <div class="col-md-8">
                         <input class="form-control" type="text" name="surname" id="surname">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="roles">Role:</label>
+                    <label class="col-md-4 control-label" for="roles"><?=$baseLang->g('roles', 'user-register')?></label>
                     <div class="col-md-8">
                     <select name="roles[]" id="roles" multiple="multiple" class="form-control" size="5" required>
                         <?php foreach ($roles as $id => $role):?>

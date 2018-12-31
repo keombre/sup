@@ -35,23 +35,43 @@ class register extends \sup\controller {
                 return $e;
             }, []);
 
+            $l = $this->container->lang;
+
             if (count($roles) == 0) {
-                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "No role specified"]);
+                $this->redirectWithMessage($response, 'user-register', "error", [
+                    $l->g('error-noroles-title', 'user-register'),
+                    $l->g('error-noroles-message', 'user-register')
+                ]);
 
             } if (!is_string($name) || strlen($name) == 0)
-                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Username missing"]);
+                $this->redirectWithMessage($response, 'user-register', "error", [
+                    $l->g('error-nouname-title', 'user-register'),
+                    $l->g('error-nouname-message', 'user-register')
+                ]);
 
             else if ($this->container->db->has("users", ["uname" => $name]))
-                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Username alredy taken!"]);
+                $this->redirectWithMessage($response, 'user-register', "error", [
+                    $l->g('error-unametaken-title', 'user-register'),
+                    $l->g('error-unametaken-message', 'user-register')
+                ]);
 
             else if (!is_string($pass) || strlen($pass) < 8)
-                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Password too short!"]);
+                $this->redirectWithMessage($response, 'user-register', "error", [
+                    $l->g('error-passshort-title', 'user-register'),
+                    $l->g('error-passshort-message', 'user-register')
+                ]);
             
             else if ($pass !== $pass2)
-                $this->redirectWithMessage($response, 'user-register', "error", ["Error!", "Passwords don't match!"]);
+                $this->redirectWithMessage($response, 'user-register', "error", [
+                    $l->g('error-passdiff-title', 'user-register'),
+                    $l->g('error-passdiff-message', 'user-register')
+                ]);
             
             else if ($data['name'] != $name || $data['pass'] != $pass)
-                $this->redirectWithMessage($response, 'user-register', "error", ["Chyba!", "Nepoužívejte speciální znaky!"]);
+                $this->redirectWithMessage($response, 'user-register', "error", [
+                    $l->g('error-charset-title', 'user-register'),
+                    $l->g('error-charset-message', 'user-register')
+                ]);
             
             else {
                 if ($this->container->auth->register($name, $pass, $roles)) {
@@ -59,9 +79,15 @@ class register extends \sup\controller {
                     $user->withAttribute('givenname', $givenname)
                          ->withAttribute('surname', $surname);
                     
-                    $this->redirectWithMessage($response, 'dashboard', "status", ["Success!", "User was created!"]);
+                    $this->redirectWithMessage($response, 'dashboard', "status", [
+                        $l->g('success-title', 'user-register'),
+                        $l->g('success-message', 'user-register')
+                    ]);
                 } else
-                    $this->redirectWithMessage($response, 'dashboard', "error", ["Chyba!", "Chyba při tvorbě uživatele!"]);                
+                    $this->redirectWithMessage($response, 'dashboard', "error", [
+                        $l->g('error-generic-title', 'user-register'),
+                        $l->g('error-generic-message', 'user-register')
+                    ]);
             }
         }
         return $response;
