@@ -56,8 +56,6 @@ class seed {
                 'roles' => [0, 1, 2],
                 'activeRole' => 2
             ]);
-            var_dump($this->db->last());
-            exit;
         }
         
     }
