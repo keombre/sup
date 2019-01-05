@@ -9,8 +9,8 @@
         "slim/php-view": "^2.2",
         "catfan/medoo": "^1.5",
         "php": "^7.0",
-        "picqer/php-barcode-generator": "^0.2.2",
-        "chillerlan/php-qrcode": "^3.0"
+        "monolog/monolog": "^1.24",
+        "wikimedia/composer-merge-plugin": "^1.4"
     },
     "license": "MIT",
     "authors": [
@@ -27,6 +27,20 @@
             "database\\": "db/",
             "controller\\": "app/controller/",
             "modules\\": "modules/"
+        }
+    },
+    "extra": {
+        "merge-plugin": {
+            "include": [
+                "modules/*/composer.json"
+            ],
+            "recurse": true,
+            "replace": false,
+            "ignore-duplicates": false,
+            "merge-dev": true,
+            "merge-extra": false,
+            "merge-extra-deep": false,
+            "merge-scripts": false
         }
     }
 }
