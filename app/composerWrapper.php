@@ -20,6 +20,7 @@ class composerWrapper {
         $this->outputStream = fopen('php://temp', 'a');
 
         putenv('COMPOSER_HOME=' . __DIR__ . '/../vendor/bin/composer');
+        putenv('COMPOSER_CACHE_DIR=' . __DIR__ . '/../vendor/bin/cache');
 
         $this->application = new Application();
         $this->application->setAutoExit(false);
