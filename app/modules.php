@@ -9,6 +9,8 @@ class modules {
     protected $modulesInstalled = [];
     protected $modulesRemote = [];
 
+    protected $composerWrapper;
+
     function __construct($container) {
         $this->container = $container;
         
@@ -90,6 +92,13 @@ class modules {
 
         rmdir($tmpFolder);
 
+        $state = $this->composerUpdate();
+
+        if (!$state) {
+            rmdir(__DIR__ . '/../modules/' . $module->getName());
+            return false;
+        }
+
         $this->container->db->insert('modules', [
             'name' => $module->getName(),
             'version' => $module->getVersion(),
@@ -97,6 +106,26 @@ class modules {
         ]);
         return true;
 
+    }
+
+    function remove(Module $module, $purge = false) {
+
+        if ($purge) {
+            if (!$module->purge())
+                return false;
+        } else {
+            if (!$module->remove())
+                return false;
+        }
+
+        if (!$this->composerUpdate())
+            return false;
+        
+        return true;
+    }
+
+    function getComposerOutput() {
+        return stream_get_contents($this->composerWrapper->getOutput());
     }
 
     function update(Module $module) {
@@ -244,6 +273,17 @@ class modules {
             return false;
         return $data;
     }
+
+    private function composerUpdate() {
+        $this->composerWrapper = new \composerWrapper();
+        $this->composerWrapper->runCommand('update');
+
+        if ($this->composerWrapper->getStatus() != 0)
+            return false;
+
+        return true;
+    }
+
 }
 
 class Module {

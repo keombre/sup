@@ -79,6 +79,21 @@
     <input type="hidden" name="name" value="" id="manage_name">
 </form>
 </div>
+<?php if(is_array(@$composerOut)):?>
+<hr />
+<div class="container">
+<div class="col-md-10 col-md-offset-1">
+<div class="panel panel-default">
+    <div class="panel-heading"><strong><?=$baseLang->g('logger-title', 'modules');?></strong></div>
+    <div class="panel-body">
+<?php foreach($composerOut as $entry):?>
+    <pre><?=$entry?></pre>
+<?php endforeach?>
+</div>
+</div>
+</div>
+</div>
+<?php endif;?>
 <script>
 function send(value, mode) {
     var elm = document.getElementById('name')

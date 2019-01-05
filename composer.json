@@ -10,7 +10,8 @@
         "catfan/medoo": "^1.5",
         "php": "^7.0",
         "monolog/monolog": "^1.24",
-        "wikimedia/composer-merge-plugin": "^1.4"
+        "wikimedia/composer-merge-plugin": "^1.4",
+        "composer/composer": "^1.8"
     },
     "license": "MIT",
     "authors": [

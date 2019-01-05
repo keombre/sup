@@ -18,8 +18,11 @@ class install extends \sup\controller {
                     $l->g('error-notfound-title', 'modules'),
                     $l->g('error-notfound-message', 'modules')
                 ]);
+            
+            $state = $this->container->modules->install($module);
+            $this->sendComposerOutput();
 
-            if ($this->container->modules->install($module))
+            if ($state)
                 $this->redirectWithMessage($response, 'modules-view', "status", [
                     $l->g('install-success-title', 'modules'),
                     $l->g('install-success-message', 'modules')
@@ -40,7 +43,11 @@ class install extends \sup\controller {
             ]);
         
         if ($request->isPatch()) {
-            if ($this->container->modules->update($module))
+
+            $state = $this->container->modules->update($module);
+            $this->sendComposerOutput();
+
+            if ($state)
                 $this->redirectWithMessage($response, 'modules-view', "status", [
                     $l->g('update-success-title', 'modules'),
                     $l->g('update-success-message', 'modules')
@@ -55,7 +62,11 @@ class install extends \sup\controller {
         }
         
         if ($request->isDelete()) {
-            if ($module->remove())
+
+            $state = $this->container->modules->remove($module);
+            $this->sendComposerOutput();
+
+            if ($state)
                 $this->redirectWithMessage($response, 'modules-view', "status", [
                     $l->g('delete-success-title', 'modules'),
                     $l->g('delete-success-message', 'modules')
@@ -68,5 +79,9 @@ class install extends \sup\controller {
 
             return $response;
         }
+    }
+
+    private function sendComposerOutput() {
+        $this->container->flash->addMessage('composerOut', $this->container->modules->getComposerOutput());
     }
 }
