@@ -8,7 +8,8 @@
         "slim/csrf": "^0.8.2",
         "slim/php-view": "^2.2",
         "catfan/medoo": "^1.5",
-        "php": "^7.0",
+        "ext-pdo": "*",
+        "php": ">=7.1",
         "monolog/monolog": "^1.24",
         "wikimedia/composer-merge-plugin": "^1.4",
         "composer/composer": "^1.8"

@@ -5,7 +5,6 @@
 /db/*/database.db
 /db/database.db
 .DS_STORE
-composer.lock
 .vscode
 /*.csv
 /modules/*/

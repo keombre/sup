@@ -11,6 +11,7 @@ class composerWrapper {
     private $outputStream;
 
     private $command;
+    private $flags = [];
     private $status = -1;
 
     private $input;
@@ -41,6 +42,13 @@ class composerWrapper {
         return $this->status;
     }
 
+    function runUpdate() {
+        $this->command = 'update';
+        $this->flags = ['--lock' => ''];
+        $this->createIO();
+        $this->run();
+    }
+
     private function run() {
         $this->status = $this->application->doRun($this->input, $this->output);
         rewind($this->outputStream);
@@ -50,10 +58,15 @@ class composerWrapper {
         if (!is_string($this->command))
             throw new Exception('No command specified');
         
-        $this->input = new ArrayInput([
+        $this->input = new ArrayInput(array_merge([
             'command' => $this->command,
-            '--working-dir' => __DIR__ . '/../'
-        ]);
+            '--working-dir' => __DIR__ . '/../',
+            '--ansi' => '',
+            '--no-progress' => '',
+            '--no-dev' => '',
+            '--no-suggest' => '',
+            '--prefer-dist' => ''
+        ], $this->flags));
         
         $this->output = new StreamOutput(
             $this->outputStream,

@@ -13,6 +13,8 @@ class modules {
 
     function __construct($container) {
         $this->container = $container;
+
+        $this->composerWrapper = new \composerWrapper();
         
         $this->syncRepo();
 
@@ -275,8 +277,7 @@ class modules {
     }
 
     private function composerUpdate() {
-        $this->composerWrapper = new \composerWrapper();
-        $this->composerWrapper->runCommand('update');
+        $this->composerWrapper->runUpdate();
 
         if ($this->composerWrapper->getStatus() != 0)
             return false;

@@ -21,7 +21,7 @@
                 <button onclick="send('<?=$entry->getName()?>', 'PATCH')" class='btn btn-xs btn-success'><?=$baseLang->g('installed-update', 'modules');?></button>&nbsp;
             </div>
         <?php endif;?>
-        <?php if (array_key_exists('description', $entry->getManifest())):?>
+        <?php if (@array_key_exists('description', $entry->getManifest())):?>
             <br /><small><?=$entry->getManifest()['description']?></small>
         <?php endif;?>
         </li>
