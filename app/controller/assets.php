@@ -34,7 +34,10 @@ class assets extends \sup\controller {
             $type = mime_content_type($path . '/assets/' . $file);
 
         $response->getBody()->write(file_get_contents($path . '/assets/' . $file));
-
+        
+        if ($file == 'sw.js') {
+            $response = $response->withHeader('Service-Worker-Allowed', '/' . $this->module_name . '/');
+        }
         return $response->withHeader('Accept-Ranges', 'bytes')
                         ->withHeader('Content-Length', $size)
                         ->withHeader('Content-Type', $type);
