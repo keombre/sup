@@ -94,7 +94,7 @@ foreach ($container->modules->getInstalled() as $module) {
     $name = $module->getName();
 
     if (class_exists('\\modules\\' . $name . '\\routes')) {
-        $app->get('/' . $name . '/assets/{path}', new \controller\assets($container, $name))
+        $app->get('/' . $name . '/assets/{path:.*}', new \controller\assets($container, $name))
         ->add(\middleware\auth\auth::class);
 
         $app->any('/' . $name . '[/{params:.*}]', function ($request, $response) use ($name, $container) {
