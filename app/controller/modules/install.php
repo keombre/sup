@@ -2,7 +2,7 @@
 
 namespace controller\modules;
 
-class install extends \sup\controller {
+class install extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
         

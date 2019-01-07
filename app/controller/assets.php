@@ -2,7 +2,7 @@
 
 namespace controller;
 
-class assets extends \sup\controller {
+class assets extends \SUP\controller {
 
     private $module_name;
 

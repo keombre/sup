@@ -2,7 +2,7 @@
 
 namespace controller\auth;
 
-class changePassword extends \sup\controller {
+class changePassword extends \SUP\controller {
     
     function __invoke($request, $response, $args) {
 

@@ -41,7 +41,7 @@ $container['modules'] = function($c) {
 };
 
 $container['auth'] = function($c) {
-    $auth = new \sup\Auth($c);
+    $auth = new \SUP\Auth($c);
     return $auth;
 };
 
@@ -85,7 +85,8 @@ $container['db'] = function ($c) {
     ]);
     return $medoo;
 };
-new \database\seed($container);
+
+(new \database\seed($container, null))->update();
 
 foreach ($container->modules->getInstalled() as $module) {
     if (!$module->isEnabled())
@@ -97,8 +98,8 @@ foreach ($container->modules->getInstalled() as $module) {
         $app->get('/' . $name . '/assets/{path:.*}', new \controller\assets($container, $name))
         ->add(\middleware\auth\auth::class);
 
-        $app->any('/' . $name . '[/{params:.*}]', function ($request, $response) use ($name, $container) {
-            return createModule($name, __DIR__ . '/../modules/' . $name, '\\modules\\' . $name, $container);
+        $app->any('/' . $name . '[/{params:.*}]', function ($request, $response) use ($module, $name, $container) {
+            return createModule($module, __DIR__ . '/../modules/' . $name, '\\modules\\' . $name, $container);
         })
         ->add(\middleware\auth\auth::class)
         ->setName($name);
@@ -111,10 +112,11 @@ $container['base'] = $container;
 
 $app->run();
 
-function createModule($module, $path, $namespace, $globalContainer) {
+function createModule(\Module $module, $path, $namespace, $globalContainer) {
     $settings = $globalContainer['settings']->all();
 
-    $settings['module_name'] = $module;
+    $name = $module->getName();
+    $settings['module_name'] = $name;
 
     $app = new \Slim\App(['settings' => $settings]);
     $container = $app->getContainer();
@@ -124,21 +126,21 @@ function createModule($module, $path, $namespace, $globalContainer) {
     $container['csrf']  = clone $globalContainer['csrf'];
     $container['base'] = $globalContainer;
 
-    $container['lang'] = function ($c) use ($module) {
-        $lang = new lang($c, __DIR__ . "/../modules" . $module . "/lang");
+    $container['lang'] = function ($c) use ($name) {
+        $lang = new lang($c, __DIR__ . "/../modules" . $name . "/lang");
         return $lang;
     };
     
     $container->lang->loadLangs($path . "/lang");
     $container->lang->getLang();
 
-    $container['view'] = function ($container) use ($path, $module) {
+    $container['view'] = function ($container) use ($path, $name) {
         $templateVariables = [
             "router" => $container->router,
             "auth" => $container->auth,
             "lang" => $container->lang,
             "ROOT_PATH" => $container->get('settings')['path'],
-            "ASSET_PATH" => $container->get('settings')['path'] . '/' . $module . "/assets" ,
+            "ASSET_PATH" => $container->get('settings')['path'] . '/' . $name . "/assets" ,
             "baseLang" => $container->base->lang,
             "config" => $container['settings']['public']
         ];
@@ -157,24 +159,29 @@ function createModule($module, $path, $namespace, $globalContainer) {
     $app->add($container->csrf);
     $app->add(\middleware\csrf::class);
 
-    $container['db'] = function ($c) use ($module) {
-        if (!is_dir(__DIR__ . '/../db/' . $module))
-            mkdir(__DIR__ . '/../db/' . $module);
+    $container['db'] = function ($c) use ($name) {
+        if (!is_dir(__DIR__ . '/../db/' . $name))
+            mkdir(__DIR__ . '/../db/' . $name);
         
         $db = $c['settings']['db'];
         $medoo = new \Medoo\Medoo([
             'database_type' => 'sqlite',
-            'database_file' => __DIR__ . '/../db/' . $module . '/database.db'
+            'database_file' => __DIR__ . '/../db/' . $name . '/database.db'
         ]);
         return $medoo;
     };
 
-    $seedClass = $namespace . '\\seed';
-    if (class_exists($seedClass))
-        new $seedClass($container);
+    $manifest = $module->getManifest();
+
+    if (array_key_exists('schema', $manifest) && is_array($manifest['schema']))
+        (new \database\seed($container, $manifest['schema']))->update();
+
+    $initClass = $namespace . '\\init';
+    if (class_exists($initClass))
+        new $initClass($container);
     
     $routes = $namespace . "\\routes";
-    $app->group('/' . $module, function () use ($routes) {
+    $app->group('/' . $name, function () use ($routes) {
         new $routes($this);
     })->add(\middleware\auth\auth::class);
 

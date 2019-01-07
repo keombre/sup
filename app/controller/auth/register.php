@@ -2,7 +2,7 @@
 
 namespace controller\auth;
 
-class register extends \sup\controller {
+class register extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 
@@ -75,7 +75,7 @@ class register extends \sup\controller {
             
             else {
                 if ($this->container->auth->register($name, $pass, $roles)) {
-                    $user = (new \sup\User($this->container))->createFromDB($this->db->get('users', 'id', ['uname' => $name]));
+                    $user = (new \SUP\User($this->container))->createFromDB($this->db->get('users', 'id', ['uname' => $name]));
                     $user->withAttribute('givenname', $givenname)
                          ->withAttribute('surname', $surname);
                     

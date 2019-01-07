@@ -2,7 +2,7 @@
 
 namespace controller;
 
-class index extends \sup\controller {
+class index extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
         $this->sendResponse($request, $response, "index.phtml", ["next" => $request->getQueryParam("next")]);

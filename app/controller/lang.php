@@ -2,7 +2,7 @@
 
 namespace controller;
 
-class lang extends \sup\controller {
+class lang extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 

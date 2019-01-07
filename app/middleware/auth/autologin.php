@@ -2,7 +2,7 @@
 
 namespace middleware\auth;
 
-class autologin extends \sup\middleware {
+class autologin extends \SUP\middleware {
 
     public function __invoke($request, $response, $next) {
         

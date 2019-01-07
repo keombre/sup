@@ -2,7 +2,7 @@
 
 namespace middleware;
 
-class csrf extends \sup\middleware {
+class csrf extends \SUP\middleware {
 
     use \traits\sendResponse;
     

@@ -2,7 +2,7 @@
 
 namespace middleware\auth;
 
-class admin extends \sup\middleware {
+class admin extends \SUP\middleware {
 
     public function __invoke($request, $response, $next) {
         

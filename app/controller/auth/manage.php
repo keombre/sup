@@ -2,14 +2,14 @@
 
 namespace controller\auth;
 
-class manage extends \sup\controller {
+class manage extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 
         $users = [];
         $students = [];
         foreach ($this->db->select('users', 'id', ['roles[!]' => 'a:1:{i:0;i:-1;}']) as $id) {
-            $user = (new \sup\User($this->container))->createFromDB($id);
+            $user = (new \SUP\User($this->container))->createFromDB($id);
             if ($user->canBecome(ROLE_TEACHER) || $user->canBecome(ROLE_ADMIN))
                 $users[] = $user;
             else

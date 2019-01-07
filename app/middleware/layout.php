@@ -2,7 +2,7 @@
 
 namespace middleware;
 
-class layout extends \sup\middleware {
+class layout extends \SUP\middleware {
 
     use \traits\sendResponse;
 

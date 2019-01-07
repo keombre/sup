@@ -2,7 +2,7 @@
 
 namespace middleware\auth;
 
-class student extends \sup\middleware {
+class student extends \SUP\middleware {
 
     public function __invoke($request, $response, $next) {
         

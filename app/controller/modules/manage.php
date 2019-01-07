@@ -2,7 +2,7 @@
 
 namespace controller\modules;
 
-class manage extends \sup\controller {
+class manage extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
         

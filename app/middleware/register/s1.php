@@ -2,7 +2,7 @@
 
 namespace middleware\register;
 
-class s1 extends \sup\middleware {
+class s1 extends \SUP\middleware {
 
     public function __invoke($request, $response, $next) {
 

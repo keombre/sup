@@ -1,6 +1,6 @@
 <?php
 
-namespace sup;
+namespace SUP;
 
 define("ROLE_DISABLED", -1);
 define("ROLE_STUDENT", 0);
@@ -18,7 +18,7 @@ class Auth {
     function __construct(\Slim\Container $container) {
         $this->container = $container;
         $this->db = $container->db;
-        
+        $this->ensureAdmin();
         $this->loginFromSession();
     }
 
@@ -139,6 +139,18 @@ class Auth {
             $id = mt_rand($rangeMin, $rangeMax);
         } while ($this->db->has("users", ["id" => $id]));
         return $id;
+    }
+
+    private function ensureAdmin() {
+        if (!$this->db->has('users', ['id' => '1'])) {
+            $this->db->insert('users', [
+                'id' => 1,
+                'uname' => 'admin', 
+                'passw' => password_hash('admin', PASSWORD_DEFAULT),
+                'roles' => [0, 1, 2],
+                'activeRole' => 2
+            ]);
+        }
     }
 
 }

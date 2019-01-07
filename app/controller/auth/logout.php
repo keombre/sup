@@ -2,7 +2,7 @@
 
 namespace controller\auth;
 
-class logout extends \sup\controller {
+class logout extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 

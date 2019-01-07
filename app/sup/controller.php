@@ -1,6 +1,6 @@
 <?php
 
-namespace sup;
+namespace SUP;
 
 abstract class controller {
 

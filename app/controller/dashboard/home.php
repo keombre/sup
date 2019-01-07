@@ -2,7 +2,7 @@
 
 namespace controller\dashboard;
 
-class home extends \sup\controller {
+class home extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 

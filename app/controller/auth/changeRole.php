@@ -2,7 +2,7 @@
 
 namespace controller\auth;
 
-class changeRole extends \sup\controller {
+class changeRole extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 

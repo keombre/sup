@@ -2,7 +2,7 @@
 
 namespace controller\auth;
 
-class login extends \sup\controller {
+class login extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 

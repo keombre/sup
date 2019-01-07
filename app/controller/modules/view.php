@@ -2,7 +2,7 @@
 
 namespace controller\modules;
 
-class view extends \sup\controller {
+class view extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
 

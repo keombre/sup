@@ -2,7 +2,7 @@
 
 namespace middleware\auth;
 
-class level extends \sup\middleware {
+class level extends \SUP\middleware {
     private $level;
     
     function __construct(\Slim\Container $container, $level) {

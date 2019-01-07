@@ -1,6 +1,6 @@
 <?php
 
-namespace sup;
+namespace SUP;
 
 interface roleActions {
     function student(\Slim\Http\Request $request, \Slim\Http\Response &$response, $args);

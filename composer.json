@@ -24,7 +24,7 @@
     "autoload": {
         "psr-4": {
             "": "app/",
-            "sup\\": "app/sup/",
+            "SUP\\": "app/sup/",
             "middleware\\": "app/middleware/",
             "database\\": "db/",
             "controller\\": "app/controller/",

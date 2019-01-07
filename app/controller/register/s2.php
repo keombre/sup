@@ -2,7 +2,7 @@
 
 namespace controller\register;
 
-class s2 extends \sup\controller {
+class s2 extends \SUP\controller {
 
     function __invoke($request, $response, $args) {
         if ($request->isGet()) {
