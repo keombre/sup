@@ -23,7 +23,7 @@ class Auth {
     }
 
     function loginFromSession():bool {
-        if (is_string(@$_SESSION['token'])) {
+        if (array_key_exists('token', $_SESSION) && is_string($_SESSION['token'])) {
             $id = $this->db->get('users', 'id', ['token' => $_SESSION['token']]);
             if ($id == false) {
                 $this->logout();

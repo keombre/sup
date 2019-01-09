@@ -79,7 +79,7 @@
     <input type="hidden" name="name" value="" id="manage_name">
 </form>
 </div>
-<?php if(is_array(@$composerOut)):?>
+<?php if(isset($composerOut) && is_array($composerOut)):?>
 <hr />
 <div class="container">
 <div class="col-md-10 col-md-offset-1">

@@ -36,17 +36,17 @@
 </head>
 <body>
 <?php require_once "navbar.phtml"?>
-<?php if(is_array(@$error) || is_array(@$status)):?>
+<?php if((isset($error) && is_array($error)) || (isset($status) && is_array($status))):?>
 <div class="container">
 <div class="col-md-6 col-md-offset-3" style="margin-bottom: -1000px;z-index: 100;">
-<?php if (is_array(@$error)):?>
+<?php if (isset($error) && is_array($error)):?>
 <?php foreach($error as $err):?>
     <div class="alert alert-danger alert-dismissable" id="alert">
         <strong><?=$err[0]?></strong> <?=array_key_exists(1, $err)?$err[1]:""?>
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     </div>
 <?php endforeach?>
-<?php endif; if (is_array(@$status)):?>
+<?php endif; if (isset($status) && is_array($status)):?>
 <?php foreach($status as $line):?>
     <div class="alert alert-success alert-dismissable" id="alert">
         <strong><?=$line[0]?></strong> <?=array_key_exists(1, $line)?$line[1]:""?>
