@@ -4,6 +4,7 @@ require '../vendor/autoload.php';
 
 set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
     if (0 === error_reporting()) return false;
+    //debug_print_backtrace();
     throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
 });
 

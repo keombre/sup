@@ -14,6 +14,14 @@ class User {
         $this->db = $container->db;
     }
 
+    public function asArray() {
+        $ret = [
+            "id" => $this->id,
+            "attributes" => $this->attributes->asArray()
+        ];
+        return $ret;
+    }
+
     function create(int $id):self {
         $clone = clone $this;
         $clone->id = $id;
@@ -24,7 +32,6 @@ class User {
         $userinfo = $this->db->get('users', ['[>]userinfo' => 'id'], [
             'users.id [Int]',
             'users.uname [String]',
-            'users.token [String]',
             'name' => [
                 'userinfo.givenname(given) [String]',
                 'userinfo.surname(sur) [String]'
