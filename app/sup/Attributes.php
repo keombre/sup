@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SUP;
 
@@ -17,7 +17,7 @@ class Attributes {
         return $this->attributes[$name];
     }
 
-    function set(string $name, $value) {
+    function set(string $name, $value):void {
         $this->attributes[$name] = $value;
     }
 
