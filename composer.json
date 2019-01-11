@@ -1,13 +1,19 @@
 {
-    "name": "gpjp/maturita",
-    "description": "All-in-one solution for kanon",
+    "name": "keombre/sup",
+    "description": "Modular boilerplate",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/keombre/Medoo"
+        }
+    ],
     "require": {
         "slim/slim": "^3.9",
         "slim/flash": "^0.4.0",
         "slim/csrf": "^0.8.2",
         "slim/php-view": "^2.2",
-        "catfan/medoo": "^1.5",
+        "catfan/medoo": "dev-master",
         "ext-pdo": "*",
         "php": ">=7.1",
         "monolog/monolog": "^1.24",
