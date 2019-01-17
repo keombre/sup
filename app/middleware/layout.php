@@ -13,7 +13,10 @@ class layout extends \SUP\middleware {
         $active = $this->container->settings->get('module_name');
         
         $res = $next($request, new \Slim\Http\Response);
-        if ($res->getStatusCode() != 200)
+        if (
+            $res->getStatusCode() != 200 ||
+            in_array('application/download', $res->getHeader('Content-Type'))
+        )
             return $res;
 
         $modules = [];
