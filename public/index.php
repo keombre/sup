@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = true;
 $config['name'] = "SUP";
-$config['public']['version'] = '0.2.7_dev';
+$config['public']['version'] = '0.2.8_dev';
 
 session_start();
 

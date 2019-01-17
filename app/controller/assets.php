@@ -28,7 +28,6 @@ class assets extends \SUP\controller
 
         $size = filesize($path . '/assets/' . $file);
         $ext = strtolower(pathinfo('/' . $file, PATHINFO_EXTENSION));
-
         if (in_array($ext, ['css', 'js'])) {
             $type = [
                 'css' => 'text/css',
@@ -40,7 +39,7 @@ class assets extends \SUP\controller
 
         $response->getBody()->write(file_get_contents($path . '/assets/' . $file));
         
-        if ($file == 'sw.js') {
+        if (basename($file) == 'sw.js') {
             $response = $response->withHeader('Service-Worker-Allowed', '/' . $this->module_name . '/');
         }
         return $response->withHeader('Accept-Ranges', 'bytes')
