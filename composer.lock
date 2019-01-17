@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7566394ac77ffcafc4cb93649b775e0e",
+    "content-hash": "3e505efced8d52ef6d1a2be6723c8d4a",
     "packages": [
         {
             "name": "catfan/medoo",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/keombre/Medoo.git",
-                "reference": "efb6da3ac55bea77cf4eaa11066b397ed6daee3d"
+                "url": "https://github.com/keombre/Medoo-main.git",
+                "reference": "c237c9c91db2ac8eb8fde4bbdcd82dddc9df7db5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keombre/Medoo/zipball/efb6da3ac55bea77cf4eaa11066b397ed6daee3d",
-                "reference": "efb6da3ac55bea77cf4eaa11066b397ed6daee3d",
+                "url": "https://api.github.com/repos/keombre/Medoo-main/zipball/c237c9c91db2ac8eb8fde4bbdcd82dddc9df7db5",
+                "reference": "c237c9c91db2ac8eb8fde4bbdcd82dddc9df7db5",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
                 "issues": "https://github.com/catfan/Medoo/issues",
                 "source": "https://github.com/catfan/Medoo"
             },
-            "time": "2019-01-11T01:06:39+00:00"
+            "time": "2019-01-15T08:09:50+00:00"
         },
         {
             "name": "chillerlan/php-qrcode",

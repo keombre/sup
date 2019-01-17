@@ -5,7 +5,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/keombre/Medoo"
+            "url": "https://github.com/keombre/Medoo-main"
         }
     ],
     "require": {
