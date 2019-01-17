@@ -32,7 +32,7 @@ trait sendResponse
         return $response;
     }
 
-    public function sendFile(string $filepath, string $filename = null)
+    public function sendFile(&$response, string $filepath, string $filename = null)
     {
         if (!is_file($filepath)) {
             return false;
