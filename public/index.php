@@ -36,6 +36,11 @@ $app->add(function (Request $request, Response $response, callable $next) {
 
 $container = $app->getContainer();
 
+$container['factory'] = function ($c) {
+    $factory = new \SUP\Factory($c);
+    return $factory;
+};
+
 $container['modules'] = function($c) {
     $modules = new \modules($c);
     return $modules;
@@ -122,6 +127,7 @@ function createModule(\Module $module, $path, $namespace, $globalContainer) {
     $app = new \Slim\App(['settings' => $settings]);
     $container = $app->getContainer();
     
+    $container['factory']  = clone $globalContainer['factory'];
     $container['auth']  = clone $globalContainer['auth'];
     $container['flash'] = clone $globalContainer['flash'];
     $container['csrf']  = clone $globalContainer['csrf'];

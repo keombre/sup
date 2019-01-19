@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SUP;
 
@@ -26,13 +26,13 @@ class Auth
     public function loginFromSession():bool
     {
         if (array_key_exists('token', $_SESSION) && is_string($_SESSION['token'])) {
-            $id = $this->db->get('users', 'id', ['token' => $_SESSION['token']]);
-            if ($id == false) {
+            $user = $this->db->get('users', ['id [Int]', 'roles [Object]'], ['token' => $_SESSION['token']]);
+            if (!is_array($user) || $user['roles'] == [-1]) {
                 $this->logout();
                 return false;
             } else {
                 $this->logged = true;
-                $this->user = (new User($this->container))->createFromDB($id);
+                $this->user = $this->container->factory->userFromID($user['id']);
                 return true;
             }
         }
