@@ -96,9 +96,9 @@ class lang {
 
     function g($field, $section, $replaceArr = null) {
         if (!array_key_exists($section, $this->table))
-            return null;
+            return $section . ':' . $field;
         if (!array_key_exists($field, $this->table[$section]))
-            return null;
+            return $section . ':' . $field;
         
         if (!is_array($replaceArr))
             return $this->table[$section][$field];
