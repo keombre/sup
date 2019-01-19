@@ -1,85 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e505efced8d52ef6d1a2be6723c8d4a",
+    "content-hash": "d57d8dbbe3060acb521bf16652df0342",
     "packages": [
         {
-            "name": "catfan/medoo",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/keombre/Medoo-main.git",
-                "reference": "c237c9c91db2ac8eb8fde4bbdcd82dddc9df7db5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/keombre/Medoo-main/zipball/c237c9c91db2ac8eb8fde4bbdcd82dddc9df7db5",
-                "reference": "c237c9c91db2ac8eb8fde4bbdcd82dddc9df7db5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-pdo": "*",
-                "php": ">=5.4"
-            },
-            "suggest": {
-                "ext-pdo_dblib": "For MSSQL or Sybase database on Linux/UNIX platform",
-                "ext-pdo_mysql": "For MySQL or MariaDB database",
-                "ext-pdo_oci": "For Oracle database",
-                "ext-pdo_oci8": "For Oracle version 8 database",
-                "ext-pdo_pqsql": "For PostgreSQL database",
-                "ext-pdo_sqlite": "For SQLite database",
-                "ext-pdo_sqlsrv": "For MSSQL database"
-            },
-            "type": "framework",
-            "autoload": {
-                "psr-4": {
-                    "Medoo\\": "/src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Angel Lai",
-                    "email": "angel@catfan.me"
-                }
-            ],
-            "description": "The lightest PHP database framework to accelerate development",
-            "homepage": "https://medoo.in",
-            "keywords": [
-                "MSSQL",
-                "MariaDB",
-                "MySQL",
-                "Oracle",
-                "PHP framework",
-                "PostgreSQL",
-                "SQL",
-                "SQLite",
-                "database",
-                "lightweight"
-            ],
-            "support": {
-                "issues": "https://github.com/catfan/Medoo/issues",
-                "source": "https://github.com/catfan/Medoo"
-            },
-            "time": "2019-01-15T08:09:50+00:00"
-        },
-        {
             "name": "chillerlan/php-qrcode",
-            "version": "3.0.3",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chillerlan/php-qrcode.git",
-                "reference": "ba81dab259d687d246295e6998533c314367847a"
+                "reference": "5e316540a1e017353491b5617fd4766b59d6ce82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/ba81dab259d687d246295e6998533c314367847a",
-                "reference": "ba81dab259d687d246295e6998533c314367847a",
+                "url": "https://api.github.com/repos/chillerlan/php-qrcode/zipball/5e316540a1e017353491b5617fd4766b59d6ce82",
+                "reference": "5e316540a1e017353491b5617fd4766b59d6ce82",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +25,7 @@
                 "php": "^7.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.5"
+                "phpunit/phpunit": "^7.3"
             },
             "type": "library",
             "extra": {
@@ -120,7 +58,7 @@
             "keywords": [
                 "qr code"
             ],
-            "time": "2018-12-20T15:37:46+00:00"
+            "time": "2018-09-19T20:32:07+00:00"
         },
         {
             "name": "chillerlan/php-settings-container",
@@ -507,23 +445,23 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.2.7",
+            "version": "5.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "8560d4314577199ba51bf2032f02cd1315587c23"
+                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/8560d4314577199ba51bf2032f02cd1315587c23",
-                "reference": "8560d4314577199ba51bf2032f02cd1315587c23",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/dcb6e1006bb5fd1e392b4daa68932880f37550d4",
+                "reference": "dcb6e1006bb5fd1e392b4daa68932880f37550d4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.1",
+                "friendsofphp/php-cs-fixer": "~2.2.20",
                 "json-schema/json-schema-test-suite": "1.2.0",
                 "phpunit/phpunit": "^4.8.35"
             },
@@ -569,7 +507,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2018-02-14T22:26:30+00:00"
+            "time": "2019-01-14T23:55:14+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1771,9 +1709,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "catfan/medoo": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

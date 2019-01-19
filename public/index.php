@@ -80,7 +80,7 @@ $container['csrf'] = function ($c) {
 };
 
 $container['db'] = function ($c) {
-    $medoo = new \Medoo\Medoo([
+    $medoo = new \database\Medoo([
         'database_type' => 'sqlite',
         'database_file' => __DIR__ . '/../db/database.db'
     ]);
@@ -165,7 +165,7 @@ function createModule(\Module $module, $path, $namespace, $globalContainer) {
             mkdir(__DIR__ . '/../db/' . $name);
         
         $db = $c['settings']['db'];
-        $medoo = new \Medoo\Medoo([
+        $medoo = new \database\Medoo([
             'database_type' => 'sqlite',
             'database_file' => __DIR__ . '/../db/' . $name . '/database.db'
         ]);

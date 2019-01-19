@@ -2,23 +2,16 @@
     "name": "keombre/sup",
     "description": "Modular boilerplate",
     "type": "project",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/keombre/Medoo-main"
-        }
-    ],
     "require": {
-        "slim/slim": "^3.9",
-        "slim/flash": "^0.4.0",
-        "slim/csrf": "^0.8.2",
-        "slim/php-view": "^2.2",
-        "catfan/medoo": "dev-master",
+        "slim/slim": "3.11.0",
+        "slim/flash": "0.4.0",
+        "slim/csrf": "0.8.3",
+        "slim/php-view": "2.2",
         "ext-pdo": "*",
         "php": ">=7.1",
-        "monolog/monolog": "^1.24",
-        "wikimedia/composer-merge-plugin": "^1.4",
-        "composer/composer": "^1.8"
+        "monolog/monolog": "1.24",
+        "wikimedia/composer-merge-plugin": "1.4.1",
+        "composer/composer": "1.8"
     },
     "license": "MIT",
     "authors": [

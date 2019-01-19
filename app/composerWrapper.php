@@ -44,7 +44,7 @@ class composerWrapper {
 
     function runUpdate() {
         $this->command = 'update';
-        $this->flags = ['--lock' => ''];
+        //$this->flags = ['--lock' => ''];
         $this->createIO();
         $this->run();
     }
