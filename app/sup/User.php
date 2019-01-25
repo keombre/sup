@@ -39,7 +39,8 @@ class User {
             'userinfo.class [String]',
             'users.roles [Object]',
             'users.activeRole [Int]',
-            'users.lastActive [Int]'
+            'users.lastActive [Int]',
+            'userinfo.year [Int]'
         ], ['id' => $id]);
 
         if ($userinfo == false)

@@ -28,7 +28,8 @@ class seed {
             "id" => "INTEGER",
             "surname" => "TEXT NULL",
             "givenname" => "TEXT NULL",
-            "class" => "TEXT NULL"
+            "class" => "TEXT NULL",
+            "year" => "INTEGER DEFAULT 0"
         ]
     ];
 

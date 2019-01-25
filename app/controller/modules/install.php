@@ -7,7 +7,7 @@ class install extends \SUP\controller {
     function __invoke($request, $response, $args) {
         
         $data = $request->getParsedBody();
-        $name = intVal(filter_var(@$data['name'], FILTER_SANITIZE_STRING));
+        $name = filter_var(@$data['name'], FILTER_SANITIZE_STRING);
         
         $l = $this->container->lang;
 
