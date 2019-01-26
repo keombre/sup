@@ -1,5 +1,9 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
+
 require '../vendor/autoload.php';
 
 set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
@@ -66,6 +70,7 @@ $container['view'] = function ($container) {
         "lang" => $container->lang,
         "ROOT_PATH" => $container->get('settings')['path'],
         "baseLang" => $container->lang,
+        "baseRouter" => $container->router,
         "config" => $container['settings']['public']
     ];
     return new \Slim\Views\PhpRenderer(__DIR__ . '/../templates/', $templateVariables);
@@ -149,6 +154,7 @@ function createModule(\Module $module, $path, $namespace, $globalContainer) {
             "ROOT_PATH" => $container->get('settings')['path'],
             "ASSET_PATH" => $container->get('settings')['path'] . '/' . $name . "/assets" ,
             "baseLang" => $container->base->lang,
+            "baseRouter" => $container->base->router,
             "config" => $container['settings']['public']
         ];
         return new \Slim\Views\PhpRenderer($path . '/templates/', $templateVariables);
