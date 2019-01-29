@@ -11,7 +11,8 @@
         "php": ">=7.1",
         "monolog/monolog": "1.24",
         "wikimedia/composer-merge-plugin": "1.4.1",
-        "composer/composer": "1.8"
+        "composer/composer": "1.8",
+        "tecnickcom/tcpdf": "6.2.26"
     },
     "license": "MIT",
     "authors": [
