@@ -79,7 +79,6 @@ TEXT;
         $this->pdf->writeHTML($userTable, true, false, false, false, '');
         
         $this->pdf->SetY($this->pdf->GetY() + 5);
-        $this->pdf->SetFont('dejavusans', '', 12);
 
         $this->pdf->writeTable($this->data[0], $this->data[1], $this->data[2]);
 

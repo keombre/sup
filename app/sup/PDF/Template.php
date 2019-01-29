@@ -80,7 +80,6 @@ class Template extends \TCPDF
 }
 .tbody td {
     border-top: 1px solid #aaa;
-    height: 30px;
 }
 table {
     padding: 0 0 0 10;
@@ -102,6 +101,8 @@ TEXT;
         }
         $tbl .= '</table>'.PHP_EOL;
 
+        $this->setCellHeightRatio(2.5);
+        $this->SetFont('dejavusans', '', 11);
         $this->writeHTML($tbl, true, false, false, false, '');
     }
 }
