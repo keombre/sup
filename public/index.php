@@ -89,6 +89,9 @@ $container['csrf'] = function ($c) {
     return $guard;
 };
 
+$app->add($container->csrf);
+$app->add(\middleware\csrf::class);
+
 $container['db'] = function ($c) {
     $medoo = new \database\Medoo([
         'database_type' => 'sqlite',
