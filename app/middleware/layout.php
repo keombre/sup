@@ -15,7 +15,7 @@ class layout extends \SUP\middleware {
         $res = $next($request, new \Slim\Http\Response);
         if (
             $res->getStatusCode() != 200 ||
-            in_array('application/download', $res->getHeader('Content-Type'))
+            count($res->getHeader('Content-Type')) > 0
         )
             return $res;
 
