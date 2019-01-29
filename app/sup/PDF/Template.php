@@ -32,7 +32,7 @@ class Template extends \TCPDF
             ];
 
             $this->SetFont('dejavusansextralight', '', 20);
-            $this->Cell(85, 11, $this->contentAPI['title'], false, 1, '', false, '', 0, false, 'T', 'B');
+            $this->Cell(80, 11, $this->contentAPI['title'], false, 1, '', false, '', 0, false, 'T', 'B');
 
             $this->SetFont('dejavusans', 'B', 20);
             $this->Cell(0, 2, $this->contentAPI['version'], false, 1);
@@ -40,7 +40,7 @@ class Template extends \TCPDF
             $this->SetFont('dejavusans', '', 8);
             $this->writeHTMLCell(0, 0, 0, 0, $topText, 0, 0, false, true, 'R');
 
-            $this->write1DBarcode($this->contentAPI['longCode'], 'C39E', 0, 4, 190, 7, 0.4, $barcodeStyle, 'L');
+            $this->write1DBarcode($this->contentAPI['longCode'], 'C39E', 0, 4, 180, 7, 0.4, $barcodeStyle, 'L');
 
         $this->endTemplate();
         $this->printTemplate($header, 15, 14);
