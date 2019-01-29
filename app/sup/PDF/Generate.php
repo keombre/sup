@@ -104,4 +104,9 @@ TEXT;
             ->withHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT')
             ->withHeader('Content-Disposition', 'inline; filename="SUPi-' . $this->title . '.pdf"');
     }
+
+    public function print()
+    {
+        $this->pdf->IncludeJS('print(true);');
+    }
 }

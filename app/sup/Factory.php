@@ -11,7 +11,7 @@ class Factory
         $this->container = $container;
     }
 
-    public function userFromID(int $id):User
+    public function userFromID(int $id):?User
     {
         $user = new User($this->container);
         return $user->createFromDB($id);
