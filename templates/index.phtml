@@ -1,13 +1,29 @@
 <?php require __dir__."/layout/app.phtml"?>
 
+<script src="<?=$ROOT_PATH?>/js/background.js"></script>
+<script>
+particlesJS.load('particles-js', '<?=$ROOT_PATH?>/js/background.json');
+</script>
+
+<style>
+#particles-js {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+.panel {
+    margin-top: 60px;
+}
+</style>
+
 <div class="container">
 <div class="col-md-6 col-md-offset-3">
 <div class="panel panel-default">
-    <div class="panel-heading"><a href="<?=$router->pathFor('register-s1')?>"><?=$baseLang->g('new-user', 'index')?></a></div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading"><?=$baseLang->g('existing-user', 'index')?></div>
     <div class="panel-body">
+        <h1 class="text-center" style="margin-bottom: 40px;"><?=$baseLang->g('existing-user', 'index')?></h1>
         <form class="form-horizontal" method="post" action="<?=$router->pathFor('login', [], ["next" => $next])?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
@@ -34,5 +50,6 @@
 </div>
 </div>
 </div>
-<img src="img/image.png" style="position: fixed; right: -50px; bottom: 15px; z-index: -1; width: 500px; opacity: 0.6;"/>
+<div id="particles-js"></div>
+<!--img src="img/image.png" style="position: fixed; right: -50px; bottom: 15px; z-index: -1; width: 500px; opacity: 0.6;"/-->
 <?php require __dir__ . "/layout/footer.phtml"?>

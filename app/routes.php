@@ -55,15 +55,6 @@ final class routes {
             $this->post('/login', \controller\auth\login::class)
                 ->setName('login');
             
-            $this->group('/new', function () {
-                $this->map(['GET', 'POST'], '/s1', \controller\register\s1::class)
-                    ->setName('register-s1');
-
-                $this->map(['GET', 'POST'], '/s2', \controller\register\s2::class)
-                    ->add(\middleware\register\s1::class)
-                    ->setName('register-s2');
-            });
-            
         })->add(\middleware\auth\autologin::class);
         
     }
