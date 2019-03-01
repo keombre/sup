@@ -101,8 +101,8 @@ TEXT;
         }
         $tbl .= '</table>'.PHP_EOL;
 
-        $this->setCellHeightRatio(2.5);
-        $this->SetFont('dejavusans', '', 11);
+        $this->setCellHeightRatio(2.2);
+        $this->SetFont('dejavusans', '', 9);
         $this->writeHTML($tbl, true, false, false, false, '');
     }
 }
