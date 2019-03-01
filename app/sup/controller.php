@@ -28,7 +28,7 @@ abstract class Controller
         }
     }
 
-    protected function sanitizePostArray(\Slim\Http\Request $request, string $queryField, string $sanitize)
+    protected function sanitizePostArray(\Slim\Http\Request $request, string $queryField, int $sanitize)
     {
         $data = $request->getParsedBody();
 

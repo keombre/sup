@@ -44,6 +44,10 @@ trait sendResponse
         
         $fh = fopen($filepath, 'rb');
 
+        return $this->sendStream($response, $fh, $filename);
+    }
+
+    public function sendStream(&$response, $fh, string $filename) {
         $stream = new \Slim\Http\Stream($fh);
 
         return $response->withHeader('Content-Type', 'application/force-download')

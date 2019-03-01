@@ -23,7 +23,8 @@ particlesJS.load('particles-js', '<?=$ROOT_PATH?>/js/background.json');
 <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
 <div class="panel panel-default">
     <div class="panel-body">
-        <h1 class="text-center" style="margin-bottom: 40px;"><?=$baseLang->g('existing-user', 'index')?></h1>
+        <h1 class="text-center"><?=$baseLang->g('title', 'main')?></h1>
+        <h3 class="text-center" style="margin-bottom: 40px;"><?=$baseLang->g('existing-user', 'index')?></h3>
         <form class="form-horizontal" method="post" action="<?=$router->pathFor('login', [], ["next" => $next])?>">
             <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
             <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
