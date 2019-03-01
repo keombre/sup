@@ -44,7 +44,7 @@
     <?php if (is_array(@$students) && count($students)):?>
         <ul class='list-group'>
         <?php foreach($students as $student):?>
-            <li class='list-group-item'><i><?=$student->getUname()?></i> <?=$student->getName()?> <b><?=$student->getAttribute('class')?></b>
+            <li class='list-group-item'><i><?=$student->getUname()?></i> <?=$student->getName()?> <b><?=$student->getLocalisedClass()?></b>
                 <button onclick="let elm=document.getElementById('id');elm.value='<?=$student->getID()?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('students-remove', 'user-manage')?></button>
             </li>
         <?php endforeach;?>

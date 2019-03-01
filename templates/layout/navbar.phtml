@@ -39,11 +39,11 @@
                     </a>
                 </li>
                 <li role="presentation" class="divider"></li>
-                <li><a href="<?=$router->pathFor('user-changePassword')?>"><span class="glyphicon glyphicon-lock"></span> <?=$baseLang->g('change-pass', 'navbar')?></a></li>
+                <?php /*<li><a href="<?=$router->pathFor('user-changePassword')?>"><span class="glyphicon glyphicon-lock"></span> <?=$baseLang->g('change-pass', 'navbar')?></a></li> */?>
                 <li><a href="<?=$router->pathFor('user-changeRole')?>"><span class="glyphicon glyphicon-pencil"></span> <?=$baseLang->g('change-role', 'navbar')?></a></li>
                 <?php if ($auth->getUser()->is(ROLE_ADMIN)):?>
                 <li><a href="<?=$router->pathFor('user-manageUsers')?>"><span class="glyphicon glyphicon-briefcase"></span> <?=$baseLang->g('manage-users', 'navbar')?></a></li>
-                <li><a href="<?=$router->pathFor('user-register')?>"><span class="glyphicon glyphicon-plus"></span> <?=$baseLang->g('register-user', 'navbar')?></a></li>
+                <?php /*<li><a href="<?=$router->pathFor('user-register')?>"><span class="glyphicon glyphicon-plus"></span> <?=$baseLang->g('register-user', 'navbar')?></a></li> */?>
                 <li role="presentation" class="divider"></li>
                 <li><a href="<?=$router->pathFor('modules-view')?>"><span class="glyphicon glyphicon-cog"></span> <?=$baseLang->g('manage-modules', 'navbar')?></a></li>
                 <?php endif;?>

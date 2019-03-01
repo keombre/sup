@@ -13,8 +13,8 @@ final class routes {
                 $this->post('/logout', \controller\auth\logout::class)
                 ->setName('user-logout');
                 
-                $this->map(['GET', 'PUT'], '/changepass', \controller\auth\changePassword::class)
-                ->setName('user-changePassword');
+                /*$this->map(['GET', 'PUT'], '/changepass', \controller\auth\changePassword::class)
+                ->setName('user-changePassword');*/
                 
                 $this->map(['GET', 'PUT'], '/changerole', \controller\auth\changeRole::class)
                 ->setName('user-changeRole');
@@ -23,8 +23,8 @@ final class routes {
                     $this->map(['GET', 'DELETE'], '/manage', \controller\auth\manage::class)
                     ->setName('user-manageUsers');
                     
-                    $this->map(['GET', 'PUT'], '/register', \controller\auth\register::class)
-                    ->setName('user-register');
+                    /*$this->map(['GET', 'PUT'], '/register', \controller\auth\register::class)
+                    ->setName('user-register');*/
                 })->add(\middleware\auth\admin::class);
             });
 
