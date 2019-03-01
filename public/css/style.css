@@ -13,6 +13,7 @@
         width: 95%;
     }
 }
+/*
 .only-print, .only-print *  {
     visibility: hidden !important;
     height: 0 !important;
@@ -75,6 +76,7 @@
         font-size: 8pt;
     }
 }
+*/
 .my-buttons button {
     margin-top: 5px;
     margin-bottom: 5px;

@@ -73,7 +73,7 @@ class Generate
 </style>
 <table>
     <tr class="top"><td width="70">{$this->container->base->lang->g('name', 'pdf')}</td><td><b>{$this->user->getAnyName()}</b></td></tr>
-    <tr><td width="70">{$this->container->base->lang->g('class', 'pdf')}</td><td><b>{$this->user->getAttribute('class')}</b></td></tr>
+    <tr><td width="70">{$this->container->base->lang->g('class', 'pdf')}</td><td><b>{$this->user->getLocalisedClass()}</b></td></tr>
 </table>
 TEXT;
         $this->pdf->writeHTML($userTable, true, false, false, false, '');

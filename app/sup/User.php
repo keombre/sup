@@ -5,6 +5,7 @@ namespace SUP;
 class User
 {
     protected $db;
+    protected $container;
     protected $id;
 
     protected $attributes;
@@ -12,6 +13,7 @@ class User
     public function __construct(\Slim\Container $container)
     {
         $this->attributes = new Attributes;
+        $this->container = $container;
         $this->db = $container->db;
     }
 
@@ -95,6 +97,16 @@ class User
         }
         
         return implode(' ', $this->attributes->get('name'));
+    }
+
+    public function getLocalisedClass():?string {
+        if (!$this->attributes->has('class') || !$this->attributes->has('year')) {
+            return null;
+        }
+
+        return $this->container->lang->g(
+            $this->getAttribute('year') . strtoupper($this->getAttribute('class')),
+        'userClass');
     }
 
     public function getAnyName():string
