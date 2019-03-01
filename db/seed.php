@@ -18,7 +18,6 @@ class seed {
         "users" => [
             "id" => "INTEGER PRIMARY KEY",
             "uname" => "TEXT",
-            "passw" => "TEXT",
             "token" => "TEXT NULL",
             "roles" => "TEXT",
             "activeRole" => "INTEGER",

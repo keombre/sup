@@ -10,6 +10,36 @@ define("ROLE_ADMIN", 2);
 class Auth
 {
     private $logged = false;
+    private $classMap = [
+        'IA' => [1, 'A'],
+        'IB' => [1, 'B'],
+
+        'IIA' => [2, 'A'],
+        'IIB' => [2, 'B'],
+
+        'IIIA' => [3, 'A'],
+        'IIIB' => [3, 'B'],
+
+        'IVA' => [4, 'A'],
+        'IVB' => [4, 'B'],
+
+        'VA' => [5, 'A'],
+        'VB' => [5, 'B'],
+        '1C' => [5, 'C'],
+
+        'VIA' => [6, 'A'],
+        'VIB' => [6, 'B'],
+        '2C'  => [6, 'C'],
+
+        'VIIA' => [7, 'A'],
+        'VIIB' => [7, 'B'],
+        '3C'   => [7, 'C'],
+
+        'VIIIA' => [8, 'A'],
+        'VIIIB' => [8, 'B'],
+        '4C'    => [8, 'C'],
+    ];
+
 
     protected $user;
     protected $container;
@@ -17,10 +47,31 @@ class Auth
 
     public function __construct(\Slim\Container $container)
     {
+        
         $this->container = $container;
         $this->db = $container->db;
-        $this->ensureAdmin();
+
+        $this->getINIConfig();
+
+        //$this->ensureAdmin();
         $this->loginFromSession();
+    }
+
+    private function getINIConfig() {
+        if (!is_file(__DIR__ . '/../../config.ini')) {
+            \file_put_contents(__DIR__ . '/../../config.ini', <<<EOF
+[ldap]
+server = 'ldap://dc.example.com' ;fill server name
+port   = '389'
+domain = 'example' ;fill domain name (example)
+dc     = 'DC=example,DC=com' ;fill DC (DC=example,DC=com)
+            
+EOF
+            );
+        }
+        $config = parse_ini_file(__DIR__ . '/../../config.ini', true);
+
+        $this->ldapConfig = $config['ldap'];
     }
 
     public function loginFromSession():bool
@@ -44,33 +95,107 @@ class Auth
         if ($this->logged) {
             return true;
         }
+
+        // ldap connect and replicate to DB
+
+        $ldap = ldap_connect($this->ldapConfig['server'], intval($this->ldapConfig['port']));
+        $ldaprdn = $username . '@' . $this->ldapConfig['domain'];
+
+        ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+
+        $bind = @ldap_bind($ldap, $ldaprdn, $password);
+
+        if (!$bind) {
+            return false;
+        }
+
+        $filter="(sAMAccountName=$username)";
+        $result = ldap_search($ldap,$this->ldapConfig['dc'], $filter);
+        $info = ldap_get_entries($ldap, $result);
+
+        if ($info['count'] != 1) {
+            return false;
+        }
+
+        $givenname = $info[0]['givenname'][0];
+        $surname   = $info[0]['sn'][0];
+        $userDN    = explode(',', $info[0]['distinguishedname'][0]);
+
+        if ($userDN[1] == 'OU=Leaders' || $userDN[1] == 'CN=Users') {
+            $roles = [ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN];
+            $class = '';
+            $year  = 0;
+        } else if ($userDN[1] == 'OU=Teachers') {
+            $roles = [ROLE_STUDENT, ROLE_TEACHER];
+            $class = '';
+            $year  = 0;
+        } else if ($userDN[2] == 'OU=Students') {
+            $roles     = [ROLE_STUDENT];
+            $classInfo = strtoupper(explode('=', $userDN[1])[1]);
+            $year      = $this->classMap[$classInfo][0];
+            $class     = $this->classMap[$classInfo][1];
+        }
+
+        @ldap_close($ldap);
+
+        if (!$this->db->has('users', ['uname' => $username])) {
+            // replicate
+            $id = $this->generateID(10000000, 99999999);
+
+            $this->db->insert('users', [
+                'id' => $id,
+                'uname' => $username,
+                'roles' => $roles,
+                'activeRole' => max($roles)
+            ]);
+
+            $this->db->insert('userinfo', [
+                'id' => $id,
+                'surname' => $surname,
+                'givenname' => $givenname,
+                'class' => $class,
+                'year' => $year
+            ]);
+        }
+
+        $id = $this->db->get('users', ['id'], ['uname' => $username])['id'];
+
+        $this->db->update('userinfo', [
+            'surname' => $surname,
+            'givenname' => $givenname,
+            'class' => $class,
+            'year' => $year
+        ], [
+            'id' => $id
+        ]);
         
         $userinfo = $this->db->get('users', [
             'id [Int]',
             'roles [Object]',
-            'passw [String]'
         ], ['uname' => $username]);
         
-        if ($userinfo == false) {
-            return false;
-        }
-        
         if (in_array(ROLE_DISABLED, $userinfo['roles'])) {
-            return false;
-        }
-        
-        if (!password_verify($password, $userinfo['passw'])) {
             return false;
         }
         
         $token = $this->generateToken();
         
         $_SESSION['token'] = $token;
-        $this->db->update('users', ['token' => $token, 'lastActive' => time()], ['id' => $userinfo['id']]);
+        $this->db->update('users', [
+            'token' => $token,
+            'lastActive' => time()
+        ], [
+            'id' => $userinfo['id']
+        ]);
 
         $this->logged = true;
         $this->user = (new User($this->container))->createfromDB($userinfo['id']);
         return true;
+    }
+
+    private function ldapConnect() {
+
     }
 
     public function logout():bool
@@ -83,25 +208,6 @@ class Auth
         unset($_SESSION['token']);
         $this->logged = false;
         
-        return true;
-    }
-
-    public function register(string $username, string $password, array $roles):bool
-    {
-        if ($this->db->has('users', ['uname' => $username])) {
-            return false;
-        }
-        
-        $id = $this->generateID(1000, 99999999);
-        $hash = \password_hash($password, \PASSWORD_DEFAULT);
-
-        $this->db->insert('users', [
-            'id' => $id,
-            'uname' => $username,
-            'passw' => $hash,
-            'roles' => $roles,
-            'activeRole' => max($roles)
-        ]);
         return true;
     }
     
@@ -161,6 +267,7 @@ class Auth
         return $id;
     }
 
+    /*
     private function ensureAdmin()
     {
         if (!$this->db->has('users', ['id' => '1'])) {
@@ -173,4 +280,7 @@ class Auth
             ]);
         }
     }
+
+    */
+
 }
