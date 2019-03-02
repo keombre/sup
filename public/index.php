@@ -1,15 +1,41 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
+if (!is_file(__DIR__ . '/../config.ini')) {
+    \file_put_contents(__DIR__ . '/../config.ini', <<<EOF
+[ldap]
+server = 'ldap://dc.example.com' ;fill server name
+port   = '389'
+domain = 'example' ;fill domain name (example)
+dc     = 'DC=example,DC=com' ;fill DC (DC=example,DC=com)
+[global]
+prod = 'false'
+
+EOF
+    );
+}
+
+$iniConfig = parse_ini_file(__DIR__ . '/../config.ini', true);
+
+if ($iniConfig['global']['prod'] == 'true') {
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+    ini_set('display_errors', false);
+    ini_set('display_startup_errors', false);
+} else {
+    error_reporting(E_ALL);
+    ini_set('display_errors', true);
+    ini_set('display_startup_errors', true);
+}
 
 require '../vendor/autoload.php';
 
 set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
     if (0 === error_reporting()) return false;
-    //debug_print_backtrace();
-    throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+    if ($iniConfig['global']['prod'] == 'true') {
+        null;
+    } else {
+        throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+    }
+    return true;
 });
 
 use Psr\Http\Message\RequestInterface as Request;
@@ -18,7 +44,11 @@ use Psr\Http\Message\ResponseInterface as Response;
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = true;
 $config['name'] = "SUP";
-$config['public']['version'] = '0.2.9_dev';
+if ($iniConfig['global']['prod'] == 'true') {
+    $config['public']['version'] = '0.2.9';
+} else {
+    $config['public']['version'] = '0.2.9_dev';
+}
 
 session_start();
 

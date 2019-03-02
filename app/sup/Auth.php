@@ -58,17 +58,7 @@ class Auth
     }
 
     private function getINIConfig() {
-        if (!is_file(__DIR__ . '/../../config.ini')) {
-            \file_put_contents(__DIR__ . '/../../config.ini', <<<EOF
-[ldap]
-server = 'ldap://dc.example.com' ;fill server name
-port   = '389'
-domain = 'example' ;fill domain name (example)
-dc     = 'DC=example,DC=com' ;fill DC (DC=example,DC=com)
-            
-EOF
-            );
-        }
+        
         $config = parse_ini_file(__DIR__ . '/../../config.ini', true);
 
         $this->ldapConfig = $config['ldap'];
