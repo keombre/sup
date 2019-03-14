@@ -29,6 +29,7 @@ if ($iniConfig['global']['prod'] == 'true') {
 require '../vendor/autoload.php';
 
 set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+    global $iniConfig;
     if (0 === error_reporting()) return false;
     if ($iniConfig['global']['prod'] == 'true') {
         null;

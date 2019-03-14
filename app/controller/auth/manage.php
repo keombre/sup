@@ -56,6 +56,26 @@ class manage extends \SUP\controller {
                     $l->g('success-remove-message', 'user-manage')
                 ]);
             }
+        } else if ($request->isPut()) {
+            $id = $this->sanitizePost($request, 'id', FILTER_SANITIZE_STRING);
+
+            if (is_null($id) || $id === false) {
+                return $this->redirectWithMessage($response, 'user-manageUsers', "error", [
+                    $l->g('error-notfound-title', 'user-manage'),
+                    $l->g('error-notfound-message', 'user-manage')
+                ]);
+            }
+
+            if ($this->container->auth->fakeLogin((int)$id)) {
+                return $this->redirectWithMessage($response, 'dashboard', "status", [
+                    $this->container->lang->g('login-success', 'user-manage', ['user' => $this->container->auth->getUser()->getAnyName()])
+                ]);
+            } else {
+                return $this->redirectWithMessage($response, 'user-manageUsers', "error", [
+                    $l->g('login-error', 'user-manage')
+                ]);
+            }
+
         }
         return $response;
     }

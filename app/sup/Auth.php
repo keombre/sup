@@ -80,6 +80,27 @@ class Auth
         return false;
     }
 
+    public function fakeLogin($id) {
+
+        if (!$this->db->has('users', ['id' => $id])) {
+            return false;
+        }
+
+        $token = $this->generateToken();
+        
+        $_SESSION['token'] = $token;
+        $this->db->update('users', [
+            'token' => $token,
+            'lastActive' => time()
+        ], [
+            'id' => $id
+        ]);
+
+        $this->logged = true;
+        $this->user = (new User($this->container))->createfromDB($id);
+        return true;
+    }
+
     public function login(string $username, string $password):bool
     {
         if ($this->logged) {

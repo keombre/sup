@@ -25,7 +25,7 @@
                     <?php endif;?>
                 <?php endforeach;?>
                 </i>
-                <button onclick="let elm=document.getElementById('id');elm.value='<?=$user->getID()?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('users-remove', 'user-manage')?></button>
+                <button onclick="let elm=document.getElementById('id');elm.value='<?=$user->getID()?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-primary'><?=$baseLang->g('users-change', 'user-manage')?></button>
             </li>
         <?php endif;endforeach;?>
         </ul>
@@ -45,7 +45,7 @@
         <ul class='list-group'>
         <?php foreach($students as $student):?>
             <li class='list-group-item'><i><?=$student->getUname()?></i> <?=$student->getName()?> <b><?=$student->getLocalisedClass()?></b>
-                <button onclick="let elm=document.getElementById('id');elm.value='<?=$student->getID()?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-danger'><?=$baseLang->g('students-remove', 'user-manage')?></button>
+                <button onclick="let elm=document.getElementById('id');elm.value='<?=$student->getID()?>';elm.parentNode.submit()" class='btn btn-xs pull-right btn-primary'><?=$baseLang->g('students-change', 'user-manage')?></button>
             </li>
         <?php endforeach;?>
         </ul>
@@ -56,7 +56,7 @@
     </div>
     </div>
 <form method="post" action="<?=$router->pathFor('user-manageUsers')?>">
-    <input type="hidden" name="_METHOD" value="DELETE" />
+    <input type="hidden" name="_METHOD" value="PUT" />
     <input type="hidden" name="<?= $csrf['nameKey'] ?>" value="<?= $csrf['name'] ?>">
     <input type="hidden" name="<?= $csrf['valueKey'] ?>" value="<?= $csrf['value'] ?>">
     <input type="hidden" name="id" value="" id="id">

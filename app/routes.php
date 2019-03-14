@@ -20,7 +20,7 @@ final class routes {
                 ->setName('user-changeRole');
                 
                 $this->group('', function () {
-                    $this->map(['GET', 'DELETE'], '/manage', \controller\auth\manage::class)
+                    $this->map(['GET', 'DELETE', 'PUT'], '/manage', \controller\auth\manage::class)
                     ->setName('user-manageUsers');
                     
                     /*$this->map(['GET', 'PUT'], '/register', \controller\auth\register::class)
