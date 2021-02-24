@@ -121,33 +121,33 @@ class Auth
         $filter="(mail=$ldaprdn)";
         $result = ldap_search($ldap,$this->ldapConfig['dc'], $filter);
 	$info = ldap_get_entries($ldap, $result);
-	var_dump($result);
-	var_dump($info);
-	exit();
         if ($info['count'] != 1) {
             return false;
-        }
+	}
 
         $givenname = $info[0]['givenname'][0];
         $surname   = $info[0]['sn'][0];
-        $userDN    = explode(',', $info[0]['distinguishedname'][0]);
-
-        if ($userDN[1] == 'OU=Leaders' || $userDN[1] == 'CN=Users') {
+        $userDN    = explode(',', $info[0]['dn']);
+        if (in_array('ou=Leadership', $userDN) || in_array('ou=Admins', $userDN)) {
             $roles = [ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN];
             $class = '';
             $year  = 0;
-        } else if ($userDN[1] == 'OU=Teachers') {
+        } else if (in_array('ou=Teachers', $userDN)) {
             $roles = [ROLE_STUDENT, ROLE_TEACHER];
             $class = '';
             $year  = 0;
-        } else if ($userDN[2] == 'OU=Students') {
+        } else if (in_array('ou=Students', $userDN)) {
             $roles     = [ROLE_STUDENT];
             $classInfo = strtoupper(explode('=', $userDN[1])[1]);
+	    if (!array_key_exists($classInfo, $this->classMap))
+                 return false;
             $year      = $this->classMap[$classInfo][0];
             $class     = $this->classMap[$classInfo][1];
-        }
+	} else {
+	    return false;
+	}
 
-        @ldap_close($ldap);
+	@ldap_close($ldap);
 
         if (!$this->db->has('users', ['uname' => $username])) {
             // replicate
