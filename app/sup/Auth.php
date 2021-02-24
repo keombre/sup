@@ -108,23 +108,22 @@ class Auth
         }
 
         // ldap connect and replicate to DB
-
-        $ldap = ldap_connect($this->ldapConfig['server'], intval($this->ldapConfig['port']));
+	$ldap = ldap_connect($this->ldapConfig['server'] . ':' . $this->ldapConfig['port']);
         $ldaprdn = $username . '@' . $this->ldapConfig['domain'];
-
+	
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
-        ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
-
-        $bind = @ldap_bind($ldap, $ldaprdn, $password);
-
+	ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+	$bind = @ldap_bind($ldap, $ldaprdn, $password);
         if (!$bind) {
             return false;
         }
 
-        $filter="(sAMAccountName=$username)";
+        $filter="(mail=$ldaprdn)";
         $result = ldap_search($ldap,$this->ldapConfig['dc'], $filter);
-        $info = ldap_get_entries($ldap, $result);
-
+	$info = ldap_get_entries($ldap, $result);
+	var_dump($result);
+	var_dump($info);
+	exit();
         if ($info['count'] != 1) {
             return false;
         }
