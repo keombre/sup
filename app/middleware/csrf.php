@@ -7,9 +7,8 @@ class csrf extends \SUP\middleware {
     use \traits\sendResponse;
     
     public function __invoke($request, $response, $next) {
-
-        $args = $request->getAttribute('routeInfo')[2];
-        $path = $request->getAttribute('routeInfo')['request'][1];
+        $args = @$request->getAttribute('routeInfo')[2];
+        $path = @$request->getAttribute('routeInfo')['request'][1];
         
         $csrf_status = @$args['csrf_status'];
 

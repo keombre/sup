@@ -42,7 +42,6 @@ set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontex
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-$config['displayErrorDetails'] = $iniConfig['global']['prod'] != 'true';
 $config['addContentLengthHeader'] = true;
 $config['name'] = "SUP";
 if ($iniConfig['global']['prod'] == 'true') {
